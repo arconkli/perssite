@@ -7,26 +7,11 @@
   margin: 0;
 }
 
-h1 {
-  padding: 4rem;
-  filter: url(#distortionFilter);
-  font-size: calc(100vw / 24 * 3);
-  color: #0e0e0e;
-  font-variation-settings: "wght" 700;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+body {
+    font-family: Inter, sans-serif;
 }
-@media (max-width: 800px) {
-  h1 {
-    font-size: 8rem;
-  }
-}
-
-
-
-
-
-
-
-
 
 @keyframes jumbo {
     from {
@@ -92,32 +77,3 @@ h1 {
     background-image: var(--stripesDark), var(--rainbow);
 }
 
-
-
-
-
-
-
-
-
-body {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-}
-
-a {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 2rem;
-  color: #0e0e0e;
-  text-decoration: none;
-}
-a:last-of-type {
-  right: 0;
-  left: unset;
-}
