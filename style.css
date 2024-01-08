@@ -1,11 +1,7 @@
-@font-face {
-  font-family: "Anybody";
-  src: url("https://assets.codepen.io/1492907/Anybody.woff2") format("woff2");
-}
-* {
-  font-family: "Anybody";
-  margin: 0;
-}
+/* Explanation in JS tab */
+
+/* Cool font from Google Fonts! */
+@import url('https://fonts.googleapis.com/css?family=Raleway:900&display=swap');
 
 body {
 	margin: 0px;
@@ -37,5 +33,3 @@ body {
 	
 	user-select: none;
 }
-}
-
