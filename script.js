@@ -9,11 +9,11 @@ const elts = {
 
 // The strings to morph between. You can change these to anything you want!
 const texts = [
-"Andrew",
-"Conklin",
-"Actor",
-"Writer",
-"Musician"
+"andrew",
+"conklin",
+"actor",
+"writer",
+"musician"
 ];
 
 
