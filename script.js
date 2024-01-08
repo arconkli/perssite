@@ -9,13 +9,12 @@ const elts = {
 
 // The strings to morph between. You can change these to anything you want!
 const texts = [
-"Why",
-"is",
-"this",
-"so",
-"satisfying",
-"to",
-"watch?"];
+"Andrew",
+"Conklin",
+"Actor",
+"Writer",
+"Musician"
+];
 
 
 // Controls the speed of morphing.
