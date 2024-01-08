@@ -7,22 +7,28 @@
 
 </head>
 <body>
-<main>
-    <div class="relative flex flex-col h-[100vh] items-center justify-center bg-white dark:bg-black transition-bg">
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="jumbo absolute -inset-[10px] opacity-50"></div>
-        </div>
-        <h1 class="relative flex items-center text-5xl font-bold text-gray-800 dark:text-white dark:opacity-80 transition-colors">
-            charm
-            <span class="ml-1 rounded-xl bg-current p-2 text-[0.7em] leading-none">
-                <span class="text-white dark:text-black">UI</span>
-            </span>
-        </h1>
-        <div class="mt-4">
-            <button onclick="toggleTheme()" class="px-3 py-1 border border-stone-200 rounded-full drop-shadow-sm text-sm text-stone-800 dark:text-white bg-white/40 dark:bg-black/40 backdrop-blur-lg hover:border-stone-300 transition-colors dark:border-stone-500 dark:hover:border-stone-400">Toggle Theme</button>
-        </div>
-    </div>
-</main>
+<!-- Explanation in JS tab -->
+
+<!-- The two texts -->
+<div id="container">
+	<span id="text1"></span>
+	<span id="text2"></span>
+</div>
+
+<!-- The SVG filter used to create the merging effect -->
+<svg id="filters">
+	<defs>
+		<filter id="threshold">
+			<!-- Basically just a threshold effect - pixels with a high enough opacity are set to full opacity, and all other pixels are set to completely transparent. -->
+			<feColorMatrix in="SourceGraphic"
+					type="matrix"
+					values="1 0 0 0 0
+									0 1 0 0 0
+									0 0 1 0 0
+									0 0 0 255 -140" />
+		</filter>
+	</defs>
+</svg>
 
 </body>
 </html>
