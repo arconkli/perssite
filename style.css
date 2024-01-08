@@ -7,16 +7,6 @@
   margin: 0;
 }
 
-::-moz-selection {
-  background: #0e0e0e;
-  color: #f0f0f0;
-}
-
-::selection {
-  background: #0e0e0e;
-  color: #f0f0f0;
-}
-
 h1 {
   padding: 4rem;
   filter: url(#distortionFilter);
