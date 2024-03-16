@@ -67,3 +67,7 @@ body {
     color: #007bff;
     transform: scale(1.1);
 }
+
+#bottom-nav marquee span {
+    margin-right: 10px; /* Adjust the margin value as needed */
+}
