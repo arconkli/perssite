@@ -92,3 +92,14 @@ function animate() {
 
 // Start the animation.
 animate();
+
+
+const marquee = document.querySelector('#bottom-nav marquee');
+
+// Function to reset the marquee position when it reaches the end
+function resetMarquee() {
+    marquee.style.transform = 'translate3d(0, 0, 0)';
+}
+
+// Listen for the animation iteration event
+marquee.addEventListener('animationiteration', resetMarquee);
