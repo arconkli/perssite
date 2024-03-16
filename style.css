@@ -40,14 +40,3 @@ body {
 	
 	user-select: none;
 }
-
-footer {
-	text-align: center; /* Center the content horizontally */
-	padding: 10px; /* Add some padding for visual separation */
-	margin-top: 20px; /* Add some space between the content and footer */
-  }
-  
-  footer a {
-	text-decoration: none; /* Remove the default underline from the link */
-	color: inherit; /* Inherit the text color from the parent element */
-  }
