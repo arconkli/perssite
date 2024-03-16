@@ -42,7 +42,7 @@ body {
 }
 
 #bottom-nav {
-    position: fixed; /* Fix the nav to the bottom */
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -53,12 +53,12 @@ body {
 
 #bottom-nav a {
     text-decoration: none;
-    color: #333; /* Adjust text color as needed */
-    font-weight: bold; /* Optional for emphasis */
-    transition: all 0.3s ease; /* Add a smooth transition for hover effects */
+    color: #333;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 #bottom-nav a:hover {
-    color: #007bff; /* Change color on hover */
-    transform: scale(1.1); /* Optional: Add a slight scaling effect */
+    color: #007bff;
+    transform: scale(1.1);
 }
