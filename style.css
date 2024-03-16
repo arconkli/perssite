@@ -64,8 +64,9 @@ body {
 }
 
 #bottom-nav a:hover {
-    color: #007bff;
-    transform: scale(1.1);
+    transform: scale(1.1) translateY(-5px); /* Scale and move up slightly */
+    text-shadow: 0 0 5px #007bff;
+    opacity: 0.9;
 }
 
 #bottom-nav marquee span {
