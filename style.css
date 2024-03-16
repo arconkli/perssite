@@ -54,6 +54,7 @@ body {
 #bottom-nav marquee {
     white-space: nowrap;
     padding: 5px;
+	animation: ticker 10s linear infinite;
 }
 
 #bottom-nav a {
