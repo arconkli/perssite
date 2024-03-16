@@ -52,8 +52,12 @@ body {
 }
 
 #bottom-nav marquee {
-    white-space: nowrap;
-    padding: 5px;
+    animation: ticker 10s linear infinite; /* Add animation */
+}
+
+@keyframes ticker {
+    0% { transform: translate3d(0, 0, 0); } /* Start position */
+    100% { transform: translate3d(-100%, 0, 0); } /* End position (off-screen) */
 }
 
 #bottom-nav a {
@@ -65,7 +69,7 @@ body {
 
 #bottom-nav a:hover {
     transform: scale(1.1) translateY(-5px); /* Scale and move up slightly */
-    text-shadow: 0 0 5px #007bff;
+    text-shadow: 0 0 2px #b1b1b1;
     opacity: 0.9;
 }
 
