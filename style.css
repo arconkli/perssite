@@ -48,7 +48,7 @@ body {
     width: 100%;
     text-align: center;
     padding: 10px;
-    background-color: #f0f0f0; /* Optional background color */
+    background-color: #000000; /* Optional background color */
 }
 
 #bottom-nav marquee {
@@ -58,7 +58,7 @@ body {
 
 #bottom-nav a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     font-weight: bold;
 	transition: transform 0.3s ease, opacity 0.3s ease, text-shadow 0.3s ease;
 }
