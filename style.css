@@ -45,10 +45,10 @@ body {
 	position: absolute;
 	width: 100%;
 	display: inline-block;
-	
+	padding: 10rem;
 	font-family: 'Anybody', sans-serif;
-	font-size: 30pt;
-	font-weight: 500;
+	font-size: 40pt;
+	font-weight: 700;
 	
 	text-align: center;
 	
