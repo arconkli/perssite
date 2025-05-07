@@ -1,5 +1,12 @@
+# robots.txt for andrewconklin.com
 User-agent: *
 Allow: /
+Disallow: /old/
+Disallow: /temp/
+Disallow: /private/
+
+# Crawl-delay
+Crawl-delay: 10
 
 # Sitemap location
 Sitemap: https://andrewconklin.com/ac_sitemap.xml
