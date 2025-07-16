@@ -76,8 +76,8 @@ body {
 .scrolling-text {
     display: inline-block;
     white-space: nowrap;
-    animation: scroll-left 60s linear infinite;
-    animation-delay: var(--random-delay, 0s);
+    animation: scroll-left 120s linear infinite;
+    animation-play-state: running;
 }
 
 @keyframes scroll-left {

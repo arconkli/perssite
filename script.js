@@ -97,9 +97,10 @@ animate();
 document.addEventListener('DOMContentLoaded', function() {
     const scrollingText = document.querySelector('.scrolling-text');
     if (scrollingText) {
-        // Generate random delay between 0 and -30 seconds (negative to start mid-animation)
-        const randomDelay = Math.random() * -30;
-        scrollingText.style.setProperty('--random-delay', randomDelay + 's');
+        // Generate random delay between -120 and 0 seconds to start mid-animation
+        const randomDelay = Math.random() * -120;
+        scrollingText.style.animationDelay = randomDelay + 's';
+        scrollingText.style.animationPlayState = 'running';
     }
 });
 
