@@ -93,3 +93,13 @@ function animate() {
 // Start the animation.
 animate();
 
+// Set random delay for scrolling text to make it appear already in motion
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollingText = document.querySelector('.scrolling-text');
+    if (scrollingText) {
+        // Generate random delay between 0 and -30 seconds (negative to start mid-animation)
+        const randomDelay = Math.random() * -30;
+        scrollingText.style.setProperty('--random-delay', randomDelay + 's');
+    }
+});
+

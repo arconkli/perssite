@@ -4,10 +4,17 @@
   <meta charset="UTF-8">
   <title>Andrew Conklin - Actor, Film Producer, and Musician</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Andrew Conklin is an acclaimed Actor, Film Producer, and Musician based in Atlanta. Founder of Soleil Pictures and creative visionary with a diverse portfolio spanning film and music.">
-  <meta name="keywords" content="Andrew Conklin, Conklin, Andrew, Actor, Filmmaker, Film Producer, Music Producer, Musician, Director, Atlanta, Soleil Pictures, Atlanta filmmaker">
+  <meta name="description" content="Andrew Conklin - Professional Actor, Film Producer, and Musician based in Atlanta, Georgia. Founder of Soleil Pictures and creative visionary with extensive experience in film production, acting, and music. Contact Andrew Conklin for acting, filmmaking, and music production services.">
+  <meta name="keywords" content="Andrew Conklin, Andrew Conklin Actor, Andrew Conklin Atlanta, Andrew Conklin Film Producer, Andrew Conklin Musician, Conklin, Andrew, Actor Atlanta, Film Producer Atlanta, Music Producer Atlanta, Soleil Pictures Andrew Conklin, Atlanta actor, Atlanta filmmaker, Georgia actor, Georgia film producer">
   <meta name="author" content="Andrew Conklin">
   <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="PLACEHOLDER_FOR_GOOGLE_SEARCH_CONSOLE">
+  <meta name="geo.region" content="US-GA">
+  <meta name="geo.placename" content="Atlanta">
+  <meta name="DC.title" content="Andrew Conklin - Actor, Film Producer, and Musician">
+  <meta name="DC.creator" content="Andrew Conklin">
+  <meta name="DC.subject" content="Actor, Film Producer, Musician, Atlanta, Georgia">
+  <meta name="DC.description" content="Andrew Conklin is a professional Actor, Film Producer, and Musician based in Atlanta, Georgia.">
   
   <!-- Performance optimizations -->
   <link rel="preload" href="./style.css" as="style">
@@ -43,16 +50,23 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Andrew Conklin",
+    "alternateName": ["Andrew Conklin Actor", "Andrew Conklin Film Producer", "Andrew Conklin Musician"],
     "url": "https://andrewconklin.com",
     "sameAs": [
-      "imdb.me/andrewconklin",
+      "https://imdb.me/andrewconklin",
       "https://www.instagram.com/andrewconklin/"
     ],
-    "jobTitle": ["Actor", "Film Producer", "Musician"],
+    "jobTitle": ["Actor", "Film Producer", "Musician", "Creative Director"],
     "worksFor": {
       "@type": "Organization",
       "name": "Soleil Pictures",
-      "url": "https://soleilpictures.com/"
+      "url": "https://soleilpictures.com/",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Atlanta",
+        "addressRegion": "GA",
+        "addressCountry": "US"
+      }
     },
     "address": {
       "@type": "PostalAddress",
@@ -60,8 +74,50 @@
       "addressRegion": "GA",
       "addressCountry": "US"
     },
-    "knowsAbout": ["Acting", "Film Production", "Music Production", "Entrepreneurship"],
-    "description": "Andrew Conklin is an Actor, Film Producer, and Musician. Raised in a military family, his nomadic childhood nurtured his visionary spirit and entrepreneurial drive.",
+    "birthPlace": {
+      "@type": "Place",
+      "name": "Dayton, Ohio"
+    },
+    "knowsAbout": ["Acting", "Film Production", "Music Production", "Entrepreneurship", "Creative Direction", "Filmmaking", "Atlanta Film Industry"],
+    "description": "Andrew Conklin is a professional Actor, Film Producer, and Musician based in Atlanta, Georgia. Raised in a military family, his nomadic childhood nurtured his visionary spirit and entrepreneurial drive. He co-founded Soleil Pictures in 2024.",
+    "hasOccupation": [
+      {
+        "@type": "Occupation",
+        "name": "Actor",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Atlanta",
+          "containedInPlace": {
+            "@type": "State",
+            "name": "Georgia"
+          }
+        }
+      },
+      {
+        "@type": "Occupation",
+        "name": "Film Producer",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Atlanta",
+          "containedInPlace": {
+            "@type": "State",
+            "name": "Georgia"
+          }
+        }
+      },
+      {
+        "@type": "Occupation",
+        "name": "Musician",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Atlanta",
+          "containedInPlace": {
+            "@type": "State",
+            "name": "Georgia"
+          }
+        }
+      }
+    ],
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://andrewconklin.com"
@@ -69,14 +125,43 @@
     "potentialAction": {
       "@type": "ViewAction",
       "target": [
-        "https://andrewconklin.com/about.html"
+        "https://andrewconklin.com/about.html",
+        "https://andrewconklin.com/work.html"
       ]
     }
   }
   </script>
+  
+  <!-- Additional Schema.org for Soleil Pictures -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Soleil Pictures",
+    "url": "https://soleilpictures.com/",
+    "foundingDate": "2024",
+    "founder": {
+      "@type": "Person",
+      "name": "Andrew Conklin",
+      "url": "https://andrewconklin.com"
+    },
+    "coFounder": {
+      "@type": "Person",
+      "name": "Christopher Perez"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Atlanta",
+      "addressRegion": "GA",
+      "addressCountry": "US"
+    },
+    "description": "Film production company co-founded by Andrew Conklin and Christopher Perez, dedicated to producing original narrative films.",
+    "industry": "Film Production"
+  }
+  </script>
 </head>
 <body>
-  <h1 class="sr-only">Andrew Conklin | Actor, Film Producer, Musician</h1>
+  <h1 class="seo-h1">Andrew Conklin | Actor, Film Producer, Musician</h1>
   <p class="sr-only">Andrew Conklin is a professional Actor, Film Producer, and Musician based in Atlanta, blending creative storytelling with production expertise.</p>
 <!-- partial:index.partial.html -->
 <!-- Explanation in JS tab -->
@@ -105,14 +190,18 @@
 <!-- Subtle social links -->
 <div id="subtle-social-links">
     <ul class="subtle-social-list">
-        <li><a href="imdb.me/andrewconklin" title="Andrew Conklin on IMDB">IMDB</a></li>
+        <li><a href="https://imdb.me/andrewconklin" title="Andrew Conklin on IMDB">IMDB</a></li>
         <li><a href="https://www.instagram.com/andrewconklin/" title="Andrew Conklin on Instagram">Instagram</a></li>
         <li><a href="about.html" title="About Andrew Conklin">About</a></li>
     </ul>
 </div>
 
 <div id="bottom-nav">
-    <marquee behavior="scroll" direction="right"><a href="https://soleilpictures.com/"><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span></a></marquee>
+    <a href="https://soleilpictures.com/">
+        <div class="scrolling-text">
+            <span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span><span>soleil pictures</span>
+        </div>
+    </a>
 </div>
 
 <!-- partial -->
