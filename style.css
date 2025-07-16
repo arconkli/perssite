@@ -76,7 +76,7 @@ body {
 .scrolling-text {
     display: inline-block;
     white-space: nowrap;
-    animation: scroll-left 30s linear infinite;
+    animation: scroll-left 60s linear infinite;
     animation-delay: var(--random-delay, 0s);
 }
 
@@ -345,17 +345,5 @@ body {
 
 /* SEO-friendly H1 styling */
 .seo-h1 {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 12px;
-    font-weight: 300;
-    color: rgba(0, 0, 0, 0.3);
-    text-align: center;
-    z-index: 999;
-    margin: 0;
-    padding: 0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    display: none;
 }
