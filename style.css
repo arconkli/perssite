@@ -74,18 +74,23 @@ body {
 }
 
 .scrolling-text {
-    display: inline-block;
+    display: flex;
     white-space: nowrap;
-    animation: scroll-left 120s linear infinite;
+    animation: scroll-left 30s linear infinite;
     animation-play-state: running;
+}
+
+.ticker-half {
+    display: flex;
+    flex-shrink: 0;
 }
 
 @keyframes scroll-left {
     0% {
-        transform: translateX(100%);
+        transform: translateX(0);
     }
     100% {
-        transform: translateX(-100%);
+        transform: translateX(-50%);
     }
 }
 
@@ -226,9 +231,6 @@ body {
         top: 60px;
     }
     
-    .seo-h1 {
-        display: none;
-    }
 }
 
 /* Portfolio Page Styles */
@@ -343,7 +345,3 @@ body {
     border: 0;
 }
 
-/* SEO-friendly H1 styling */
-.seo-h1 {
-    display: none;
-}

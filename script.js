@@ -97,8 +97,8 @@ animate();
 document.addEventListener('DOMContentLoaded', function() {
     const scrollingText = document.querySelector('.scrolling-text');
     if (scrollingText) {
-        // Generate random delay between -120 and 0 seconds to start mid-animation
-        const randomDelay = Math.random() * -120;
+        // Generate random delay between -30 and 0 seconds to start mid-animation
+        const randomDelay = Math.random() * -30;
         scrollingText.style.animationDelay = randomDelay + 's';
         scrollingText.style.animationPlayState = 'running';
     }
