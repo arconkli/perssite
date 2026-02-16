@@ -1172,71 +1172,71 @@
       .window-body { padding-top: 12px; }
 
       /* Stats */
-      .stats-row { gap: 4px; margin-bottom: 8px; }
-      .stat-card { min-width: 0; padding: 6px 4px; flex: 1 1 0; }
-      .stat-value { font-size: 15px; }
+      .stats-row { gap: 3px; margin-bottom: 6px; }
+      .stat-card { min-width: 0; padding: 4px 3px; flex: 1 1 0; }
+      .stat-value { font-size: 14px; }
       .stat-label { font-size: 9px; }
 
       /* Toolbar */
-      .window-toolbar { flex-wrap: wrap; gap: 4px; padding: 6px 8px; }
+      .window-toolbar { flex-wrap: wrap; gap: 3px; padding: 4px 8px; }
 
       /* Tabs: fill width */
       .mac-tabs { flex-wrap: nowrap; }
-      .mac-tab { flex: 1; text-align: center; padding: 8px; font-size: 13px; }
+      .mac-tab { flex: 1; text-align: center; padding: 6px; font-size: 12px; }
 
-      /* Buttons: touch-friendly */
-      .mac-btn { min-height: 36px; padding: 6px 14px; font-size: 13px; }
-      .mac-btn-sm { min-height: 32px; padding: 4px 10px; font-size: 12px; }
+      /* Buttons: touch-friendly but not oversized */
+      .mac-btn { min-height: 32px; padding: 5px 12px; font-size: 12px; }
+      .mac-btn-sm { min-height: 28px; padding: 3px 8px; font-size: 11px; }
 
       /* Movie rows: proper tap targets */
-      .movie-row { gap: 6px; padding: 6px 8px; min-height: 44px; }
-      .movie-poster, .movie-poster-ph { width: 28px; height: 42px; }
-      .movie-title { font-size: 13px; }
-      .movie-date { font-size: 11px; min-width: 60px; }
-      .movie-rating { font-size: 14px; min-width: 34px; }
+      .movie-row { gap: 5px; padding: 5px 8px; min-height: 40px; }
+      .movie-poster, .movie-poster-ph { width: 26px; height: 39px; }
+      .movie-title { font-size: 12px; }
+      .movie-date { font-size: 10px; min-width: 56px; }
+      .movie-rating { font-size: 13px; min-width: 32px; }
 
       /* Watch items */
-      .watch-item { padding: 6px 8px; min-height: 44px; gap: 6px; }
-      .watch-title { font-size: 13px; }
+      .watch-item { padding: 5px 8px; min-height: 40px; gap: 5px; }
+      .watch-title { font-size: 12px; }
 
       /* Prevent iOS zoom on focus — all inputs must be >= 16px */
       input, select, textarea { font-size: 16px !important; }
 
       /* Search bar */
-      .search-bar { flex-wrap: wrap; gap: 6px; margin: 6px 0; }
-      .search-bar .mac-input { min-height: 34px; padding: 4px 8px; }
-      #filter-input, #filter-watch { flex: 1 1 100%; order: -1; }
+      .search-bar { flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+      .search-bar .mac-input { min-height: 30px; padding: 3px 6px; }
+      #filter-input, #filter-watch { flex: 1 1 100%; order: -1; min-height: 30px; }
       #sort-select, #genre-filter, #tag-filter, #watch-source-filter {
-        flex: 1 1 auto; min-height: 34px; font-size: 12px;
+        flex: 1 1 auto; min-height: 26px; padding: 2px 4px;
       }
 
       /* Forms: stack vertically */
-      .add-form { padding: 10px; margin: 8px 0; }
-      .form-row { flex-direction: column; gap: 6px; }
-      .form-row label { font-size: 12px; }
+      .add-form { padding: 8px; margin: 4px 0; }
+      .form-row { flex-direction: column; gap: 3px; margin-bottom: 4px; }
+      .form-row label { font-size: 11px; }
       .form-row .mac-input {
         width: 100% !important; min-width: 0 !important;
-        min-height: 36px; padding: 6px 8px;
+        min-height: 32px; padding: 4px 8px;
       }
       .form-row .mac-input.date-input,
       .form-row .mac-input.title-input,
       .form-row .mac-input.rating-input { width: 100% !important; flex: none; }
-      .form-tags { gap: 12px; margin: 6px 0; }
-      .form-tags label { font-size: 13px; gap: 6px; min-height: 32px; display: flex; align-items: center; }
-      .form-tags input[type="checkbox"] { width: 20px; height: 20px; }
+      .form-tags { gap: 8px; margin: 4px 0; }
+      .form-tags label { font-size: 12px; gap: 4px; min-height: 28px; display: flex; align-items: center; }
+      .form-tags input[type="checkbox"] { width: 16px; height: 16px; }
 
       /* Edit inline: vertical */
-      .edit-inline { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
-      .edit-inline .mac-input { width: 100% !important; min-width: 0 !important; min-height: 34px; }
+      .edit-inline { flex-direction: column; align-items: stretch; gap: 4px; padding: 6px; }
+      .edit-inline .mac-input { width: 100% !important; min-width: 0 !important; min-height: 30px; }
       .edit-inline .form-tags { width: 100%; }
       .edit-inline .mac-btn { width: 100%; }
 
       /* Movie action buttons */
-      .movie-actions { gap: 4px; margin-left: 2px; }
-      .movie-actions .mac-btn-sm { min-height: 28px; padding: 2px 8px; font-size: 11px; }
+      .movie-actions { gap: 3px; margin-left: 2px; }
+      .movie-actions .mac-btn-sm { min-height: 26px; padding: 2px 6px; font-size: 10px; }
 
       /* Legend */
-      .legend-box { padding: 6px 8px; margin-bottom: 8px; }
+      .legend-box { padding: 4px 8px; margin-bottom: 4px; font-size: 10px; }
 
       /* Detail modal: compact modal on mobile */
       .detail-overlay { align-items: center; justify-content: center; padding: 12px; }
@@ -1249,31 +1249,31 @@
       .detail-titlebar { position: sticky; top: 0; z-index: 1; flex-shrink: 0; }
       .detail-body {
         flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-        padding: 12px; flex-direction: column;
+        padding: 10px; flex-direction: column;
       }
-      .detail-poster { width: 100px; margin: 0 auto 12px; }
-      .detail-section-content { font-size: 12px; }
-      .provider-logo { width: 36px; height: 36px; }
+      .detail-poster { width: 90px; margin: 0 auto 10px; }
+      .detail-section-content { font-size: 11px; }
+      .provider-logo { width: 32px; height: 32px; }
 
       /* Watched modal */
       #watched-modal .detail-dialog {
-        width: 100% !important; max-width: 100%; height: auto; max-height: 90vh;
+        width: 92% !important; max-width: 400px; height: auto; max-height: 85vh;
         border: 2px solid var(--mac-black); align-self: center;
       }
       #watched-modal .detail-overlay { align-items: center; }
-      #watched-modal .detail-body { padding: 16px; }
-      #watched-modal .mac-input { width: 100% !important; min-height: 36px; font-size: 14px; }
-      #watched-modal .mac-btn { min-height: 40px; font-size: 14px; }
+      #watched-modal .detail-body { padding: 12px; }
+      #watched-modal .mac-input { width: 100% !important; min-height: 32px; }
+      #watched-modal .mac-btn { min-height: 34px; font-size: 12px; }
 
       /* Login dialog */
       .login-dialog { width: 90%; max-width: 340px; }
-      .login-body { padding: 16px; }
-      .login-fields .mac-input { min-height: 36px; font-size: 14px; padding: 6px 8px; }
-      .login-buttons .mac-btn { min-height: 40px; padding: 8px 24px; font-size: 14px; }
+      .login-body { padding: 14px; }
+      .login-fields .mac-input { min-height: 34px; padding: 5px 8px; }
+      .login-buttons .mac-btn { min-height: 36px; padding: 6px 20px; font-size: 13px; }
 
       /* Suggest form */
-      #suggest-section .form-row { flex-direction: column; gap: 6px; }
-      #suggest-section .mac-input { width: 100% !important; min-height: 36px; font-size: 14px; }
+      #suggest-section .form-row { flex-direction: column; gap: 3px; }
+      #suggest-section .mac-input { width: 100% !important; min-height: 32px; }
 
       /* TMDB dropdown: in-flow on mobile so it doesn't cover the input */
       .tmdb-dropdown {
@@ -1281,10 +1281,10 @@
         max-height: 200px;
         left: auto; right: auto;
       }
-      .tmdb-result { padding: 8px; font-size: 13px; min-height: 44px; }
+      .tmdb-result { padding: 6px 8px; font-size: 12px; min-height: 38px; }
 
       /* Status bar */
-      .window-statusbar { font-size: 11px; padding: 4px 8px; }
+      .window-statusbar { font-size: 10px; padding: 3px 8px; }
 
       /* Scrollbars: thinner on mobile */
       ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1312,15 +1312,15 @@
       .scroll-top-btn.visible { display: flex; }
 
       /* Undo bar */
-      .undo-bar { font-size: 12px; padding: 8px; }
+      .undo-bar { font-size: 11px; padding: 6px 8px; }
     }
 
     @media (max-width: 380px) {
-      .movie-date { min-width: 46px; font-size: 10px; }
-      .movie-rating { min-width: 28px; font-size: 12px; }
+      .movie-date { min-width: 42px; font-size: 9px; }
+      .movie-rating { min-width: 26px; font-size: 11px; }
       .movie-poster, .movie-poster-ph { display: none; }
-      .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-      .window-toolbar .mac-btn-sm { padding: 4px 8px; font-size: 11px; min-height: 30px; }
+      .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+      .window-toolbar .mac-btn-sm { padding: 3px 6px; font-size: 10px; min-height: 26px; }
     }
   </style>
 </head>
