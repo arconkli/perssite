@@ -587,14 +587,15 @@
       min-height: 28px;
     }
 
-    .movie-row:hover {
-      background: var(--mac-highlight);
-      color: var(--mac-highlight-text);
+    @media (hover: hover) {
+      .movie-row:hover {
+        background: var(--mac-highlight);
+        color: var(--mac-highlight-text);
+      }
+      .movie-row:hover .movie-date,
+      .movie-row:hover .movie-info,
+      .movie-row:hover .movie-rating { color: var(--mac-highlight-text); }
     }
-
-    .movie-row:hover .movie-date,
-    .movie-row:hover .movie-info,
-    .movie-row:hover .movie-rating { color: var(--mac-highlight-text); }
 
     .movie-poster {
       width: 30px;
@@ -705,9 +706,11 @@
       cursor: default;
     }
 
-    .watch-item:hover {
-      background: var(--mac-highlight);
-      color: var(--mac-highlight-text);
+    @media (hover: hover) {
+      .watch-item:hover {
+        background: var(--mac-highlight);
+        color: var(--mac-highlight-text);
+      }
     }
 
     .watch-num { font-size: 10px; color: #999; min-width: 22px; font-variant-numeric: tabular-nums; }
@@ -924,7 +927,9 @@
       border: 1px solid #CCC;
     }
 
-    .watch-item:hover .watch-providers { color: var(--mac-highlight-text); }
+    @media (hover: hover) {
+      .watch-item:hover .watch-providers { color: var(--mac-highlight-text); }
+    }
 
     .watch-provider-group {
       display: inline-flex;
@@ -1141,6 +1146,12 @@
         -webkit-overflow-scrolling: touch;
       }
 
+      /* Suggest form: move above watchlist on mobile */
+      #suggest-section { order: -1; }
+
+      /* More padding at top */
+      .window-body { padding-top: 12px; }
+
       /* Stats */
       .stats-row { gap: 4px; margin-bottom: 8px; }
       .stat-card { min-width: 0; padding: 6px 4px; flex: 1 1 0; }
@@ -1251,6 +1262,27 @@
       /* Scrollbars: thinner on mobile */
       ::-webkit-scrollbar { width: 8px; height: 8px; }
       ::-webkit-scrollbar-button { height: 0; width: 0; display: none; }
+
+      /* Scroll-to-top button */
+      .scroll-top-btn {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--mac-platinum);
+        border: 2px solid var(--mac-dark-border);
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        font-size: 18px;
+        line-height: 1;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        cursor: pointer;
+      }
+      .scroll-top-btn.visible { display: flex; }
 
       /* Undo bar */
       .undo-bar { font-size: 12px; padding: 8px; }
@@ -1466,6 +1498,9 @@
       <span class="dock-label">Film Rankings</span>
     </div>
   </div>
+
+  <!-- Scroll to top button (mobile) -->
+  <div class="scroll-top-btn" id="scroll-top-btn" onclick="scrollToTop()">&uarr;</div>
 
 </div>
 
@@ -2910,6 +2945,24 @@ setInterval(updateClock, 30000);
 window.addEventListener('beforeunload', () => {
   localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache));
 });
+
+// === SCROLL TO TOP (Mobile) ===
+function scrollToTop() {
+  const active = document.getElementById(activeTab === 'rankings' ? 'ratings-list' : 'watchlist-list');
+  if (active) active.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function() {
+  const btn = document.getElementById('scroll-top-btn');
+  function checkScroll() {
+    const active = document.getElementById(activeTab === 'rankings' ? 'ratings-list' : 'watchlist-list');
+    if (active && active.scrollTop > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }
+  document.addEventListener('scroll', checkScroll, true);
+})();
 
 // === WINDOW DRAG & RESIZE (Desktop Only) ===
 (function() {
