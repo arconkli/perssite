@@ -2305,7 +2305,7 @@ async function showMovieDetail(tmdbId) {
   }
 
   let suggestedHtml = '';
-  const suggestor = (ratingEntry && ratingEntry.suggested_by) || (watchlist.find(w => w.tmdb_id === tmdbId)?.suggested_by);
+  const suggestor = mode === 'edit' ? ((ratingEntry && ratingEntry.suggested_by) || (watchlist.find(w => w.tmdb_id === tmdbId)?.suggested_by)) : null;
   if (suggestor) {
     const watchEntry = watchlist.find(w => w.tmdb_id === tmdbId);
     const reason = watchEntry?.reason;
