@@ -573,12 +573,12 @@
     .movie-row {
       display: flex;
       align-items: center;
-      padding: 3px 6px;
+      padding: 4px 6px;
       gap: 8px;
       border-bottom: 1px solid #EEE;
       background: var(--mac-field-bg);
       cursor: default;
-      min-height: 28px;
+      min-height: 36px;
     }
 
     @media (hover: hover) {
@@ -592,16 +592,16 @@
     }
 
     .movie-poster {
-      width: 30px;
-      height: 44px;
+      width: 34px;
+      height: 50px;
       object-fit: cover;
       flex-shrink: 0;
       border: 1px solid var(--mac-dark-border);
     }
 
     .movie-poster-ph {
-      width: 30px;
-      height: 44px;
+      width: 34px;
+      height: 50px;
       flex-shrink: 0;
       border: 1px solid var(--mac-dark-border);
       background: #EEE;
@@ -693,11 +693,12 @@
     .watch-item {
       display: flex;
       align-items: center;
-      padding: 3px 8px;
+      padding: 4px 8px;
       gap: 8px;
       border-bottom: 1px solid #EEE;
       background: var(--mac-field-bg);
       cursor: default;
+      min-height: 36px;
     }
 
     @media (hover: hover) {
@@ -1183,15 +1184,15 @@
       .mac-btn-sm { min-height: 28px; padding: 3px 8px; font-size: 11px; }
 
       /* Movie rows: proper tap targets */
-      .movie-row { gap: 5px; padding: 5px 8px; min-height: 40px; }
-      .movie-poster, .movie-poster-ph { width: 26px; height: 39px; }
-      .movie-title { font-size: 12px; }
+      .movie-row { gap: 5px; padding: 5px 8px; min-height: 46px; }
+      .movie-poster, .movie-poster-ph { width: 30px; height: 44px; }
+      .movie-title { font-size: 13px; }
       .movie-date { font-size: 10px; min-width: 56px; }
       .movie-rating { font-size: 13px; min-width: 32px; }
 
       /* Watch items */
-      .watch-item { padding: 5px 8px; min-height: 40px; gap: 5px; }
-      .watch-title { font-size: 12px; }
+      .watch-item { padding: 5px 8px; min-height: 46px; gap: 5px; }
+      .watch-title { font-size: 13px; }
 
       /* Text inputs: comfortable typing size; selects: compact */
       input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea {
