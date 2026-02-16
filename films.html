@@ -87,11 +87,6 @@
       color: var(--mac-white);
     }
 
-    .menu-apple {
-      padding: 1px 10px;
-      font-size: 14px;
-    }
-
     .menu-app-name { font-weight: bold; }
 
     .menu-bar-spacer { flex: 1; }
@@ -144,6 +139,53 @@
 
     .desktop-icon-trash {
       margin-top: auto;
+    }
+
+    .trash-icon {
+      width: 18px;
+      height: 22px;
+      border: 2px solid #555;
+      border-top: none;
+      border-radius: 0 0 3px 3px;
+      position: relative;
+      display: inline-block;
+    }
+    .trash-icon::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      height: 2px;
+      background: #555;
+      border-radius: 1px;
+    }
+    .trash-icon::after {
+      content: '';
+      position: absolute;
+      top: -7px;
+      left: 4px;
+      right: 4px;
+      height: 3px;
+      background: #555;
+      border-radius: 1px;
+    }
+
+    .trash-icon-lg {
+      width: 26px;
+      height: 32px;
+    }
+    .trash-icon-lg::before {
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      height: 3px;
+    }
+    .trash-icon-lg::after {
+      top: -10px;
+      left: 6px;
+      right: 6px;
+      height: 4px;
     }
 
     .desktop-icon.selected .desktop-icon-label {
@@ -1054,7 +1096,7 @@
     /* === RESPONSIVE === */
     @media (max-width: 640px) {
       #menu-bar { font-size: 11px; }
-      .menu-item:not(.menu-apple):not(.menu-app-name) { display: none; }
+      .menu-item:not(.menu-app-name) { display: none; }
       .menu-right .menu-item:not(.menu-clock) { display: none; }
 
       #desktop-area { padding: 8px; }
@@ -1125,7 +1167,6 @@
 
   <!-- Menu Bar -->
   <div id="menu-bar">
-    <div class="menu-item menu-apple">&#63743;</div>
     <div class="menu-item menu-app-name">Film Rankings</div>
     <div class="menu-item">File</div>
     <div class="menu-item">Edit</div>
@@ -1145,7 +1186,7 @@
       <span class="desktop-icon-label">Film Rankings</span>
     </div>
     <div class="desktop-icon desktop-icon-trash">
-      <div class="desktop-icon-img">&#128465;</div>
+      <div class="desktop-icon-img"><div class="trash-icon trash-icon-lg"></div></div>
       <span class="desktop-icon-label">Trash</span>
     </div>
   </div>
@@ -1301,7 +1342,7 @@
     <div class="dock-divider"></div>
     <div class="dock-spacer"></div>
     <div class="dock-item" title="Trash">
-      <span class="dock-icon">&#128465;</span>
+      <span class="dock-icon"><div class="trash-icon"></div></span>
       <span class="dock-label">Trash</span>
     </div>
   </div>
@@ -2303,6 +2344,7 @@ function renderMovieRow(m) {
 
   const actions = mode === 'edit' ? `
     <div class="movie-actions">
+      <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();logRewatch(${m.id})" title="Log rewatch" style="min-width:auto;padding:1px 5px;font-size:10px">Re</button>
       <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 5px;font-size:10px">Edit</button>
       <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
     </div>` : '';
@@ -2511,6 +2553,12 @@ async function addRating() {
     const el = document.getElementById(id);
     if (el) el.checked = false;
   });
+}
+
+async function logRewatch(ratingId) {
+  await db.from('rewatches').insert({ rating_id: ratingId });
+  const movie = ratings.find(r => r.id === ratingId);
+  if (movie) alert(`Logged rewatch of "${movie.title}"`);
 }
 
 async function deleteRating(id) {
