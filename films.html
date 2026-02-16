@@ -674,40 +674,29 @@
       color: #888;
       text-align: right;
     }
-    .scores-wrap {
+    .sub-scores {
       display: flex;
-      align-items: center;
       gap: 6px;
+      justify-content: flex-end;
     }
-    .public-score-col {
-      text-align: center;
-      min-width: 28px;
-    }
-    .public-score-label {
-      display: block;
-      font-size: 7px;
+    .sub-score {
+      font-size: 8px;
       font-weight: normal;
-      text-transform: uppercase;
+      line-height: 1.2;
+      text-align: right;
+    }
+    .sub-score-label {
       color: #999;
+      text-transform: uppercase;
+      font-size: 7px;
       letter-spacing: 0.3px;
     }
-    .public-score-value {
-      display: block;
-      font-size: 12px;
-      font-weight: bold;
+    .sub-score-public {
       color: #5B7FBA;
+      font-weight: bold;
     }
-    .my-score-col {
-      text-align: center;
-      min-width: 28px;
-    }
-    .my-score-label {
-      display: block;
-      font-size: 7px;
-      font-weight: normal;
-      text-transform: uppercase;
-      color: #999;
-      letter-spacing: 0.3px;
+    .sub-score-adj {
+      color: #888;
     }
 
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
@@ -1241,11 +1230,10 @@
       .movie-poster, .movie-poster-ph { width: 30px; height: 44px; }
       .movie-title { font-size: 13px; }
       .movie-date { font-size: 10px; min-width: 56px; }
-      .movie-rating { font-size: 13px; min-width: 24px; }
-      .scores-wrap { gap: 4px; }
-      .public-score-col, .my-score-col { min-width: 24px; }
-      .public-score-value { font-size: 11px; }
-      .public-score-label, .my-score-label { font-size: 6px; }
+      .movie-rating { font-size: 13px; min-width: 32px; }
+      .sub-scores { gap: 4px; }
+      .sub-score { font-size: 7px; }
+      .sub-score-label { font-size: 6px; }
 
       /* Watch items */
       .watch-item { padding: 5px 8px; min-height: 46px; gap: 5px; }
@@ -1372,9 +1360,7 @@
 
     @media (max-width: 380px) {
       .movie-date { min-width: 42px; font-size: 9px; }
-      .movie-rating { min-width: 20px; font-size: 11px; }
-      .public-score-col, .my-score-col { min-width: 20px; }
-      .public-score-value { font-size: 10px; }
+      .movie-rating { min-width: 26px; font-size: 11px; }
       .movie-poster, .movie-poster-ph { display: none; }
       .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
       .window-toolbar .mac-btn-sm { padding: 3px 6px; font-size: 10px; min-height: 26px; }
@@ -1483,7 +1469,7 @@
             <span><span class="tag tag-opening">OD</span> Opening Day</span>
             <span><span class="tag tag-prelist">PL</span> Pre-List</span>
           </div>
-          <div style="font-size:9px;color:#999;margin-top:3px"><span style="color:#5B7FBA;font-weight:bold">Public</span> = avg critics score (IMDb 50%, RT 25%, MC 25%) &nbsp; <span style="font-weight:bold">Ours</span> = our rating</div>
+          <div style="font-size:9px;color:#999;margin-top:3px"><span style="color:#5B7FBA;font-weight:bold">Pub</span> = public avg (IMDb 50%, RT 25%, MC 25%) &nbsp; <span style="color:#888">Adj</span> = adjusted score</div>
         </div>
         <div class="search-bar">
           <label for="filter-input">Find:</label>
@@ -2781,14 +2767,17 @@ function renderMovieRow(m) {
   const rwCount = rewatchCounts[m.id] || 0;
   const rwBadge = rwCount > 0 ? `<span class="rewatch-badge" title="${rwCount + 1} total viewings">\u00D7${rwCount + 1}</span>` : '';
 
-  // Public score: weighted average of IMDb (50%), RT (25%), MC (25%)
-  let publicScoreHtml = '';
+  // Sub-scores: public avg + adjusted
+  let subScoresHtml = '';
+  const subParts = [];
   if (tmdb && tmdb.externalRatings) {
     const ps = calcPublicScore(tmdb.externalRatings);
-    if (ps !== null) publicScoreHtml = `<div class="public-score-col" title="Public avg: IMDb 50%, RT 25%, MC 25%"><span class="public-score-label">Public</span><span class="public-score-value">${ps}</span></div>`;
+    if (ps !== null) subParts.push(`<span class="sub-score" title="Public avg: IMDb 50%, RT 25%, MC 25%"><span class="sub-score-label">Pub </span><span class="sub-score-public">${ps}</span></span>`);
   }
-
-  const myScoreHtml = `<div class="my-score-col"><span class="my-score-label">Ours</span><span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}</span></div>`;
+  if (adjustedScores[m.id] !== undefined) {
+    subParts.push(`<span class="sub-score" title="Adjusted score (normalized)"><span class="sub-score-label">Adj </span><span class="sub-score-adj">${adjustedScores[m.id].toFixed(1)}</span></span>`);
+  }
+  if (subParts.length) subScoresHtml = `<div class="sub-scores">${subParts.join('')}</div>`;
 
   const clickHandler = m.tmdb_id ? `onclick="showMovieDetail(${m.tmdb_id})"` : '';
   return `<div class="movie-row" ${clickHandler}>
@@ -2799,7 +2788,7 @@ function renderMovieRow(m) {
       ${infoHtml}
     </div>
     <span class="movie-tags">${tags}</span>
-    <div class="scores-wrap">${publicScoreHtml}${myScoreHtml}</div>
+    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}${subScoresHtml}</span>
     ${actions}
   </div>`;
 }
