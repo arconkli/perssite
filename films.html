@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Film Rankings</title>
+  <style>
+    /* === WINDOWS 95 THEME === */
+    :root {
+      --win-bg: #C0C0C0;
+      --win-dark: #808080;
+      --win-darker: #404040;
+      --win-light: #DFDFDF;
+      --win-white: #FFFFFF;
+      --win-titlebar: #000080;
+      --win-titlebar-text: #FFFFFF;
+      --win-desktop: #008080;
+      --win-field: #FFFFFF;
+      --win-field-text: #000000;
+      --win-text: #000000;
+      --win-highlight: #000080;
+      --win-highlight-text: #FFFFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+      font-size: 11px;
+      background: var(--win-desktop);
+      color: var(--win-text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    input, select, button, textarea {
+      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+      font-size: 11px;
+    }
+
+    /* Outset (raised) */
+    .win-outset {
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+    }
+    /* Inset (sunken) */
+    .win-inset {
+      border: 2px solid;
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+    }
+
+    /* === LOGIN DIALOG === */
+    #login-screen {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--win-bg); width: 360px; z-index: 100;
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    }
+    .dialog-titlebar {
+      background: var(--win-titlebar); color: var(--win-titlebar-text);
+      padding: 3px 4px; display: flex; align-items: center; justify-content: space-between;
+      font-weight: bold; font-size: 11px; user-select: none;
+    }
+    .dialog-body {
+      padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .dialog-body label { font-size: 11px; }
+    .dialog-row { display: flex; align-items: center; gap: 8px; }
+    .dialog-icon {
+      font-size: 32px; flex-shrink: 0; width: 40px; text-align: center;
+    }
+    .dialog-buttons {
+      display: flex; justify-content: flex-end; gap: 6px; margin-top: 4px;
+    }
+    #login-error {
+      color: #CC0000; font-size: 11px; min-height: 14px; text-align: center;
+    }
+
+    /* === WIN95 BUTTONS === */
+    .win-btn {
+      background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      padding: 3px 12px; font-size: 11px; cursor: pointer;
+      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+      min-width: 75px; text-align: center; color: var(--win-text);
+    }
+    .win-btn:active {
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+      padding: 4px 11px 2px 13px;
+    }
+    .win-btn:focus { outline: 1px dotted var(--win-text); outline-offset: -4px; }
+    .win-btn-sm { min-width: auto; padding: 2px 8px; }
+
+    /* Titlebar buttons */
+    .tb-btn {
+      width: 16px; height: 14px; background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; font-weight: bold; cursor: pointer; padding: 0;
+      line-height: 1; color: var(--win-text); font-family: 'Tahoma', sans-serif;
+    }
+    .tb-btn:active {
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+    }
+
+    /* === WIN95 INPUT === */
+    .win-input {
+      background: var(--win-field); color: var(--win-field-text);
+      border: 2px solid;
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+      padding: 2px 4px; font-size: 11px; outline: none;
+      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+    }
+
+    /* === MAIN WINDOW === */
+    #app {
+      display: none; background: var(--win-bg); width: 100%; max-width: 960px;
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      flex-direction: column;
+    }
+    .win-titlebar {
+      background: var(--win-titlebar); color: var(--win-titlebar-text);
+      padding: 3px 4px; display: flex; align-items: center; justify-content: space-between;
+      font-weight: bold; font-size: 11px; user-select: none;
+    }
+    .win-titlebar-text { flex: 1; padding-left: 2px; white-space: nowrap; overflow: hidden; }
+    .win-titlebar-buttons { display: flex; gap: 2px; }
+
+    /* Toolbar */
+    .win-toolbar {
+      display: flex; align-items: center; gap: 2px;
+      padding: 2px 4px;
+      border-bottom: 1px solid var(--win-dark);
+      background: var(--win-bg);
+    }
+    .toolbar-sep {
+      width: 1px; height: 18px; margin: 0 4px;
+      border-left: 1px solid var(--win-dark);
+      border-right: 1px solid var(--win-white);
+    }
+    .toolbar-label {
+      font-size: 11px; padding: 0 4px; color: var(--win-text);
+    }
+
+    /* Body */
+    .win-body { padding: 8px; flex: 1; overflow-y: auto; }
+
+    /* === STATS PANELS === */
+    .stats-panels { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+    .stat-panel {
+      border: 2px solid;
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+      padding: 2px 8px; font-size: 11px; flex: 1; min-width: 80px;
+    }
+    .stat-panel b { font-weight: bold; }
+
+    /* === TABS === */
+    .win-tabs { display: flex; gap: 0; padding: 0 2px; margin-bottom: -2px; position: relative; z-index: 1; }
+    .win-tab {
+      background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      border-bottom: none;
+      padding: 3px 14px; cursor: pointer; font-size: 11px;
+      position: relative; top: 2px; color: var(--win-text);
+      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+    }
+    .win-tab.active {
+      top: 0; padding-bottom: 5px; z-index: 2;
+      border-bottom: 2px solid var(--win-bg);
+    }
+    .win-tab-panel {
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      padding: 10px; background: var(--win-bg); position: relative;
+    }
+
+    /* === GROUPBOX === */
+    .win-groupbox {
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      padding: 10px 8px 6px; margin: 6px 0; position: relative;
+    }
+    .win-groupbox-label {
+      position: absolute; top: -7px; left: 8px;
+      background: var(--win-bg); padding: 0 4px; font-size: 11px;
+    }
+    .scale-items { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    .scale-item { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+    .scale-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .tag-items { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; font-size: 11px; color: #555; }
+
+    /* === SEARCH BAR === */
+    .search-bar { display: flex; align-items: center; gap: 6px; margin: 8px 0; }
+    .search-bar label { font-size: 11px; white-space: nowrap; }
+    .search-bar .win-input { flex: 1; }
+
+    /* === CONTENT AREA (sunken list) === */
+    .content-area {
+      border: 2px solid;
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+      background: var(--win-field); max-height: 500px; overflow-y: auto;
+      min-height: 200px;
+    }
+
+    /* === YEAR & MONTH HEADERS === */
+    .year-header {
+      font-size: 12px; font-weight: bold; padding: 4px 6px;
+      background: var(--win-bg);
+      border-bottom: 1px solid var(--win-dark);
+      display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1;
+    }
+    .year-count { font-weight: normal; color: #555; }
+    .month-header {
+      font-size: 11px; font-weight: bold; padding: 3px 6px 3px 12px;
+      background: var(--win-light); color: #333;
+      border-bottom: 1px solid #ccc;
+    }
+    .month-count { font-weight: normal; color: #888; }
+
+    /* === MOVIE ROW === */
+    .movie-row {
+      display: flex; align-items: center; padding: 2px 4px; gap: 6px;
+      border-bottom: 1px solid #eee; background: var(--win-field);
+      cursor: default; min-height: 24px;
+    }
+    .movie-row:hover { background: var(--win-highlight); color: var(--win-highlight-text); }
+    .movie-row:hover .movie-date,
+    .movie-row:hover .movie-info,
+    .movie-row:hover .movie-rating { color: var(--win-highlight-text); }
+    .movie-poster {
+      width: 28px; height: 42px; object-fit: cover; flex-shrink: 0;
+      border: 1px solid var(--win-dark); background: #ddd;
+    }
+    .movie-poster-ph {
+      width: 28px; height: 42px; flex-shrink: 0;
+      border: 1px solid var(--win-dark); background: #eee;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: #999;
+    }
+    .movie-date { font-size: 11px; color: #555; min-width: 60px; font-variant-numeric: tabular-nums; }
+    .movie-title-wrap { flex: 1; min-width: 0; }
+    .movie-title { font-size: 11px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .movie-info { font-size: 10px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .movie-tags { display: flex; gap: 2px; flex-shrink: 0; }
+    .tag {
+      font-size: 8px; letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 1px 4px; font-weight: bold;
+    }
+    .tag-theater { background: #C0D8F0; color: #000080; }
+    .tag-festival { background: #D8C0E8; color: #600080; }
+    .tag-opening { background: #C0E8C0; color: #006000; }
+    .tag-rewatch { background: #D8D8D8; color: #555; }
+    .movie-rating {
+      font-size: 12px; font-weight: bold; min-width: 32px; text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .rating-gold { color: #B8860B; }
+    .rating-green { color: #006400; }
+    .rating-orange { color: #CC7000; }
+    .rating-red { color: #CC0000; }
+    .rating-dnf { color: #808080; font-size: 10px; font-weight: normal; font-style: italic; }
+    .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
+
+    /* === WATCHLIST === */
+    .watch-item {
+      display: flex; align-items: center; padding: 3px 6px; gap: 8px;
+      border-bottom: 1px solid #eee; background: var(--win-field); cursor: default;
+    }
+    .watch-item:hover { background: var(--win-highlight); color: var(--win-highlight-text); }
+    .watch-num { font-size: 10px; color: #999; min-width: 22px; font-variant-numeric: tabular-nums; }
+    .watch-title { flex: 1; font-size: 11px; }
+
+    /* === FORMS === */
+    .add-form {
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      padding: 10px 8px 8px; margin: 8px 0; position: relative;
+    }
+    .add-form-label {
+      position: absolute; top: -7px; left: 8px;
+      background: var(--win-bg); padding: 0 4px; font-size: 11px; font-weight: bold;
+    }
+    .form-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; align-items: center; }
+    .form-row label { font-size: 11px; white-space: nowrap; }
+    .form-row .win-input.date-input { width: 80px; }
+    .form-row .win-input.title-input { flex: 1; min-width: 140px; }
+    .form-row .win-input.rating-input { width: 55px; }
+    .form-tags { display: flex; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+    .form-tags label { font-size: 11px; display: flex; align-items: center; gap: 3px; cursor: pointer; }
+
+    /* TMDB Search Dropdown */
+    .tmdb-dropdown {
+      position: absolute; left: 0; right: 0; z-index: 50;
+      background: var(--win-field);
+      border: 2px solid;
+      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+      max-height: 200px; overflow-y: auto;
+    }
+    .tmdb-result {
+      display: flex; align-items: center; gap: 6px; padding: 3px 6px;
+      cursor: pointer; font-size: 11px;
+    }
+    .tmdb-result:hover { background: var(--win-highlight); color: var(--win-highlight-text); }
+    .tmdb-result img { width: 24px; height: 36px; object-fit: cover; border: 1px solid #ccc; }
+    .tmdb-result-ph { width: 24px; height: 36px; background: #eee; border: 1px solid #ccc; flex-shrink: 0; }
+
+    /* Edit inline */
+    .edit-inline {
+      display: flex; gap: 4px; align-items: center; padding: 3px 4px;
+      background: #FFFFCC; border-bottom: 1px solid #ccc; flex-wrap: wrap;
+    }
+    .edit-inline .win-input { font-size: 11px; }
+    .edit-inline .win-input.date-input { width: 70px; }
+    .edit-inline .win-input.title-input { flex: 1; min-width: 120px; }
+    .edit-inline .win-input.rating-input { width: 50px; }
+
+    /* === STATUS BAR === */
+    .win-statusbar {
+      border-top: 2px solid;
+      border-color: var(--win-dark) var(--win-white);
+      padding: 2px 4px; display: flex; gap: 4px; font-size: 11px;
+    }
+    .sb-section {
+      border: 1px solid;
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      padding: 1px 6px;
+    }
+    .sb-section:first-child { flex: 2; }
+    .sb-section:nth-child(2) { flex: 1; }
+    .sb-section:last-child { flex: 1; }
+
+    /* === EXPORT SECTION === */
+    .export-section { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* === SCROLLBARS (WebKit) === */
+    ::-webkit-scrollbar { width: 16px; height: 16px; }
+    ::-webkit-scrollbar-track { background: var(--win-light); }
+    ::-webkit-scrollbar-thumb {
+      background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+    }
+    ::-webkit-scrollbar-button {
+      background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      width: 16px; height: 16px;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 640px) {
+      body { padding: 0; align-items: stretch; }
+      #app { max-width: 100%; border: none; box-shadow: none; }
+      #login-screen { width: 90%; max-width: 340px; }
+      .movie-poster, .movie-poster-ph { width: 22px; height: 33px; }
+      .movie-row { gap: 4px; }
+      .stats-panels { gap: 2px; }
+      .stat-panel { min-width: 60px; padding: 2px 4px; font-size: 10px; }
+      .content-area { max-height: 400px; }
+      .win-toolbar { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Dialog -->
+<div id="login-screen">
+  <div class="dialog-titlebar">
+    <span>Login</span>
+    <div style="display:flex;gap:2px">
+      <button class="tb-btn" onclick="document.getElementById('pwd-input').value=''">&times;</button>
+    </div>
+  </div>
+  <div class="dialog-body">
+    <div class="dialog-row">
+      <div class="dialog-icon">&#128274;</div>
+      <div>
+        <div style="margin-bottom:8px;font-size:11px">Enter password to access Film Rankings.</div>
+        <div class="dialog-row">
+          <label for="pwd-input">Password:</label>
+          <input type="password" class="win-input" id="pwd-input" style="flex:1" autocomplete="off">
+        </div>
+      </div>
+    </div>
+    <p id="login-error"></p>
+    <div class="dialog-buttons">
+      <button class="win-btn" onclick="attemptLogin()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main App Window -->
+<div id="app">
+  <div class="win-titlebar">
+    <span class="win-titlebar-text" id="titlebar-text">Film Rankings</span>
+    <div class="win-titlebar-buttons">
+      <button class="tb-btn" title="Minimize">_</button>
+      <button class="tb-btn" title="Maximize">&#9633;</button>
+      <button class="tb-btn" title="Close" onclick="logout()">&times;</button>
+    </div>
+  </div>
+
+  <div class="win-toolbar" id="toolbar">
+    <button class="win-btn win-btn-sm" onclick="switchTab('rankings')">Rankings</button>
+    <button class="win-btn win-btn-sm" onclick="switchTab('watchlist')">Watchlist</button>
+    <div class="toolbar-sep"></div>
+    <span class="toolbar-label" id="toolbar-mode"></span>
+    <div style="flex:1"></div>
+    <button class="win-btn win-btn-sm" id="toolbar-export" style="display:none" onclick="exportData()">Export</button>
+    <button class="win-btn win-btn-sm" onclick="logout()">Lock</button>
+  </div>
+
+  <div class="win-body">
+    <!-- Stats -->
+    <div class="stats-panels">
+      <div class="stat-panel">Rated: <b id="s-total">0</b></div>
+      <div class="stat-panel">Avg: <b id="s-avg">0</b></div>
+      <div class="stat-panel">Perfect 10s: <b id="s-tens">0</b></div>
+      <div class="stat-panel">Watchlist: <b id="s-watch">0</b></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="win-tabs">
+      <button class="win-tab active" data-tab="rankings" onclick="switchTab('rankings')">Rankings</button>
+      <button class="win-tab" data-tab="watchlist" onclick="switchTab('watchlist')">Watchlist</button>
+    </div>
+
+    <!-- Rankings Panel -->
+    <div class="win-tab-panel" id="tab-rankings">
+      <div class="win-groupbox">
+        <span class="win-groupbox-label">Rating Scale</span>
+        <div class="scale-items">
+          <div class="scale-item"><span class="scale-dot" style="background:#B8860B"></span> 9+</div>
+          <div class="scale-item"><span class="scale-dot" style="background:#006400"></span> 7.5+</div>
+          <div class="scale-item"><span class="scale-dot" style="background:#CC7000"></span> 5+</div>
+          <div class="scale-item"><span class="scale-dot" style="background:#CC0000"></span> 0+</div>
+          <div class="scale-item"><span class="scale-dot" style="background:#808080"></span> DNF</div>
+        </div>
+        <div class="tag-items">
+          <span><span class="tag tag-theater">T</span> Theater</span>
+          <span><span class="tag tag-festival">F</span> Festival</span>
+          <span><span class="tag tag-opening">OD</span> Opening Day</span>
+          <span><span class="tag tag-rewatch">R</span> Rewatch</span>
+        </div>
+      </div>
+      <div class="search-bar">
+        <label for="filter-input">Find:</label>
+        <input type="text" class="win-input" id="filter-input" placeholder="Search movies..." oninput="render()">
+      </div>
+      <div class="content-area" id="ratings-list"></div>
+      <div id="add-rating-section" style="position:relative"></div>
+    </div>
+
+    <!-- Watchlist Panel -->
+    <div class="win-tab-panel" id="tab-watchlist" style="display:none">
+      <div class="search-bar">
+        <label for="filter-watch">Find:</label>
+        <input type="text" class="win-input" id="filter-watch" placeholder="Search watchlist..." oninput="render()">
+      </div>
+      <div class="content-area" id="watchlist-list"></div>
+      <div id="add-watch-section" style="position:relative"></div>
+    </div>
+
+    <div id="export-section"></div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="win-statusbar">
+    <div class="sb-section" id="sb-mode">View Mode</div>
+    <div class="sb-section" id="sb-count">0 films</div>
+    <div class="sb-section" id="sb-tmdb">Ready</div>
+  </div>
+</div>
+
+<script>
+// === CONFIG ===
+const VIEW_HASH = 'db944067d6c7762bee2cd7cc3c55e9f35ccea4e885fa17930856aefe784a1b52';
+const EDIT_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+const STORAGE_KEY = 'ac_films_data';
+const SESSION_KEY = 'ac_films_mode';
+
+// === TMDB CONFIG ===
+const TMDB_KEY = '696e0c182f4e0c9df706d94b7bf50021';
+const TMDB_BASE = 'https://api.themoviedb.org/3';
+const TMDB_IMG = 'https://image.tmdb.org/t/p';
+const TMDB_CACHE_KEY = 'ac_films_tmdb';
+const TMDB_GENRES = {
+  28:'Action',12:'Adventure',16:'Animation',35:'Comedy',80:'Crime',
+  99:'Documentary',18:'Drama',10751:'Family',14:'Fantasy',36:'History',
+  27:'Horror',10402:'Music',9648:'Mystery',10749:'Romance',878:'Sci-Fi',
+  10770:'TV Movie',53:'Thriller',10752:'War',37:'Western'
+};
+
+// === DEFAULT DATA ===
+const DEFAULT_RATINGS = [
+  ["01/31/26","Fallen Angels",7.25,[]],
+  ["01/30/26","The Incredibles",9.25,[]],
+  ["01/29/26","Iron Lung",7.75,[]],
+  ["01/12/26","Marty Supreme",9.75,[]],
+  ["01/02/26","Wicked: For Good",5.75,[]],
+  ["12/28/25","Brightburn",6,[]],
+  ["12/26/25","Public Enemies",7.5,[]],
+  ["12/26/25","Top Gun: Maverick",9.75,[]],
+  ["12/20/25","Five Nights at Freddy's 2",6.5,[]],
+  ["12/18/25","El Camino",7.25,[]],
+  ["12/16/25","Identity",7.25,[]],
+  ["12/14/25","The Island",6.25,[]],
+  ["12/01/25","Frankenstein",7.5,[]],
+  ["11/27/25","True Romance",8.5,[]],
+  ["11/27/25","Everyone's Hero",7.5,[]],
+  ["11/26/25","12 Monkeys",7.25,[]],
+  ["11/24/25","Money Ball",9.25,[]],
+  ["11/19/25","Free Solo",6.5,[]],
+  ["11/15/25","Madagascar 3: Europe's Most Wanted",9.25,[]],
+  ["11/10/25","Troy",6.5,[]],
+  ["10/29/25","John Wick: Chapter 4",9.5,[]],
+  ["10/15/25","Jennifer's Body",7.5,[]],
+  ["09/27/25","One Battle After Another",8,[]],
+  ["09/09/25","Tron: Legacy",8,[]],
+  ["09/08/25","Call Me by Your Name",7.25,[]],
+  ["08/20/25","The King",8.75,[]],
+  ["07/31/25","John Wick: Chapter 3",8.75,[]],
+  ["07/31/25","John Wick: Chapter 2",8.5,[]],
+  ["07/29/25","Ick",8.25,[]],
+  ["07/27/25","The Dark Knight",9.5,[]],
+  ["07/16/25","Shark Tale",7,[]],
+  ["07/01/25","Ballerina",8.5,[]],
+  ["06/30/25","F1",9.25,[]],
+  ["06/21/25","John Wick",9.25,[]],
+  ["06/20/25","The Accountant 2","DNF",[]],
+  ["06/13/25","The Girl Next Door",7.75,[]],
+  ["05/27/25","Late Night with the Devil",6,[]],
+  ["05/25/25","Tropic Thunder",9,[]],
+  ["05/25/25","How to Train Your Dragon: The Hidden World",8.5,[]],
+  ["05/24/25","How to Train Your Dragon 2",8.5,[]],
+  ["05/24/25","How to Train Your Dragon",9.25,[]],
+  ["05/24/25","Air Force Elite - Thunderbirds",6,[]],
+  ["05/23/25","Mission: Impossible - Final Reckoning",9,[]],
+  ["05/04/25","The Fighter",8.75,[]],
+  ["05/02/25","Thunderbolts",8.25,[]],
+  ["05/02/25","Anora",8.5,[]],
+  ["05/01/25","The White House Effect",5.75,[]],
+  ["04/29/25","OBEX",4.5,[]],
+  ["04/29/25","The Kingdom",9,[]],
+  ["04/28/25","Drive",8,[]],
+  ["04/24/25","Warfare",8,[]],
+  ["04/12/25","Goodfellas",8.75,[]],
+  ["04/04/25","Minecraft",6.25,[]],
+  ["03/26/25","Mickey 17",6,[]],
+  ["03/23/25","Electric State",6,[]],
+  ["02/26/25","The Monkey",5.75,[]],
+  ["02/19/25","Companion",7.5,[]],
+  ["02/05/25","Paul Blart: Mall Cop",7.25,[]],
+  ["01/15/25","Better Man",8.5,[]],
+  ["01/07/25","Wicked",8.5,[]],
+  ["01/06/25","Boy Kills World",6,[]],
+  ["01/03/25","Immaculate",6.5,[]],
+  ["12/30/24","Gladiator 2",7.75,[]],
+  ["12/28/24","Oddity",6.75,[]],
+  ["12/27/24","Split",7.75,[]],
+  ["12/27/24","Gladiator",8.75,[]],
+  ["12/23/24","Transformers One",7.5,[]],
+  ["12/16/24","Spy Game",6,[]],
+  ["12/13/24","Subservience",6,[]],
+  ["11/28/24","Oz",6.5,[]],
+  ["11/27/24","Smile 2",7,[]],
+  ["10/01/24","Wolfs",6.75,[]],
+  ["09/13/24","The Disaster Artist",7,[]],
+  ["05/30/24","Prom Dates",6.5,[]],
+  ["05/20/24","Se7en",8.5,[]],
+  ["05/18/24","Sicario",9,[]],
+  ["05/05/24","Oldboy","DNF",[]],
+  ["04/07/24","The Breath",8,[]],
+  ["04/03/24","Imperium",8,[]],
+  ["04/01/24","High Life",7.5,[]],
+  ["03/02/24","Free Fire",7.5,[]],
+  ["03/02/24","Mayhem","DNF",[]],
+  ["03/01/24","Office Space",8,[]],
+  ["02/29/24","Belko Experiment","DNF",[]],
+  ["02/22/24","Dune: Part Two",10,[]],
+  ["01/22/24","Kidnapping Inc",8.75,[]],
+  ["01/21/24","A Different Man",8.75,[]],
+  ["01/20/24","Love Lies Bleeding",8.25,[]],
+  ["01/19/24","It's What's Inside",7.5,[]],
+  ["01/19/24","Sasquatch Sunset",6,[]],
+  ["01/14/24","Vivarium",6,[]],
+  ["01/05/24","M.I.B",7.5,[]],
+  ["01/05/24","R.I.P.D.",6,[]],
+  ["01/04/24","The Creator",7.5,[]],
+  ["12/25/23","The Other Guys",7.25,[]],
+  ["12/24/23","The Lodge",6.5,[]],
+  ["12/21/23","I'm Thinking of Ending Things",6,[]],
+  ["12/20/23","The Hunger Games (2023)",7,[]],
+  ["11/20/23","Hotel Transylvania: Transformania",5.75,[]],
+  ["11/20/23","Hotel Transylvania 3",6.5,[]],
+  ["11/20/23","Hotel Transylvania 2",7,[]],
+  ["11/20/23","Hotel Transylvania",8.25,[]],
+  ["10/05/23","Rejuvenation",3.5,[]],
+  ["09/30/23","Better Luck Tomorrow",7.25,[]],
+  ["09/17/23","Bottoms",8.25,[]],
+  ["09/17/23","Ted",6.5,[]],
+  ["09/07/23","The Speed Cubers",4.5,[]],
+  ["09/05/23","The Big Short",8.25,[]],
+  ["08/13/23","The Mist",5,[]],
+  ["08/10/23","Sorry to Bother You",9,[]],
+  ["08/10/23","La La Land",9,[]],
+  ["08/10/23","The Nice Guys",6.5,[]],
+  ["08/09/23","Gran Turismo",7.5,[]],
+  ["07/21/23","Barbie",9,[]],
+  ["07/21/23","Oppenheimer",9.5,[]],
+  ["07/14/23","Butch Cassidy and the Sundance Kid",6.5,[]],
+  ["07/10/23","Mission: Impossible - Dead Reckoning",9.5,[]],
+  ["07/09/23","Ex Machina",9.5,[]],
+  ["07/09/23","The Mask",8.75,[]],
+  ["07/08/23","Journey 2: The Mysterious Island",3,[]],
+  ["07/08/23","A Trip to the Moon",9.25,[]],
+  ["07/06/23","Megamind",8.75,[]],
+  ["07/05/23","Catch Me If You Can",8.5,[]],
+  ["07/04/23","I, Tonya",8.5,[]],
+  ["07/03/23","Focus",8.25,[]],
+  ["07/02/23","2001: A Space Odyssey",7.5,[]],
+  ["07/01/23","Amsterdam",5.75,[]],
+  ["06/30/23","Harley Quinn: Birds of Prey",9,[]],
+  ["06/30/23","Indiana Jones and the Dial of Destiny",7,[]],
+  ["06/30/23","Suicide Squad",6,[]],
+  ["06/29/23","Evil Dead Rise",4,[]],
+  ["06/28/23","The Suicide Squad",5.25,[]],
+  ["06/24/23","Spider-Man: Into the Spider-Verse",9.5,[]],
+  ["06/23/23","Spider-Man: Across the Spider-Verse",9.75,[]],
+  ["06/22/23","Asteroid City",8,[]],
+  ["06/20/23","Black Panther: Wakanda Forever",5,[]],
+  ["06/18/23","Inglorious Bastards",9,[]],
+  ["06/17/23","Toy Story 2",8.75,[]],
+  ["06/10/23","Fight Club",8.5,[]],
+  ["06/09/23","Babylon",10,[]],
+  ["06/06/23","Glass Onion: Knives Out",5.5,[]],
+  ["06/04/23","Deadpool 2",7.75,[]],
+  ["06/04/23","Deadpool",8.5,[]],
+  ["06/03/23","Bullet Train",8.75,[]],
+  ["06/03/23","Mario Movie",8.25,[]],
+  ["05/27/23","American Psycho",9,[]],
+  ["05/24/23","Once Upon a Time in Hollywood",7,[]],
+  ["05/19/23","Blade Runner 2049",9.5,[]],
+  ["05/17/23","Dune",9.75,[]],
+  ["05/10/23","Pirates of the Caribbean 1",10,[]]
+];
+
+const DEFAULT_WATCHLIST = [
+  "Fallen Angels","GOAT","Heretics","Sin City","Chronicle",
+  "What Happened to Monday","Woman in Black","Guns Akimbo","Anthropoid",
+  "True Detective","The Apprentice","Till Death","Run Lola Run",
+  "Snatch","Rush","It Follows","LA Confidential","Mr. & Mrs. Smith",
+  "Shaolin Soccer","The Aviator","Thelma & Louise","Pretty Woman",
+  "3 Idiots","Taare Zameen Par","Apocalypse Now","Extraction","Chaplin",
+  "The Revenant","Cleopatra (1963)","Secrets of the Octopus","The Gray Man",
+  "Crazy, Stupid, Love","Beautiful Boy","Bombshell","Ad Astra",
+  "Spring Breakers","Saturday Night","The Shining","Tron",
+  "Judas and the Black Messiah","Psycho","Killer Joe"
+];
+
+// === STATE ===
+let mode = null;
+let ratings = [];
+let watchlist = [];
+let activeTab = 'rankings';
+let editingId = null;
+let nextId = 1;
+let tmdbCache = {};
+let tmdbMatchRunning = false;
+
+// === UTILITY ===
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function parseDate(d) {
+  const [mm,dd,yy] = d.split('/').map(Number);
+  return { month: mm, day: dd, year: 2000 + yy, sort: (2000+yy)*10000 + mm*100 + dd };
+}
+
+function ratingClass(r) {
+  if (r === 'DNF') return 'rating-dnf';
+  if (r >= 9) return 'rating-gold';
+  if (r >= 7.5) return 'rating-green';
+  if (r >= 5) return 'rating-orange';
+  return 'rating-red';
+}
+
+function ratingDisplay(r) {
+  if (r === 'DNF') return 'DNF';
+  return Number.isInteger(r) ? r.toString() : r.toFixed(2).replace(/0$/, '');
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// === AUTH ===
+async function attemptLogin() {
+  const pwd = document.getElementById('pwd-input').value;
+  if (!pwd) return;
+  const hash = await sha256(pwd);
+  if (hash === EDIT_HASH) mode = 'edit';
+  else if (hash === VIEW_HASH) mode = 'view';
+  else {
+    document.getElementById('login-error').textContent = 'Incorrect password.';
+    document.getElementById('pwd-input').value = '';
+    return;
+  }
+  sessionStorage.setItem(SESSION_KEY, mode);
+  showApp();
+}
+
+function logout() {
+  mode = null;
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('login-error').textContent = '';
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('titlebar-text').textContent =
+    'Film Rankings' + (mode === 'edit' ? ' [Edit Mode]' : '');
+  document.getElementById('toolbar-mode').textContent =
+    mode === 'edit' ? 'Edit Mode' : 'View Mode';
+  document.getElementById('toolbar-export').style.display =
+    mode === 'edit' ? '' : 'none';
+  document.getElementById('sb-mode').textContent =
+    mode === 'edit' ? 'Edit Mode' : 'View Mode';
+  loadData();
+  loadTMDBCache();
+  render();
+  autoMatchTMDB();
+}
+
+// === DATA ===
+function loadData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const d = JSON.parse(saved);
+      ratings = d.ratings || [];
+      watchlist = d.watchlist || [];
+      nextId = d.nextId || 1;
+      return;
+    } catch(e) {}
+  }
+  ratings = DEFAULT_RATINGS.map(r => ({
+    id: nextId++, date: r[0], title: r[1], rating: r[2],
+    tags: r[3] || [], tmdb_id: r[4] || null
+  }));
+  watchlist = DEFAULT_WATCHLIST.map(t => ({ id: nextId++, title: t }));
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ratings, watchlist, nextId }));
+}
+
+// === TMDB ===
+function loadTMDBCache() {
+  try {
+    const s = localStorage.getItem(TMDB_CACHE_KEY);
+    if (s) tmdbCache = JSON.parse(s);
+  } catch(e) { tmdbCache = {}; }
+}
+
+function saveTMDBCache() {
+  localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache));
+}
+
+async function tmdbSearch(query, year) {
+  let url = `${TMDB_BASE}/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(query)}`;
+  if (year) url += `&year=${year}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('TMDB ' + resp.status);
+  return resp.json();
+}
+
+function tmdbCacheFromResult(r) {
+  return {
+    poster_path: r.poster_path,
+    release_date: r.release_date || '',
+    genres: (r.genre_ids || []).map(id => TMDB_GENRES[id]).filter(Boolean).slice(0, 3),
+    ts: Date.now()
+  };
+}
+
+function getPosterUrl(path, size) {
+  if (!path) return null;
+  return `${TMDB_IMG}/${size || 'w92'}${path}`;
+}
+
+function getTMDBInfo(tmdbId) {
+  if (!tmdbId || !tmdbCache[tmdbId]) return null;
+  return tmdbCache[tmdbId];
+}
+
+async function autoMatchTMDB() {
+  if (tmdbMatchRunning) return;
+  const unmatched = ratings.filter(r => !r.tmdb_id);
+  if (unmatched.length === 0) {
+    document.getElementById('sb-tmdb').textContent = 'TMDB: Ready';
+    return;
+  }
+  tmdbMatchRunning = true;
+  let matched = 0;
+  const total = unmatched.length;
+
+  for (let i = 0; i < unmatched.length; i += 5) {
+    const batch = unmatched.slice(i, i + 5);
+    const promises = batch.map(async movie => {
+      try {
+        // Extract year from title if present like "Cleopatra (1963)"
+        let searchTitle = movie.title;
+        let yearFilter = null;
+        const ym = movie.title.match(/\((\d{4})\)$/);
+        if (ym) {
+          yearFilter = ym[1];
+          searchTitle = movie.title.replace(/\s*\(\d{4}\)$/, '');
+        }
+        let data = await tmdbSearch(searchTitle, yearFilter);
+        // If no results with year filter, try without
+        if ((!data.results || data.results.length === 0) && yearFilter) {
+          data = await tmdbSearch(searchTitle, null);
+        }
+        if (data.results && data.results.length > 0) {
+          const best = data.results[0];
+          movie.tmdb_id = best.id;
+          tmdbCache[best.id] = tmdbCacheFromResult(best);
+          matched++;
+        }
+      } catch(e) { /* skip */ }
+    });
+    await Promise.all(promises);
+    saveData();
+    saveTMDBCache();
+    document.getElementById('sb-tmdb').textContent =
+      `TMDB: ${i + batch.length}/${total}`;
+    render();
+    // Small delay between batches
+    await new Promise(r => setTimeout(r, 150));
+  }
+  document.getElementById('sb-tmdb').textContent = `TMDB: ${matched} matched`;
+  tmdbMatchRunning = false;
+}
+
+// TMDB search for add form
+let searchTimeout = null;
+function onTitleSearch(val) {
+  clearTimeout(searchTimeout);
+  const dd = document.getElementById('tmdb-dropdown');
+  if (!dd) return;
+  if (val.length < 2) { dd.style.display = 'none'; return; }
+  searchTimeout = setTimeout(async () => {
+    try {
+      const data = await tmdbSearch(val, null);
+      if (!data.results || data.results.length === 0) {
+        dd.style.display = 'none'; return;
+      }
+      let html = '';
+      data.results.slice(0, 6).forEach(r => {
+        const yr = r.release_date ? r.release_date.substring(0, 4) : '?';
+        const poster = r.poster_path
+          ? `<img src="${getPosterUrl(r.poster_path, 'w92')}" alt="">`
+          : '<div class="tmdb-result-ph"></div>';
+        html += `<div class="tmdb-result" data-id="${r.id}" data-title="${escHtml(r.title)}"
+                  onclick="selectTMDBResult(this)">
+          ${poster}<span>${escHtml(r.title)} (${yr})</span>
+        </div>`;
+      });
+      dd.innerHTML = html;
+      dd.style.display = 'block';
+    } catch(e) { dd.style.display = 'none'; }
+  }, 400);
+}
+
+function selectTMDBResult(el) {
+  const id = parseInt(el.dataset.id);
+  const title = el.dataset.title;
+  document.getElementById('new-title').value = title;
+  const hiddenId = document.getElementById('new-tmdb-id');
+  if (hiddenId) hiddenId.value = id;
+  const dd = document.getElementById('tmdb-dropdown');
+  if (dd) dd.style.display = 'none';
+  // Cache from search if not already
+  if (!tmdbCache[id]) {
+    tmdbSearch(title, null).then(data => {
+      if (data.results) {
+        const match = data.results.find(r => r.id === id);
+        if (match) { tmdbCache[id] = tmdbCacheFromResult(match); saveTMDBCache(); }
+      }
+    }).catch(() => {});
+  }
+}
+
+// === RENDER ===
+function render() {
+  renderStats();
+  if (activeTab === 'rankings') renderRatings();
+  else renderWatchlist();
+  renderEditSections();
+  // Update status bar
+  const numericCount = ratings.filter(r => r.rating !== 'DNF').length;
+  document.getElementById('sb-count').textContent = numericCount + ' films rated';
+}
+
+function renderStats() {
+  const nr = ratings.filter(r => r.rating !== 'DNF');
+  const total = nr.length;
+  const avg = total ? (nr.reduce((s,r) => s + r.rating, 0) / total).toFixed(2) : '0';
+  const tens = nr.filter(r => r.rating === 10).length;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-avg').textContent = avg;
+  document.getElementById('s-tens').textContent = tens;
+  document.getElementById('s-watch').textContent = watchlist.length;
+}
+
+function renderRatings() {
+  const filter = document.getElementById('filter-input').value.toLowerCase();
+  const filtered = ratings.filter(r => r.title.toLowerCase().includes(filter));
+  const years = {};
+  filtered.forEach(r => {
+    const p = parseDate(r.date);
+    if (!years[p.year]) years[p.year] = {};
+    if (!years[p.year][p.month]) years[p.year][p.month] = [];
+    years[p.year][p.month].push(r);
+  });
+
+  let html = '';
+  Object.keys(years).sort((a,b) => b - a).forEach(year => {
+    const ym = Object.values(years[year]).flat();
+    const yc = ym.filter(r => r.rating !== 'DNF').length;
+    html += `<div class="year-header"><span>//${year}</span><span class="year-count">(${yc})</span></div>`;
+    Object.keys(years[year]).sort((a,b) => b - a).forEach(month => {
+      const movies = years[year][month];
+      const mc = movies.filter(r => r.rating !== 'DNF').length;
+      html += `<div class="month-header">${MONTHS[month-1]} <span class="month-count">(${mc})</span></div>`;
+      movies.forEach(m => {
+        html += editingId === m.id ? renderEditRow(m) : renderMovieRow(m);
+      });
+    });
+  });
+  document.getElementById('ratings-list').innerHTML = html;
+}
+
+function renderMovieRow(m) {
+  const tags = (m.tags || []).map(t => {
+    const cls = {t:'tag-theater',f:'tag-festival',o:'tag-opening',r:'tag-rewatch'}[t] || '';
+    const label = {t:'T',f:'F',o:'OD',r:'R'}[t] || t;
+    return `<span class="tag ${cls}">${label}</span>`;
+  }).join('');
+
+  const actions = mode === 'edit' ? `
+    <div class="movie-actions">
+      <button class="win-btn win-btn-sm" onclick="startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 4px;font-size:10px">Edit</button>
+      <button class="win-btn win-btn-sm" onclick="deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 4px;font-size:10px">&times;</button>
+    </div>` : '';
+
+  // TMDB poster + info
+  let posterHtml = '<div class="movie-poster-ph">?</div>';
+  let infoHtml = '';
+  const tmdb = getTMDBInfo(m.tmdb_id);
+  if (tmdb) {
+    if (tmdb.poster_path) {
+      posterHtml = `<img class="movie-poster" src="${getPosterUrl(tmdb.poster_path)}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+    }
+    const yr = tmdb.release_date ? tmdb.release_date.substring(0, 4) : '';
+    const genres = tmdb.genres ? tmdb.genres.join(', ') : '';
+    const parts = [yr, genres].filter(Boolean);
+    if (parts.length) infoHtml = `<div class="movie-info">${escHtml(parts.join(' \u00B7 '))}</div>`;
+  }
+
+  return `<div class="movie-row">
+    ${posterHtml}
+    <span class="movie-date">${escHtml(m.date)}</span>
+    <div class="movie-title-wrap">
+      <div class="movie-title">${escHtml(m.title)}</div>
+      ${infoHtml}
+    </div>
+    <span class="movie-tags">${tags}</span>
+    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}</span>
+    ${actions}
+  </div>`;
+}
+
+function renderEditRow(m) {
+  const tc = ['t','f','o','r'].map(t => {
+    const l = {t:'Theater',f:'Festival',o:'Opening Day',r:'Rewatch'}[t];
+    const ck = (m.tags || []).includes(t) ? 'checked' : '';
+    return `<label><input type="checkbox" data-tag="${t}" ${ck}> ${l}</label>`;
+  }).join('');
+
+  return `<div class="edit-inline">
+    <input class="win-input date-input" id="edit-date" value="${escHtml(m.date)}">
+    <input class="win-input title-input" id="edit-title" value="${escHtml(m.title)}">
+    <input class="win-input rating-input" id="edit-rating" value="${m.rating === 'DNF' ? 'DNF' : m.rating}">
+    <div class="form-tags">${tc}</div>
+    <button class="win-btn win-btn-sm" onclick="saveEdit(${m.id})">Save</button>
+    <button class="win-btn win-btn-sm" onclick="cancelEdit()">Cancel</button>
+  </div>`;
+}
+
+function renderWatchlist() {
+  const filter = document.getElementById('filter-watch').value.toLowerCase();
+  const filtered = watchlist.filter(w => w.title.toLowerCase().includes(filter));
+  let html = '';
+  filtered.forEach((w, i) => {
+    const actions = mode === 'edit' ? `
+      <div class="movie-actions">
+        <button class="win-btn win-btn-sm" onclick="watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 4px;font-size:10px">Watched</button>
+        <button class="win-btn win-btn-sm" onclick="deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 4px;font-size:10px">&times;</button>
+      </div>` : '';
+    html += `<div class="watch-item">
+      <span class="watch-num">${i + 1}.</span>
+      <span class="watch-title">${escHtml(w.title)}</span>
+      ${actions}
+    </div>`;
+  });
+  document.getElementById('watchlist-list').innerHTML = html;
+}
+
+function renderEditSections() {
+  const ars = document.getElementById('add-rating-section');
+  const aws = document.getElementById('add-watch-section');
+  const es = document.getElementById('export-section');
+
+  if (mode !== 'edit') {
+    if (ars) ars.innerHTML = '';
+    if (aws) aws.innerHTML = '';
+    if (es) es.innerHTML = '';
+    return;
+  }
+
+  if (activeTab === 'rankings' && ars) {
+    ars.innerHTML = `
+      <div class="add-form">
+        <span class="add-form-label">Add Movie</span>
+        <div class="form-row">
+          <label>Date:</label>
+          <input class="win-input date-input" id="new-date" placeholder="MM/DD/YY">
+          <label>Title:</label>
+          <input class="win-input title-input" id="new-title" placeholder="Search TMDB..." oninput="onTitleSearch(this.value)">
+          <label>Rating:</label>
+          <input class="win-input rating-input" id="new-rating" placeholder="0-10">
+          <input type="hidden" id="new-tmdb-id">
+        </div>
+        <div id="tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
+        <div class="form-tags">
+          <label><input type="checkbox" id="new-tag-t"> Theater</label>
+          <label><input type="checkbox" id="new-tag-f"> Festival</label>
+          <label><input type="checkbox" id="new-tag-o"> Opening Day</label>
+          <label><input type="checkbox" id="new-tag-r"> Rewatch</label>
+        </div>
+        <button class="win-btn" onclick="addRating()">Add</button>
+      </div>`;
+  } else if (activeTab === 'watchlist' && aws) {
+    aws.innerHTML = `
+      <div class="add-form">
+        <span class="add-form-label">Add to Watchlist</span>
+        <div class="form-row">
+          <label>Title:</label>
+          <input class="win-input title-input" id="new-watch-title" placeholder="Movie title">
+          <button class="win-btn" onclick="addWatch()">Add</button>
+        </div>
+      </div>`;
+  }
+
+  if (es) {
+    es.innerHTML = `
+      <div class="export-section">
+        <button class="win-btn" onclick="exportData()">Export Data</button>
+        <button class="win-btn" onclick="resetData()">Reset to Defaults</button>
+      </div>`;
+  }
+}
+
+// === TAB SWITCHING ===
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.win-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('tab-rankings').style.display = tab === 'rankings' ? '' : 'none';
+  document.getElementById('tab-watchlist').style.display = tab === 'watchlist' ? '' : 'none';
+  editingId = null;
+  render();
+}
+
+// === EDIT ACTIONS ===
+function addRating() {
+  const date = document.getElementById('new-date').value.trim();
+  const title = document.getElementById('new-title').value.trim();
+  const rv = document.getElementById('new-rating').value.trim();
+  const tmdbIdEl = document.getElementById('new-tmdb-id');
+  const tmdbId = tmdbIdEl ? parseInt(tmdbIdEl.value) || null : null;
+  if (!date || !title) return;
+
+  const rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
+  if (rating !== 'DNF' && isNaN(rating)) return;
+
+  const tags = [];
+  if (document.getElementById('new-tag-t').checked) tags.push('t');
+  if (document.getElementById('new-tag-f').checked) tags.push('f');
+  if (document.getElementById('new-tag-o').checked) tags.push('o');
+  if (document.getElementById('new-tag-r').checked) tags.push('r');
+
+  const newSort = parseDate(date).sort;
+  let idx = ratings.findIndex(r => parseDate(r.date).sort <= newSort);
+  if (idx === -1) idx = ratings.length;
+
+  ratings.splice(idx, 0, { id: nextId++, date, title, rating, tags, tmdb_id: tmdbId });
+  saveData();
+  render();
+
+  document.getElementById('new-date').value = '';
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-rating').value = '';
+  if (tmdbIdEl) tmdbIdEl.value = '';
+  ['new-tag-t','new-tag-f','new-tag-o','new-tag-r'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = false;
+  });
+}
+
+function deleteRating(id) {
+  ratings = ratings.filter(r => r.id !== id);
+  saveData(); render();
+}
+
+function startEdit(id) { editingId = id; render(); }
+function cancelEdit() { editingId = null; render(); }
+
+function saveEdit(id) {
+  const m = ratings.find(r => r.id === id);
+  if (!m) return;
+  m.date = document.getElementById('edit-date').value.trim();
+  m.title = document.getElementById('edit-title').value.trim();
+  const rv = document.getElementById('edit-rating').value.trim();
+  m.rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
+  m.tags = [];
+  document.querySelectorAll('.edit-inline [data-tag]').forEach(cb => {
+    if (cb.checked) m.tags.push(cb.dataset.tag);
+  });
+  editingId = null;
+  saveData(); render();
+}
+
+function addWatch() {
+  const title = document.getElementById('new-watch-title').value.trim();
+  if (!title) return;
+  watchlist.push({ id: nextId++, title });
+  saveData(); render();
+  document.getElementById('new-watch-title').value = '';
+}
+
+function deleteWatch(id) {
+  watchlist = watchlist.filter(w => w.id !== id);
+  saveData(); render();
+}
+
+function watchedMovie(id) {
+  const w = watchlist.find(x => x.id === id);
+  if (!w) return;
+  const date = prompt('Date watched (MM/DD/YY):');
+  if (!date) return;
+  const rv = prompt('Rating (0-10 or DNF):');
+  if (rv === null) return;
+  const rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
+  if (rating !== 'DNF' && isNaN(rating)) return;
+
+  const newSort = parseDate(date).sort;
+  let idx = ratings.findIndex(r => parseDate(r.date).sort <= newSort);
+  if (idx === -1) idx = ratings.length;
+  ratings.splice(idx, 0, { id: nextId++, date, title: w.title, rating, tags: [], tmdb_id: null });
+  watchlist = watchlist.filter(x => x.id !== id);
+  saveData(); render();
+}
+
+// === EXPORT / RESET ===
+function exportData() {
+  const data = JSON.stringify({ ratings, watchlist }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'films_data.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function resetData() {
+  if (!confirm('Reset all data to defaults? This will erase any edits and TMDB cache.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(TMDB_CACHE_KEY);
+  tmdbCache = {};
+  nextId = 1;
+  loadData();
+  render();
+  autoMatchTMDB();
+}
+
+// === INIT ===
+document.getElementById('pwd-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') attemptLogin();
+});
+
+const savedMode = sessionStorage.getItem(SESSION_KEY);
+if (savedMode === 'view' || savedMode === 'edit') {
+  mode = savedMode;
+  showApp();
+}
+</script>
+
+</body>
+</html>
