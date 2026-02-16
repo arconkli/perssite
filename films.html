@@ -6,477 +6,1063 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Film Rankings</title>
   <style>
-    /* === WINDOWS 95 THEME === */
+    /* === CLASSIC MAC OS THEME === */
+    @import url('https://fonts.googleapis.com/css2?family=Geneva:wght@400&family=VT323&display=swap');
+
     :root {
-      --win-bg: #C0C0C0;
-      --win-dark: #808080;
-      --win-darker: #404040;
-      --win-light: #DFDFDF;
-      --win-white: #FFFFFF;
-      --win-titlebar: #000080;
-      --win-titlebar-text: #FFFFFF;
-      --win-desktop: #008080;
-      --win-field: #FFFFFF;
-      --win-field-text: #000000;
-      --win-text: #000000;
-      --win-highlight: #000080;
-      --win-highlight-text: #FFFFFF;
+      --mac-platinum: #DDDDDD;
+      --mac-window-bg: #EEEEEE;
+      --mac-dark-border: #777777;
+      --mac-darker-border: #555555;
+      --mac-light-border: #FFFFFF;
+      --mac-black: #000000;
+      --mac-white: #FFFFFF;
+      --mac-titlebar-stripe: #AAAAAA;
+      --mac-highlight: #316AC5;
+      --mac-highlight-text: #FFFFFF;
+      --mac-field-bg: #FFFFFF;
+      --mac-text: #000000;
+      --mac-text-secondary: #555555;
+      --mac-menu-highlight: #316AC5;
+      --mac-desktop-bg: #5F7B97;
+      --mac-font: 'Geneva', 'Charcoal', 'Chicago', 'Lucida Grande', 'Helvetica', sans-serif;
+      --mac-font-pixel: 'VT323', 'Geneva', monospace;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+      font-family: var(--mac-font);
+      font-size: 12px;
+      color: var(--mac-text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      cursor: default;
+      -webkit-font-smoothing: none;
+    }
+
+    /* === DESKTOP === */
+    #mac-desktop {
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--mac-desktop-bg);
+      /* Classic Mac OS desktop pattern */
+      background-image:
+        radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
+      background-size: 4px 4px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* === MENU BAR === */
+    #menu-bar {
+      height: 20px;
+      background: var(--mac-white);
+      border-bottom: 2px solid var(--mac-black);
+      display: none;
+      align-items: center;
+      padding: 0;
+      font-size: 12px;
+      font-weight: normal;
+      color: var(--mac-text);
+      z-index: 100;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .menu-item {
+      padding: 1px 12px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      cursor: default;
+    }
+
+    .menu-item:hover {
+      background: var(--mac-menu-highlight);
+      color: var(--mac-white);
+    }
+
+    .menu-apple {
+      padding: 1px 10px;
+      font-size: 14px;
+    }
+
+    .menu-app-name { font-weight: bold; }
+
+    .menu-bar-spacer { flex: 1; }
+
+    .menu-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-clock {
+      font-variant-numeric: tabular-nums;
       font-size: 11px;
-      background: var(--win-desktop);
-      color: var(--win-text);
-      min-height: 100vh;
+      padding-right: 8px;
+    }
+
+    /* === DESKTOP AREA === */
+    #desktop-area {
+      flex: 1;
+      position: relative;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 72px;
+      padding: 4px;
+      cursor: default;
+      user-select: none;
+    }
+
+    .desktop-icon-img {
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    .desktop-icon-label {
+      font-size: 10px;
+      color: var(--mac-white);
+      text-align: center;
+      margin-top: 2px;
+      word-break: break-word;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    }
+
+    .desktop-icon-trash {
+      margin-top: auto;
+    }
+
+    .desktop-icon.selected .desktop-icon-label {
+      background: var(--mac-highlight);
+      color: var(--mac-white);
+    }
+
+    /* === LOGIN SCREEN === */
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-    }
-    input, select, button, textarea {
-      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
-      font-size: 11px;
-    }
-
-    /* Outset (raised) */
-    .win-outset {
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-    }
-    /* Inset (sunken) */
-    .win-inset {
-      border: 2px solid;
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+      background-color: var(--mac-desktop-bg);
+      background-image:
+        radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
+      background-size: 4px 4px;
     }
 
-    /* === LOGIN DIALOG === */
-    #login-screen {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: var(--win-bg); width: 360px; z-index: 100;
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
-    }
-    .dialog-titlebar {
-      background: var(--win-titlebar); color: var(--win-titlebar-text);
-      padding: 3px 4px; display: flex; align-items: center; justify-content: space-between;
-      font-weight: bold; font-size: 11px; user-select: none;
-    }
-    .dialog-body {
-      padding: 20px; display: flex; flex-direction: column; gap: 12px;
-    }
-    .dialog-body label { font-size: 11px; }
-    .dialog-row { display: flex; align-items: center; gap: 8px; }
-    .dialog-icon {
-      font-size: 32px; flex-shrink: 0; width: 40px; text-align: center;
-    }
-    .dialog-buttons {
-      display: flex; justify-content: flex-end; gap: 6px; margin-top: 4px;
-    }
-    #login-error {
-      color: #CC0000; font-size: 11px; min-height: 14px; text-align: center;
+    .login-dialog {
+      background: var(--mac-platinum);
+      border: 2px solid var(--mac-black);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      width: 340px;
+      padding: 0;
     }
 
-    /* === WIN95 BUTTONS === */
-    .win-btn {
-      background: var(--win-bg);
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      padding: 3px 12px; font-size: 11px; cursor: pointer;
-      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
-      min-width: 75px; text-align: center; color: var(--win-text);
-    }
-    .win-btn:active {
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
-      padding: 4px 11px 2px 13px;
-    }
-    .win-btn:focus { outline: 1px dotted var(--win-text); outline-offset: -4px; }
-    .win-btn-sm { min-width: auto; padding: 2px 8px; }
-
-    /* Titlebar buttons */
-    .tb-btn {
-      width: 16px; height: 14px; background: var(--win-bg);
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px; font-weight: bold; cursor: pointer; padding: 0;
-      line-height: 1; color: var(--win-text); font-family: 'Tahoma', sans-serif;
-    }
-    .tb-btn:active {
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+    .login-titlebar {
+      height: 20px;
+      background: var(--mac-white);
+      border-bottom: 1px solid var(--mac-black);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      position: relative;
     }
 
-    /* === WIN95 INPUT === */
-    .win-input {
-      background: var(--win-field); color: var(--win-field-text);
-      border: 2px solid;
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
-      padding: 2px 4px; font-size: 11px; outline: none;
-      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
+    /* Classic Mac striped title bar */
+    .login-titlebar::after {
+      content: '';
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      top: 3px;
+      bottom: 3px;
+      background: repeating-linear-gradient(
+        0deg,
+        var(--mac-white) 0px,
+        var(--mac-white) 1px,
+        var(--mac-titlebar-stripe) 1px,
+        var(--mac-titlebar-stripe) 2px,
+        var(--mac-white) 2px,
+        var(--mac-white) 3px
+      );
     }
 
-    /* === MAIN WINDOW === */
-    #app {
-      display: none; background: var(--win-bg); width: 100%; max-width: 960px;
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    .login-titlebar-text {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      flex: 1;
+      background: var(--mac-white);
+      padding: 0 8px;
+      display: inline;
+      width: auto;
+      margin: 0 auto;
+    }
+
+    .login-body {
+      padding: 20px;
+      display: flex;
       flex-direction: column;
+      gap: 14px;
     }
-    .win-titlebar {
-      background: var(--win-titlebar); color: var(--win-titlebar-text);
-      padding: 3px 4px; display: flex; align-items: center; justify-content: space-between;
-      font-weight: bold; font-size: 11px; user-select: none;
-    }
-    .win-titlebar-text { flex: 1; padding-left: 2px; white-space: nowrap; overflow: hidden; }
-    .win-titlebar-buttons { display: flex; gap: 2px; }
 
-    /* Toolbar */
-    .win-toolbar {
-      display: flex; align-items: center; gap: 2px;
+    .login-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .login-icon {
+      font-size: 36px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .login-fields {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .login-fields label {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .login-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    #login-error {
+      color: #CC0000;
+      font-size: 11px;
+      min-height: 14px;
+      text-align: center;
+    }
+
+    /* === CLASSIC MAC BUTTONS === */
+    .mac-btn {
+      background: var(--mac-platinum);
+      border: 2px solid;
+      border-color: var(--mac-light-border) var(--mac-dark-border) var(--mac-dark-border) var(--mac-light-border);
+      border-radius: 4px;
+      padding: 3px 16px;
+      font-size: 12px;
+      font-family: var(--mac-font);
+      cursor: default;
+      color: var(--mac-text);
+      font-weight: normal;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .mac-btn:active {
+      border-color: var(--mac-dark-border) var(--mac-light-border) var(--mac-light-border) var(--mac-dark-border);
+      background: #CCCCCC;
+    }
+
+    .mac-btn-primary {
+      border: 3px solid var(--mac-black);
+      border-radius: 6px;
+      padding: 2px 16px;
+    }
+
+    .mac-btn-sm {
+      padding: 2px 10px;
+      font-size: 11px;
+      min-width: auto;
+    }
+
+    /* === CLASSIC MAC INPUT === */
+    .mac-input {
+      background: var(--mac-field-bg);
+      color: var(--mac-text);
+      border: 2px solid;
+      border-color: var(--mac-darker-border) var(--mac-light-border) var(--mac-light-border) var(--mac-darker-border);
       padding: 2px 4px;
-      border-bottom: 1px solid var(--win-dark);
-      background: var(--win-bg);
+      font-size: 12px;
+      font-family: var(--mac-font);
+      outline: none;
     }
-    .toolbar-sep {
-      width: 1px; height: 18px; margin: 0 4px;
-      border-left: 1px solid var(--win-dark);
-      border-right: 1px solid var(--win-white);
+
+    .mac-input:focus {
+      outline: 1.5px solid var(--mac-highlight);
+      outline-offset: 0;
     }
+
+    /* === APP WINDOW === */
+    #app {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 92%;
+      max-width: 920px;
+      max-height: calc(100vh - 20px - 80px);
+      background: var(--mac-window-bg);
+      border: 2px solid var(--mac-black);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 50;
+    }
+
+    /* === WINDOW TITLEBAR (Classic Mac striped) === */
+    .window-titlebar {
+      height: 20px;
+      background: var(--mac-white);
+      border-bottom: 1px solid var(--mac-black);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      user-select: none;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    /* Horizontal stripes */
+    .window-titlebar::after {
+      content: '';
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      top: 3px;
+      bottom: 3px;
+      background: repeating-linear-gradient(
+        0deg,
+        var(--mac-white) 0px,
+        var(--mac-white) 1px,
+        var(--mac-titlebar-stripe) 1px,
+        var(--mac-titlebar-stripe) 2px,
+        var(--mac-white) 2px,
+        var(--mac-white) 3px
+      );
+      pointer-events: none;
+    }
+
+    .close-box {
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--mac-black);
+      background: var(--mac-white);
+      cursor: default;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0;
+      z-index: 1;
+      position: relative;
+    }
+
+    .close-box:active {
+      background: var(--mac-black);
+    }
+
+    .window-title {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--mac-text);
+      background: var(--mac-white);
+      padding: 0 8px;
+      margin: 0 auto;
+    }
+
+    .zoom-box {
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--mac-black);
+      background: var(--mac-white);
+      cursor: default;
+      flex-shrink: 0;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* Inner square for zoom box */
+    .zoom-box::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 5px;
+      height: 5px;
+      border: 1px solid var(--mac-black);
+    }
+
+    /* === WINDOW TOOLBAR === */
+    .window-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-bottom: 1px solid var(--mac-dark-border);
+      background: var(--mac-platinum);
+      flex-shrink: 0;
+    }
+
+    .toolbar-spacer { flex: 1; }
+
     .toolbar-label {
-      font-size: 11px; padding: 0 4px; color: var(--win-text);
+      font-size: 11px;
+      color: var(--mac-text-secondary);
     }
 
-    /* Body */
-    .win-body { padding: 8px; flex: 1; overflow-y: auto; }
-
-    /* === STATS PANELS === */
-    .stats-panels { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
-    .stat-panel {
-      border: 2px solid;
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
-      padding: 2px 8px; font-size: 11px; flex: 1; min-width: 80px;
-    }
-    .stat-panel b { font-weight: bold; }
-
-    /* === TABS === */
-    .win-tabs { display: flex; gap: 0; padding: 0 2px; margin-bottom: -2px; position: relative; z-index: 1; }
-    .win-tab {
-      background: var(--win-bg);
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      border-bottom: none;
-      padding: 3px 14px; cursor: pointer; font-size: 11px;
-      position: relative; top: 2px; color: var(--win-text);
-      font-family: 'Tahoma', 'Segoe UI', 'Arial', sans-serif;
-    }
-    .win-tab.active {
-      top: 0; padding-bottom: 5px; z-index: 2;
-      border-bottom: 2px solid var(--win-bg);
-    }
-    .win-tab-panel {
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      padding: 10px; background: var(--win-bg); position: relative;
+    .toolbar-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--mac-dark-border);
+      margin: 0 4px;
     }
 
-    /* === GROUPBOX === */
-    .win-groupbox {
+    /* === CLASSIC MAC TABS === */
+    .mac-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0;
+      background: var(--mac-platinum);
+    }
+
+    .mac-tab {
+      background: var(--mac-platinum);
+      border: 1px solid var(--mac-dark-border);
+      border-bottom: 1px solid var(--mac-dark-border);
+      padding: 3px 18px;
+      font-size: 12px;
+      font-family: var(--mac-font);
+      cursor: default;
+      color: var(--mac-text);
+      font-weight: normal;
+      border-radius: 4px 4px 0 0;
+      margin-right: -1px;
+      position: relative;
+    }
+
+    .mac-tab.active {
+      background: var(--mac-window-bg);
+      border-bottom-color: var(--mac-window-bg);
+      font-weight: bold;
+      z-index: 1;
+    }
+
+    .mac-tab:hover:not(.active) {
+      background: #D5D5D5;
+    }
+
+    .tab-panel {
+      border: 1px solid var(--mac-dark-border);
+      border-top: none;
+      padding: 10px;
+      background: var(--mac-window-bg);
+    }
+
+    /* === WINDOW BODY === */
+    .window-body {
+      padding: 8px;
+      flex: 1;
+      overflow-y: auto;
+      background: var(--mac-window-bg);
+    }
+
+    /* === STATS ROW === */
+    .stats-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      flex: 1;
+      min-width: 80px;
+      background: var(--mac-white);
       border: 2px solid;
-      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
-      padding: 10px 8px 6px; margin: 6px 0; position: relative;
+      border-color: var(--mac-darker-border) var(--mac-light-border) var(--mac-light-border) var(--mac-darker-border);
+      padding: 4px 8px;
+      text-align: center;
     }
-    .win-groupbox-label {
-      position: absolute; top: -7px; left: 8px;
-      background: var(--win-bg); padding: 0 4px; font-size: 11px;
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--mac-text);
+      font-family: var(--mac-font-pixel);
     }
-    .scale-items { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--mac-text-secondary);
+    }
+
+    /* === LEGEND (Rating Scale) === */
+    .legend-box {
+      border: 1px solid var(--mac-dark-border);
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      background: var(--mac-platinum);
+    }
+
+    .legend-title {
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .scale-items { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
     .scale-item { display: flex; align-items: center; gap: 4px; font-size: 11px; }
-    .scale-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .tag-items { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; font-size: 11px; color: #555; }
+    .scale-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.2); }
+    .tag-items { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; font-size: 10px; color: var(--mac-text-secondary); }
 
     /* === SEARCH BAR === */
     .search-bar { display: flex; align-items: center; gap: 6px; margin: 8px 0; }
-    .search-bar label { font-size: 11px; white-space: nowrap; }
-    .search-bar .win-input { flex: 1; }
+    .search-bar label { font-size: 12px; white-space: nowrap; }
+    .search-bar .mac-input { flex: 1; }
 
     /* === CONTENT AREA (sunken list) === */
     .content-area {
       border: 2px solid;
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
-      background: var(--win-field); max-height: 500px; overflow-y: auto;
-      min-height: 200px;
+      border-color: var(--mac-darker-border) var(--mac-light-border) var(--mac-light-border) var(--mac-darker-border);
+      background: var(--mac-field-bg);
+      max-height: 460px;
+      overflow-y: auto;
+      min-height: 180px;
     }
 
     /* === YEAR & MONTH HEADERS === */
     .year-header {
-      font-size: 12px; font-weight: bold; padding: 4px 6px;
-      background: var(--win-bg);
-      border-bottom: 1px solid var(--win-dark);
-      display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 8px;
+      background: var(--mac-platinum);
+      border-bottom: 1px solid var(--mac-dark-border);
+      display: flex;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
-    .year-count { font-weight: normal; color: #555; }
+
+    .year-count { font-weight: normal; color: var(--mac-text-secondary); }
+
     .month-header {
-      font-size: 11px; font-weight: bold; padding: 3px 6px 3px 12px;
-      background: var(--win-light); color: #333;
-      border-bottom: 1px solid #ccc;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 8px 3px 16px;
+      background: #E8E8E8;
+      color: var(--mac-text-secondary);
+      border-bottom: 1px solid #DDD;
     }
-    .month-count { font-weight: normal; color: #888; }
+
+    .month-count { font-weight: normal; color: #999; }
 
     /* === MOVIE ROW === */
     .movie-row {
-      display: flex; align-items: center; padding: 2px 4px; gap: 6px;
-      border-bottom: 1px solid #eee; background: var(--win-field);
-      cursor: default; min-height: 24px;
+      display: flex;
+      align-items: center;
+      padding: 3px 6px;
+      gap: 8px;
+      border-bottom: 1px solid #EEE;
+      background: var(--mac-field-bg);
+      cursor: default;
+      min-height: 28px;
     }
-    .movie-row:hover { background: var(--win-highlight); color: var(--win-highlight-text); }
+
+    .movie-row:hover {
+      background: var(--mac-highlight);
+      color: var(--mac-highlight-text);
+    }
+
     .movie-row:hover .movie-date,
     .movie-row:hover .movie-info,
-    .movie-row:hover .movie-rating { color: var(--win-highlight-text); }
+    .movie-row:hover .movie-rating { color: var(--mac-highlight-text); }
+
     .movie-poster {
-      width: 28px; height: 42px; object-fit: cover; flex-shrink: 0;
-      border: 1px solid var(--win-dark); background: #ddd;
+      width: 30px;
+      height: 44px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid var(--mac-dark-border);
     }
+
     .movie-poster-ph {
-      width: 28px; height: 42px; flex-shrink: 0;
-      border: 1px solid var(--win-dark); background: #eee;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9px; color: #999;
+      width: 30px;
+      height: 44px;
+      flex-shrink: 0;
+      border: 1px solid var(--mac-dark-border);
+      background: #EEE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #AAA;
     }
-    .movie-date { font-size: 11px; color: #555; min-width: 60px; font-variant-numeric: tabular-nums; }
-    .movie-title-wrap { flex: 1; min-width: 0; }
-    .movie-title { font-size: 11px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .movie-info { font-size: 10px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .movie-tags { display: flex; gap: 2px; flex-shrink: 0; }
-    .tag {
-      font-size: 8px; letter-spacing: 0.5px; text-transform: uppercase;
-      padding: 1px 4px; font-weight: bold;
-    }
-    .tag-theater { background: #C0D8F0; color: #000080; }
-    .tag-festival { background: #D8C0E8; color: #600080; }
-    .tag-opening { background: #C0E8C0; color: #006000; }
-    .tag-rewatch { background: #D8D8D8; color: #555; }
-    .movie-rating {
-      font-size: 12px; font-weight: bold; min-width: 32px; text-align: right;
+
+    .movie-date {
+      font-size: 11px;
+      color: var(--mac-text-secondary);
+      min-width: 62px;
       font-variant-numeric: tabular-nums;
     }
+
+    .movie-title-wrap { flex: 1; min-width: 0; }
+
+    .movie-title {
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .movie-info {
+      font-size: 10px;
+      color: #888;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .movie-tags { display: flex; gap: 2px; flex-shrink: 0; }
+
+    .tag {
+      font-size: 8px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      font-weight: bold;
+      border: 1px solid;
+    }
+
+    .tag-theater { background: #D0E0F0; color: #000080; border-color: #A0B0D0; }
+    .tag-festival { background: #E0D0F0; color: #600080; border-color: #C0A0D0; }
+    .tag-opening { background: #D0F0D0; color: #006000; border-color: #A0D0A0; }
+    .tag-rewatch { background: #E0E0E0; color: #555; border-color: #C0C0C0; }
+
+    .movie-rating {
+      font-size: 13px;
+      font-weight: bold;
+      min-width: 34px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
     .rating-gold { color: #B8860B; }
     .rating-green { color: #006400; }
     .rating-orange { color: #CC7000; }
     .rating-red { color: #CC0000; }
     .rating-dnf { color: #808080; font-size: 10px; font-weight: normal; font-style: italic; }
+
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
 
     /* === WATCHLIST === */
     .watch-item {
-      display: flex; align-items: center; padding: 3px 6px; gap: 8px;
-      border-bottom: 1px solid #eee; background: var(--win-field); cursor: default;
+      display: flex;
+      align-items: center;
+      padding: 3px 8px;
+      gap: 8px;
+      border-bottom: 1px solid #EEE;
+      background: var(--mac-field-bg);
+      cursor: default;
     }
-    .watch-item:hover { background: var(--win-highlight); color: var(--win-highlight-text); }
+
+    .watch-item:hover {
+      background: var(--mac-highlight);
+      color: var(--mac-highlight-text);
+    }
+
     .watch-num { font-size: 10px; color: #999; min-width: 22px; font-variant-numeric: tabular-nums; }
-    .watch-title { flex: 1; font-size: 11px; }
+    .watch-title { flex: 1; font-size: 12px; }
 
     /* === FORMS === */
     .add-form {
-      border: 2px solid;
-      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
-      padding: 10px 8px 8px; margin: 8px 0; position: relative;
+      border: 1px solid var(--mac-dark-border);
+      padding: 12px 10px 10px;
+      margin: 10px 0;
+      background: var(--mac-platinum);
+      position: relative;
     }
+
     .add-form-label {
-      position: absolute; top: -7px; left: 8px;
-      background: var(--win-bg); padding: 0 4px; font-size: 11px; font-weight: bold;
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
     }
+
     .form-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; align-items: center; }
     .form-row label { font-size: 11px; white-space: nowrap; }
-    .form-row .win-input.date-input { width: 80px; }
-    .form-row .win-input.title-input { flex: 1; min-width: 140px; }
-    .form-row .win-input.rating-input { width: 55px; }
+    .form-row .mac-input.date-input { width: 80px; }
+    .form-row .mac-input.title-input { flex: 1; min-width: 140px; }
+    .form-row .mac-input.rating-input { width: 55px; }
     .form-tags { display: flex; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-    .form-tags label { font-size: 11px; display: flex; align-items: center; gap: 3px; cursor: pointer; }
+    .form-tags label { font-size: 11px; display: flex; align-items: center; gap: 3px; cursor: default; }
 
     /* TMDB Search Dropdown */
     .tmdb-dropdown {
-      position: absolute; left: 0; right: 0; z-index: 50;
-      background: var(--win-field);
-      border: 2px solid;
-      border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
-      max-height: 200px; overflow-y: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--mac-field-bg);
+      border: 2px solid var(--mac-black);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      max-height: 200px;
+      overflow-y: auto;
     }
+
     .tmdb-result {
-      display: flex; align-items: center; gap: 6px; padding: 3px 6px;
-      cursor: pointer; font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      cursor: default;
+      font-size: 11px;
     }
-    .tmdb-result:hover { background: var(--win-highlight); color: var(--win-highlight-text); }
-    .tmdb-result img { width: 24px; height: 36px; object-fit: cover; border: 1px solid #ccc; }
-    .tmdb-result-ph { width: 24px; height: 36px; background: #eee; border: 1px solid #ccc; flex-shrink: 0; }
+
+    .tmdb-result:hover {
+      background: var(--mac-highlight);
+      color: var(--mac-highlight-text);
+    }
+
+    .tmdb-result img { width: 24px; height: 36px; object-fit: cover; border: 1px solid #CCC; }
+    .tmdb-result-ph { width: 24px; height: 36px; background: #EEE; border: 1px solid #CCC; flex-shrink: 0; }
 
     /* Edit inline */
     .edit-inline {
-      display: flex; gap: 4px; align-items: center; padding: 3px 4px;
-      background: #FFFFCC; border-bottom: 1px solid #ccc; flex-wrap: wrap;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 3px 6px;
+      background: #FFFACC;
+      border-bottom: 1px solid #DDD;
+      flex-wrap: wrap;
     }
-    .edit-inline .win-input { font-size: 11px; }
-    .edit-inline .win-input.date-input { width: 70px; }
-    .edit-inline .win-input.title-input { flex: 1; min-width: 120px; }
-    .edit-inline .win-input.rating-input { width: 50px; }
+
+    .edit-inline .mac-input { font-size: 11px; }
+    .edit-inline .mac-input.date-input { width: 72px; }
+    .edit-inline .mac-input.title-input { flex: 1; min-width: 120px; }
+    .edit-inline .mac-input.rating-input { width: 52px; }
 
     /* === STATUS BAR === */
-    .win-statusbar {
-      border-top: 2px solid;
-      border-color: var(--win-dark) var(--win-white);
-      padding: 2px 4px; display: flex; gap: 4px; font-size: 11px;
+    .window-statusbar {
+      border-top: 1px solid var(--mac-dark-border);
+      padding: 2px 8px;
+      display: flex;
+      gap: 4px;
+      font-size: 10px;
+      background: var(--mac-platinum);
+      flex-shrink: 0;
+      color: var(--mac-text-secondary);
     }
+
     .sb-section {
       border: 1px solid;
-      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      border-color: var(--mac-darker-border) var(--mac-light-border) var(--mac-light-border) var(--mac-darker-border);
       padding: 1px 6px;
+      background: var(--mac-white);
     }
+
     .sb-section:first-child { flex: 2; }
     .sb-section:nth-child(2) { flex: 1; }
-    .sb-section:last-child { flex: 1; }
+    .sb-section:last-child { flex: 1; text-align: right; }
 
     /* === EXPORT SECTION === */
-    .export-section { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .export-section { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* === SCROLLBARS (WebKit) === */
-    ::-webkit-scrollbar { width: 16px; height: 16px; }
-    ::-webkit-scrollbar-track { background: var(--win-light); }
-    ::-webkit-scrollbar-thumb {
-      background: var(--win-bg);
+    /* === DOCK (Classic Mac Launcher Bar) === */
+    #dock {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: var(--mac-platinum);
+      border-top: 2px solid var(--mac-black);
+      display: none;
+      align-items: center;
+      padding: 0 8px;
+      z-index: 90;
+      gap: 2px;
+    }
+
+    .dock-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      cursor: default;
+    }
+
+    .dock-item:hover {
+      border-color: var(--mac-dark-border);
+      background: var(--mac-white);
+    }
+
+    .dock-item.dock-active {
       border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+      border-color: var(--mac-light-border) var(--mac-darker-border) var(--mac-darker-border) var(--mac-light-border);
+      background: #D0D0D0;
+    }
+
+    .dock-icon { font-size: 20px; line-height: 1; }
+    .dock-label { font-size: 11px; }
+
+    .dock-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--mac-dark-border);
+      margin: 0 6px;
+    }
+
+    .dock-spacer { flex: 1; }
+
+    /* === CLASSIC MAC SCROLLBARS === */
+    ::-webkit-scrollbar { width: 16px; height: 16px; }
+    ::-webkit-scrollbar-track { background: var(--mac-platinum); border-left: 1px solid var(--mac-dark-border); }
+    ::-webkit-scrollbar-thumb {
+      background: var(--mac-platinum);
+      border: 2px solid;
+      border-color: var(--mac-light-border) var(--mac-darker-border) var(--mac-darker-border) var(--mac-light-border);
+    }
+    ::-webkit-scrollbar-thumb:active {
+      border-color: var(--mac-darker-border) var(--mac-light-border) var(--mac-light-border) var(--mac-darker-border);
     }
     ::-webkit-scrollbar-button {
-      background: var(--win-bg);
-      border: 2px solid;
-      border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
-      width: 16px; height: 16px;
+      background: var(--mac-platinum);
+      border: 1px solid;
+      border-color: var(--mac-light-border) var(--mac-darker-border) var(--mac-darker-border) var(--mac-light-border);
+      height: 16px;
+      width: 16px;
     }
+    ::-webkit-scrollbar-button:active {
+      border-color: var(--mac-darker-border) var(--mac-light-border) var(--mac-light-border) var(--mac-darker-border);
+    }
+    ::-webkit-scrollbar-corner { background: var(--mac-platinum); }
 
     /* === RESPONSIVE === */
     @media (max-width: 640px) {
-      body { padding: 0; align-items: stretch; }
-      #app { max-width: 100%; border: none; box-shadow: none; }
-      #login-screen { width: 90%; max-width: 340px; }
-      .movie-poster, .movie-poster-ph { width: 22px; height: 33px; }
-      .movie-row { gap: 4px; }
-      .stats-panels { gap: 2px; }
-      .stat-panel { min-width: 60px; padding: 2px 4px; font-size: 10px; }
-      .content-area { max-height: 400px; }
-      .win-toolbar { flex-wrap: wrap; }
+      #menu-bar { font-size: 11px; }
+      .menu-item:not(.menu-apple):not(.menu-app-name) { display: none; }
+      .menu-right .menu-item:not(.menu-clock) { display: none; }
+
+      #desktop-area { padding: 8px; }
+      .desktop-icon { display: none; }
+
+      #app {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        max-height: none;
+        flex: 1;
+        box-shadow: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      #dock { display: none !important; }
+
+      .movie-poster, .movie-poster-ph { width: 24px; height: 36px; }
+      .movie-row { gap: 5px; padding: 2px 4px; }
+      .stats-row { gap: 3px; }
+      .stat-card { min-width: 60px; padding: 3px 4px; }
+      .stat-value { font-size: 14px; }
+      .content-area { max-height: 380px; }
+      .window-toolbar { flex-wrap: wrap; gap: 4px; }
+      .mac-tabs { flex-wrap: wrap; }
+    }
+
+    /* A bit more space on tiny screens */
+    @media (max-width: 380px) {
+      .movie-date { min-width: 50px; font-size: 10px; }
+      .movie-rating { min-width: 28px; font-size: 12px; }
+      .movie-poster, .movie-poster-ph { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- Login Dialog -->
-<div id="login-screen">
-  <div class="dialog-titlebar">
-    <span>Login</span>
-    <div style="display:flex;gap:2px">
-      <button class="tb-btn" onclick="document.getElementById('pwd-input').value=''">&times;</button>
-    </div>
-  </div>
-  <div class="dialog-body">
-    <div class="dialog-row">
-      <div class="dialog-icon">&#128274;</div>
-      <div>
-        <div style="margin-bottom:8px;font-size:11px">Enter password to access Film Rankings.</div>
-        <div class="dialog-row">
-          <label for="pwd-input">Password:</label>
-          <input type="password" class="win-input" id="pwd-input" style="flex:1" autocomplete="off">
+<div id="mac-desktop">
+
+  <!-- Login Screen (Classic Mac dialog over desktop pattern) -->
+  <div id="login-screen">
+    <div class="login-dialog">
+      <div class="login-titlebar">
+        <span class="login-titlebar-text">Film Rankings</span>
+      </div>
+      <div class="login-body">
+        <div class="login-row">
+          <div class="login-icon">&#127916;</div>
+          <div class="login-fields">
+            <div style="font-size:12px;margin-bottom:4px">Enter password to access Film Rankings.</div>
+            <label>
+              Password:
+              <input type="password" class="mac-input" id="pwd-input" style="flex:1;width:100%" autocomplete="off">
+            </label>
+          </div>
+        </div>
+        <p id="login-error"></p>
+        <div class="login-buttons">
+          <button class="mac-btn mac-btn-primary" onclick="attemptLogin()">OK</button>
         </div>
       </div>
     </div>
-    <p id="login-error"></p>
-    <div class="dialog-buttons">
-      <button class="win-btn" onclick="attemptLogin()">OK</button>
-    </div>
-  </div>
-</div>
-
-<!-- Main App Window -->
-<div id="app">
-  <div class="win-titlebar">
-    <span class="win-titlebar-text" id="titlebar-text">Film Rankings</span>
-    <div class="win-titlebar-buttons">
-      <button class="tb-btn" title="Minimize">_</button>
-      <button class="tb-btn" title="Maximize">&#9633;</button>
-      <button class="tb-btn" title="Close" onclick="logout()">&times;</button>
-    </div>
   </div>
 
-  <div class="win-toolbar" id="toolbar">
-    <button class="win-btn win-btn-sm" onclick="switchTab('rankings')">Rankings</button>
-    <button class="win-btn win-btn-sm" onclick="switchTab('watchlist')">Watchlist</button>
-    <div class="toolbar-sep"></div>
-    <span class="toolbar-label" id="toolbar-mode"></span>
-    <div style="flex:1"></div>
-    <button class="win-btn win-btn-sm" id="toolbar-export" style="display:none" onclick="exportData()">Export</button>
-    <button class="win-btn win-btn-sm" onclick="logout()">Lock</button>
+  <!-- Menu Bar -->
+  <div id="menu-bar">
+    <div class="menu-item menu-apple">&#63743;</div>
+    <div class="menu-item menu-app-name">Film Rankings</div>
+    <div class="menu-item">File</div>
+    <div class="menu-item">Edit</div>
+    <div class="menu-item">View</div>
+    <div class="menu-item">Help</div>
+    <div class="menu-bar-spacer"></div>
+    <div class="menu-right">
+      <span class="menu-item" id="menu-mode-indicator"></span>
+      <span class="menu-item menu-clock" id="menu-clock"></span>
+    </div>
   </div>
 
-  <div class="win-body">
-    <!-- Stats -->
-    <div class="stats-panels">
-      <div class="stat-panel">Rated: <b id="s-total">0</b></div>
-      <div class="stat-panel">Avg: <b id="s-avg">0</b></div>
-      <div class="stat-panel">Perfect 10s: <b id="s-tens">0</b></div>
-      <div class="stat-panel">Watchlist: <b id="s-watch">0</b></div>
+  <!-- Desktop Area with Icons -->
+  <div id="desktop-area">
+    <div class="desktop-icon" ondblclick="focusAppWindow()">
+      <div class="desktop-icon-img">&#127916;</div>
+      <span class="desktop-icon-label">Film Rankings</span>
+    </div>
+    <div class="desktop-icon desktop-icon-trash">
+      <div class="desktop-icon-img">&#128465;</div>
+      <span class="desktop-icon-label">Trash</span>
+    </div>
+  </div>
+
+  <!-- App Window -->
+  <div id="app">
+    <div class="window-titlebar">
+      <div class="close-box" onclick="logout()" title="Close"></div>
+      <span class="window-title" id="titlebar-text">Film Rankings</span>
+      <div class="zoom-box" title="Zoom"></div>
     </div>
 
-    <!-- Tabs -->
-    <div class="win-tabs">
-      <button class="win-tab active" data-tab="rankings" onclick="switchTab('rankings')">Rankings</button>
-      <button class="win-tab" data-tab="watchlist" onclick="switchTab('watchlist')">Watchlist</button>
+    <div class="window-toolbar" id="toolbar">
+      <button class="mac-btn mac-btn-sm" onclick="switchTab('rankings')">Rankings</button>
+      <button class="mac-btn mac-btn-sm" onclick="switchTab('watchlist')">Watchlist</button>
+      <div class="toolbar-divider"></div>
+      <span class="toolbar-label" id="toolbar-mode"></span>
+      <div class="toolbar-spacer"></div>
+      <button class="mac-btn mac-btn-sm" id="toolbar-export" style="display:none" onclick="exportData()">Export</button>
+      <button class="mac-btn mac-btn-sm" onclick="logout()">Lock</button>
     </div>
 
-    <!-- Rankings Panel -->
-    <div class="win-tab-panel" id="tab-rankings">
-      <div class="win-groupbox">
-        <span class="win-groupbox-label">Rating Scale</span>
-        <div class="scale-items">
-          <div class="scale-item"><span class="scale-dot" style="background:#B8860B"></span> 9+</div>
-          <div class="scale-item"><span class="scale-dot" style="background:#006400"></span> 7.5+</div>
-          <div class="scale-item"><span class="scale-dot" style="background:#CC7000"></span> 5+</div>
-          <div class="scale-item"><span class="scale-dot" style="background:#CC0000"></span> 0+</div>
-          <div class="scale-item"><span class="scale-dot" style="background:#808080"></span> DNF</div>
+    <div class="window-body">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-value" id="s-total">0</div><div class="stat-label">Rated</div></div>
+        <div class="stat-card"><div class="stat-value" id="s-avg">0</div><div class="stat-label">Average</div></div>
+        <div class="stat-card"><div class="stat-value" id="s-tens">0</div><div class="stat-label">Perfect 10s</div></div>
+        <div class="stat-card"><div class="stat-value" id="s-watch">0</div><div class="stat-label">Watchlist</div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="mac-tabs">
+        <button class="mac-tab active" data-tab="rankings" onclick="switchTab('rankings')">Rankings</button>
+        <button class="mac-tab" data-tab="watchlist" onclick="switchTab('watchlist')">Watchlist</button>
+      </div>
+
+      <!-- Rankings Panel -->
+      <div class="tab-panel" id="tab-rankings">
+        <div class="legend-box">
+          <div class="legend-title">Rating Scale</div>
+          <div class="scale-items">
+            <div class="scale-item"><span class="scale-dot" style="background:#B8860B"></span> 9+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#006400"></span> 7.5+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#CC7000"></span> 5+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#CC0000"></span> 0+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#808080"></span> DNF</div>
+          </div>
+          <div class="tag-items">
+            <span><span class="tag tag-theater">T</span> Theater</span>
+            <span><span class="tag tag-festival">F</span> Festival</span>
+            <span><span class="tag tag-opening">OD</span> Opening Day</span>
+            <span><span class="tag tag-rewatch">R</span> Rewatch</span>
+          </div>
         </div>
-        <div class="tag-items">
-          <span><span class="tag tag-theater">T</span> Theater</span>
-          <span><span class="tag tag-festival">F</span> Festival</span>
-          <span><span class="tag tag-opening">OD</span> Opening Day</span>
-          <span><span class="tag tag-rewatch">R</span> Rewatch</span>
+        <div class="search-bar">
+          <label for="filter-input">Find:</label>
+          <input type="text" class="mac-input" id="filter-input" placeholder="Search movies..." oninput="render()">
         </div>
+        <div class="content-area" id="ratings-list"></div>
+        <div id="add-rating-section" style="position:relative"></div>
       </div>
-      <div class="search-bar">
-        <label for="filter-input">Find:</label>
-        <input type="text" class="win-input" id="filter-input" placeholder="Search movies..." oninput="render()">
+
+      <!-- Watchlist Panel -->
+      <div class="tab-panel" id="tab-watchlist" style="display:none">
+        <div class="search-bar">
+          <label for="filter-watch">Find:</label>
+          <input type="text" class="mac-input" id="filter-watch" placeholder="Search watchlist..." oninput="render()">
+        </div>
+        <div class="content-area" id="watchlist-list"></div>
+        <div id="add-watch-section" style="position:relative"></div>
       </div>
-      <div class="content-area" id="ratings-list"></div>
-      <div id="add-rating-section" style="position:relative"></div>
+
+      <div id="export-section"></div>
     </div>
 
-    <!-- Watchlist Panel -->
-    <div class="win-tab-panel" id="tab-watchlist" style="display:none">
-      <div class="search-bar">
-        <label for="filter-watch">Find:</label>
-        <input type="text" class="win-input" id="filter-watch" placeholder="Search watchlist..." oninput="render()">
-      </div>
-      <div class="content-area" id="watchlist-list"></div>
-      <div id="add-watch-section" style="position:relative"></div>
+    <!-- Status Bar -->
+    <div class="window-statusbar">
+      <div class="sb-section" id="sb-mode">View Mode</div>
+      <div class="sb-section" id="sb-count">0 films</div>
+      <div class="sb-section" id="sb-tmdb">Ready</div>
     </div>
-
-    <div id="export-section"></div>
   </div>
 
-  <!-- Status Bar -->
-  <div class="win-statusbar">
-    <div class="sb-section" id="sb-mode">View Mode</div>
-    <div class="sb-section" id="sb-count">0 films</div>
-    <div class="sb-section" id="sb-tmdb">Ready</div>
+  <!-- Dock / Launcher Bar -->
+  <div id="dock">
+    <div class="dock-item dock-active" title="Film Rankings" ondblclick="focusAppWindow()">
+      <span class="dock-icon">&#127916;</span>
+      <span class="dock-label">Film Rankings</span>
+    </div>
+    <div class="dock-divider"></div>
+    <div class="dock-spacer"></div>
+    <div class="dock-item" title="Trash">
+      <span class="dock-icon">&#128465;</span>
+      <span class="dock-label">Trash</span>
+    </div>
   </div>
+
 </div>
 
 <script>
@@ -727,7 +1313,9 @@ function logout() {
   mode = null;
   sessionStorage.removeItem(SESSION_KEY);
   document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('menu-bar').style.display = 'none';
+  document.getElementById('dock').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('pwd-input').value = '';
   document.getElementById('login-error').textContent = '';
 }
@@ -735,18 +1323,27 @@ function logout() {
 function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
+  document.getElementById('menu-bar').style.display = 'flex';
+  document.getElementById('dock').style.display = 'flex';
   document.getElementById('titlebar-text').textContent =
-    'Film Rankings' + (mode === 'edit' ? ' [Edit Mode]' : '');
+    'Film Rankings' + (mode === 'edit' ? ' - Edit Mode' : '');
   document.getElementById('toolbar-mode').textContent =
     mode === 'edit' ? 'Edit Mode' : 'View Mode';
   document.getElementById('toolbar-export').style.display =
     mode === 'edit' ? '' : 'none';
   document.getElementById('sb-mode').textContent =
     mode === 'edit' ? 'Edit Mode' : 'View Mode';
+  document.getElementById('menu-mode-indicator').textContent =
+    mode === 'edit' ? 'Edit' : 'View';
   loadData();
   loadTMDBCache();
   render();
   autoMatchTMDB();
+}
+
+function focusAppWindow() {
+  const app = document.getElementById('app');
+  if (app) app.style.display = 'flex';
 }
 
 // === DATA ===
@@ -826,7 +1423,6 @@ async function autoMatchTMDB() {
     const batch = unmatched.slice(i, i + 5);
     const promises = batch.map(async movie => {
       try {
-        // Extract year from title if present like "Cleopatra (1963)"
         let searchTitle = movie.title;
         let yearFilter = null;
         const ym = movie.title.match(/\((\d{4})\)$/);
@@ -835,7 +1431,6 @@ async function autoMatchTMDB() {
           searchTitle = movie.title.replace(/\s*\(\d{4}\)$/, '');
         }
         let data = await tmdbSearch(searchTitle, yearFilter);
-        // If no results with year filter, try without
         if ((!data.results || data.results.length === 0) && yearFilter) {
           data = await tmdbSearch(searchTitle, null);
         }
@@ -853,7 +1448,6 @@ async function autoMatchTMDB() {
     document.getElementById('sb-tmdb').textContent =
       `TMDB: ${i + batch.length}/${total}`;
     render();
-    // Small delay between batches
     await new Promise(r => setTimeout(r, 150));
   }
   document.getElementById('sb-tmdb').textContent = `TMDB: ${matched} matched`;
@@ -898,7 +1492,6 @@ function selectTMDBResult(el) {
   if (hiddenId) hiddenId.value = id;
   const dd = document.getElementById('tmdb-dropdown');
   if (dd) dd.style.display = 'none';
-  // Cache from search if not already
   if (!tmdbCache[id]) {
     tmdbSearch(title, null).then(data => {
       if (data.results) {
@@ -915,7 +1508,6 @@ function render() {
   if (activeTab === 'rankings') renderRatings();
   else renderWatchlist();
   renderEditSections();
-  // Update status bar
   const numericCount = ratings.filter(r => r.rating !== 'DNF').length;
   document.getElementById('sb-count').textContent = numericCount + ' films rated';
 }
@@ -968,11 +1560,10 @@ function renderMovieRow(m) {
 
   const actions = mode === 'edit' ? `
     <div class="movie-actions">
-      <button class="win-btn win-btn-sm" onclick="startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 4px;font-size:10px">Edit</button>
-      <button class="win-btn win-btn-sm" onclick="deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 4px;font-size:10px">&times;</button>
+      <button class="mac-btn mac-btn-sm" onclick="startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 5px;font-size:10px">Edit</button>
+      <button class="mac-btn mac-btn-sm" onclick="deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
     </div>` : '';
 
-  // TMDB poster + info
   let posterHtml = '<div class="movie-poster-ph">?</div>';
   let infoHtml = '';
   const tmdb = getTMDBInfo(m.tmdb_id);
@@ -1007,12 +1598,12 @@ function renderEditRow(m) {
   }).join('');
 
   return `<div class="edit-inline">
-    <input class="win-input date-input" id="edit-date" value="${escHtml(m.date)}">
-    <input class="win-input title-input" id="edit-title" value="${escHtml(m.title)}">
-    <input class="win-input rating-input" id="edit-rating" value="${m.rating === 'DNF' ? 'DNF' : m.rating}">
+    <input class="mac-input date-input" id="edit-date" value="${escHtml(m.date)}">
+    <input class="mac-input title-input" id="edit-title" value="${escHtml(m.title)}">
+    <input class="mac-input rating-input" id="edit-rating" value="${m.rating === 'DNF' ? 'DNF' : m.rating}">
     <div class="form-tags">${tc}</div>
-    <button class="win-btn win-btn-sm" onclick="saveEdit(${m.id})">Save</button>
-    <button class="win-btn win-btn-sm" onclick="cancelEdit()">Cancel</button>
+    <button class="mac-btn mac-btn-sm" onclick="saveEdit(${m.id})">Save</button>
+    <button class="mac-btn mac-btn-sm" onclick="cancelEdit()">Cancel</button>
   </div>`;
 }
 
@@ -1023,8 +1614,8 @@ function renderWatchlist() {
   filtered.forEach((w, i) => {
     const actions = mode === 'edit' ? `
       <div class="movie-actions">
-        <button class="win-btn win-btn-sm" onclick="watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 4px;font-size:10px">Watched</button>
-        <button class="win-btn win-btn-sm" onclick="deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 4px;font-size:10px">&times;</button>
+        <button class="mac-btn mac-btn-sm" onclick="watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 5px;font-size:10px">Watched</button>
+        <button class="mac-btn mac-btn-sm" onclick="deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
       </div>` : '';
     html += `<div class="watch-item">
       <span class="watch-num">${i + 1}.</span>
@@ -1053,11 +1644,11 @@ function renderEditSections() {
         <span class="add-form-label">Add Movie</span>
         <div class="form-row">
           <label>Date:</label>
-          <input class="win-input date-input" id="new-date" placeholder="MM/DD/YY">
+          <input class="mac-input date-input" id="new-date" placeholder="MM/DD/YY">
           <label>Title:</label>
-          <input class="win-input title-input" id="new-title" placeholder="Search TMDB..." oninput="onTitleSearch(this.value)">
+          <input class="mac-input title-input" id="new-title" placeholder="Search TMDB..." oninput="onTitleSearch(this.value)">
           <label>Rating:</label>
-          <input class="win-input rating-input" id="new-rating" placeholder="0-10">
+          <input class="mac-input rating-input" id="new-rating" placeholder="0-10">
           <input type="hidden" id="new-tmdb-id">
         </div>
         <div id="tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
@@ -1067,7 +1658,7 @@ function renderEditSections() {
           <label><input type="checkbox" id="new-tag-o"> Opening Day</label>
           <label><input type="checkbox" id="new-tag-r"> Rewatch</label>
         </div>
-        <button class="win-btn" onclick="addRating()">Add</button>
+        <button class="mac-btn" onclick="addRating()">Add</button>
       </div>`;
   } else if (activeTab === 'watchlist' && aws) {
     aws.innerHTML = `
@@ -1075,8 +1666,8 @@ function renderEditSections() {
         <span class="add-form-label">Add to Watchlist</span>
         <div class="form-row">
           <label>Title:</label>
-          <input class="win-input title-input" id="new-watch-title" placeholder="Movie title">
-          <button class="win-btn" onclick="addWatch()">Add</button>
+          <input class="mac-input title-input" id="new-watch-title" placeholder="Movie title">
+          <button class="mac-btn" onclick="addWatch()">Add</button>
         </div>
       </div>`;
   }
@@ -1084,8 +1675,8 @@ function renderEditSections() {
   if (es) {
     es.innerHTML = `
       <div class="export-section">
-        <button class="win-btn" onclick="exportData()">Export Data</button>
-        <button class="win-btn" onclick="resetData()">Reset to Defaults</button>
+        <button class="mac-btn" onclick="exportData()">Export Data</button>
+        <button class="mac-btn" onclick="resetData()">Reset to Defaults</button>
       </div>`;
   }
 }
@@ -1093,7 +1684,7 @@ function renderEditSections() {
 // === TAB SWITCHING ===
 function switchTab(tab) {
   activeTab = tab;
-  document.querySelectorAll('.win-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.mac-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.getElementById('tab-rankings').style.display = tab === 'rankings' ? '' : 'none';
   document.getElementById('tab-watchlist').style.display = tab === 'watchlist' ? '' : 'none';
   editingId = null;
@@ -1210,6 +1801,19 @@ function resetData() {
   render();
   autoMatchTMDB();
 }
+
+// === MENU BAR CLOCK ===
+function updateClock() {
+  const now = new Date();
+  const el = document.getElementById('menu-clock');
+  if (el) {
+    el.textContent = now.toLocaleTimeString('en-US', {
+      hour: 'numeric', minute: '2-digit', hour12: true
+    });
+  }
+}
+updateClock();
+setInterval(updateClock, 30000);
 
 // === INIT ===
 document.getElementById('pwd-input').addEventListener('keydown', e => {
