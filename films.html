@@ -2078,9 +2078,14 @@ function computeAdjustedScores() {
   if (!nr.length) return;
   const avg = nr.reduce((s, r) => s + r.rating, 0) / nr.length;
   if (avg === 0) return;
-  const scale = 5 / avg;
   nr.forEach(r => {
-    adjustedScores[r.id] = Math.round(r.rating * scale * 100) / 100;
+    let adj;
+    if (r.rating <= avg) {
+      adj = (r.rating / avg) * 5;
+    } else {
+      adj = 5 + ((r.rating - avg) / (10 - avg)) * 5;
+    }
+    adjustedScores[r.id] = Math.round(adj * 100) / 100;
   });
 }
 
