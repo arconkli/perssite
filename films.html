@@ -2239,6 +2239,14 @@ async function submitSuggestion() {
   const name = document.getElementById('suggest-name').value.trim();
   const reason = document.getElementById('suggest-reason').value.trim();
   if (!title || !name) return;
+  if (ratings.some(r => r.title.toLowerCase() === title.toLowerCase())) {
+    alert(`"${title}" has already been watched!`);
+    return;
+  }
+  if (watchlist.some(w => w.title.toLowerCase() === title.toLowerCase())) {
+    alert(`"${title}" is already on the watchlist!`);
+    return;
+  }
   const { data: inserted } = await db.from('watchlist').insert({
     title,
     suggested_by: name,
@@ -2649,6 +2657,14 @@ async function saveEdit(id) {
 async function addWatch() {
   const title = document.getElementById('new-watch-title').value.trim();
   if (!title) return;
+  if (ratings.some(r => r.title.toLowerCase() === title.toLowerCase())) {
+    alert(`"${title}" is already in your watched list.`);
+    return;
+  }
+  if (watchlist.some(w => w.title.toLowerCase() === title.toLowerCase())) {
+    alert(`"${title}" is already on the watchlist!`);
+    return;
+  }
   const { data: inserted } = await db.from('watchlist').insert({ title }).select().single();
   await loadData();
   render();
