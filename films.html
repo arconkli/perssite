@@ -942,14 +942,6 @@
 
     .watch-provider-name { font-size: 9px; }
 
-    .watch-suggested {
-      font-size: 9px;
-      color: #888;
-      font-style: italic;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
 
     /* === STATUS BAR === */
     .window-statusbar {
@@ -2313,8 +2305,11 @@ async function showMovieDetail(tmdbId) {
   }
 
   let suggestedHtml = '';
-  if (ratingEntry && ratingEntry.suggested_by) {
-    suggestedHtml = `<div class="detail-section"><div class="detail-section-title">Suggested by</div><div class="detail-section-content">${escHtml(ratingEntry.suggested_by)}</div></div>`;
+  const suggestor = (ratingEntry && ratingEntry.suggested_by) || (watchlist.find(w => w.tmdb_id === tmdbId)?.suggested_by);
+  if (suggestor) {
+    const watchEntry = watchlist.find(w => w.tmdb_id === tmdbId);
+    const reason = watchEntry?.reason;
+    suggestedHtml = `<div class="detail-section"><div class="detail-section-title">Suggested by</div><div class="detail-section-content">${escHtml(suggestor)}${reason ? ` &mdash; &ldquo;${escHtml(reason)}&rdquo;` : ''}</div></div>`;
   }
 
   bodyEl.innerHTML = `
@@ -2664,7 +2659,6 @@ function renderWatchlist() {
       <span class="watch-num">${i + 1}.</span>
       <div class="watch-title-wrap">
         <span class="watch-title">${escHtml(w.title)}</span>
-        ${w.suggested_by ? `<div class="watch-suggested">${mode === 'edit' ? `Suggested by ${escHtml(w.suggested_by)}${w.reason ? ` &mdash; &ldquo;${escHtml(w.reason)}&rdquo;` : ''}` : 'Suggested'}</div>` : ''}
         ${providersHtml}
       </div>
       ${actions}
@@ -2721,8 +2715,12 @@ function renderEditSections() {
         <div class="form-row">
           <label>Title:</label>
           <input class="mac-input title-input" id="new-watch-title" placeholder="Movie title">
-          <button class="mac-btn" onclick="addWatch()">Add</button>
         </div>
+        <div class="form-row">
+          <label>Suggested&nbsp;by:</label>
+          <input class="mac-input" id="new-watch-suggested" placeholder="(optional)">
+        </div>
+        <button class="mac-btn" onclick="addWatch()">Add</button>
       </div>`;
   }
 
@@ -2863,10 +2861,13 @@ async function addWatch() {
     alert(`"${title}" is already on the watchlist!`);
     return;
   }
-  const { data: inserted } = await db.from('watchlist').insert({ title }).select().single();
+  const suggestedBy = document.getElementById('new-watch-suggested')?.value.trim() || null;
+  const { data: inserted } = await db.from('watchlist').insert({ title, suggested_by: suggestedBy }).select().single();
   await loadData();
   render();
   document.getElementById('new-watch-title').value = '';
+  const wsbEl = document.getElementById('new-watch-suggested');
+  if (wsbEl) wsbEl.value = '';
   // Auto-match TMDB immediately
   if (inserted) {
     try {
