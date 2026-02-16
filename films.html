@@ -1881,6 +1881,7 @@ async function showApp() {
   render();
   await warmCache();
   autoMatchTMDB();
+  fetchAllPublicScores();
 }
 
 function focusAppWindow() {
@@ -2275,6 +2276,7 @@ async function fetchMovieDetails(tmdbId) {
 function cacheMovieDetails(tmdbId, details) {
   if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
   const c = tmdbCache[tmdbId];
+  if (details.imdb_id) c.imdb_id = details.imdb_id;
   c.runtime = details.runtime;
   c.director = (details.credits?.crew || []).filter(p => p.job === 'Director').map(p => p.name);
   c.cast = (details.credits?.cast || []).slice(0, 5).map(p => p.name);
@@ -2288,6 +2290,61 @@ function cacheMovieDetails(tmdbId, details) {
       buy: (usProviders.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
     };
   }
+  saveTMDBCache();
+}
+
+async function fetchAllPublicScores() {
+  const STALE_DAYS = 14;
+  const now = Date.now();
+  const staleMs = STALE_DAYS * 24 * 60 * 60 * 1000;
+
+  // Collect movies that need OMDb data
+  const needFetch = [];
+  for (const m of ratings) {
+    if (!m.tmdb_id) continue;
+    const cached = tmdbCache[m.tmdb_id];
+    if (cached?.externalRatings && cached.externalRatingsAt && (now - cached.externalRatingsAt) < staleMs) continue;
+    needFetch.push(m);
+  }
+  if (!needFetch.length) return;
+
+  // Step 1: Get imdb_ids for movies that don't have them cached
+  const needImdb = needFetch.filter(m => !tmdbCache[m.tmdb_id]?.imdb_id);
+  for (let i = 0; i < needImdb.length; i += 3) {
+    const batch = needImdb.slice(i, i + 3);
+    await Promise.all(batch.map(async m => {
+      try {
+        const resp = await fetch(`${TMDB_BASE}/movie/${m.tmdb_id}?api_key=${TMDB_KEY}`);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (!tmdbCache[m.tmdb_id]) tmdbCache[m.tmdb_id] = {};
+        if (data.imdb_id) tmdbCache[m.tmdb_id].imdb_id = data.imdb_id;
+      } catch (e) {}
+    }));
+  }
+
+  // Step 2: Fetch OMDb scores in batches
+  const toFetch = needFetch.filter(m => tmdbCache[m.tmdb_id]?.imdb_id);
+  let updated = false;
+  for (let i = 0; i < toFetch.length; i += 3) {
+    const batch = toFetch.slice(i, i + 3);
+    await Promise.all(batch.map(async m => {
+      try {
+        const imdbId = tmdbCache[m.tmdb_id].imdb_id;
+        const resp = await fetch(`${OMDB_BASE}/?i=${imdbId}&apikey=${OMDB_KEY}`);
+        if (!resp.ok) return;
+        const omdb = await resp.json();
+        if (omdb.Response !== 'False' && omdb.Ratings) {
+          tmdbCache[m.tmdb_id].externalRatings = omdb.Ratings.map(r => ({ source: r.Source, value: r.Value }));
+          tmdbCache[m.tmdb_id].externalRatingsAt = now;
+          updated = true;
+        }
+      } catch (e) {}
+    }));
+    // Re-render periodically so scores appear as they load
+    if (updated && i % 15 === 0) { render(); updated = false; }
+  }
+  if (updated) render();
   saveTMDBCache();
 }
 
@@ -2336,6 +2393,7 @@ async function showMovieDetail(tmdbId) {
           externalRatings = omdb.Ratings.map(r => ({ source: r.Source, value: r.Value }));
           if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
           tmdbCache[tmdbId].externalRatings = externalRatings;
+          tmdbCache[tmdbId].externalRatingsAt = Date.now();
           saveTMDBCache();
         }
       }
