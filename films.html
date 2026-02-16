@@ -938,6 +938,15 @@
 
     .watch-provider-name { font-size: 9px; }
 
+    .watch-suggested {
+      font-size: 9px;
+      color: #888;
+      font-style: italic;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     @media (max-width: 640px) {
       .detail-body { flex-direction: column; }
       .detail-poster { width: 100px; }
@@ -1224,9 +1233,27 @@
         <div class="search-bar">
           <label for="filter-watch">Find:</label>
           <input type="text" class="mac-input" id="filter-watch" placeholder="Search watchlist..." oninput="render()">
+          <select class="mac-input" id="watch-source-filter" onchange="render()" style="width:auto">
+            <option value="">All</option>
+            <option value="mine">My Picks</option>
+          </select>
         </div>
         <div class="content-area" id="watchlist-list"></div>
         <div id="add-watch-section" style="position:relative"></div>
+        <div class="add-form" id="suggest-section">
+          <span class="add-form-label">Suggest a Movie</span>
+          <div class="form-row">
+            <label>Movie:</label>
+            <input class="mac-input title-input" id="suggest-title" placeholder="Movie title">
+          </div>
+          <div class="form-row">
+            <label>Name:</label>
+            <input class="mac-input" id="suggest-name" placeholder="Your name" style="width:120px">
+            <label>Why?</label>
+            <input class="mac-input" id="suggest-reason" placeholder="Optional reason" style="flex:1;min-width:100px">
+            <button class="mac-btn" onclick="submitSuggestion()">Suggest</button>
+          </div>
+        </div>
       </div>
 
       <div id="export-section"></div>
@@ -1620,7 +1647,7 @@ async function loadData() {
   }
 
   if (dbWatch && dbWatch.length > 0) {
-    watchlist = dbWatch.map(w => ({ id: w.id, title: w.title, tmdb_id: w.tmdb_id }));
+    watchlist = dbWatch.map(w => ({ id: w.id, title: w.title, tmdb_id: w.tmdb_id, suggested_by: w.suggested_by, reason: w.reason }));
   }
 }
 
@@ -2103,9 +2130,66 @@ function populateGenreFilter() {
     sorted.map(g => `<option value="${g}"${g === current ? ' selected' : ''}>${g}</option>`).join('');
 }
 
+function populateWatchSourceFilter() {
+  const sel = document.getElementById('watch-source-filter');
+  if (!sel) return;
+  const current = sel.value;
+  const names = new Set();
+  watchlist.forEach(w => { if (w.suggested_by) names.add(w.suggested_by); });
+  const sorted = [...names].sort();
+  let html = '<option value="">All</option><option value="mine">My Picks</option>';
+  if (sorted.length) html += '<option value="__suggestions__">All Suggestions</option>';
+  sorted.forEach(n => { html += `<option value="${n}"${n === current ? ' selected' : ''}>${escHtml(n)}</option>`; });
+  sel.innerHTML = html;
+  if (current && sel.querySelector(`option[value="${CSS.escape(current)}"]`)) sel.value = current;
+}
+
+async function submitSuggestion() {
+  const title = document.getElementById('suggest-title').value.trim();
+  const name = document.getElementById('suggest-name').value.trim();
+  const reason = document.getElementById('suggest-reason').value.trim();
+  if (!title || !name) return;
+  const { data: inserted } = await db.from('watchlist').insert({
+    title,
+    suggested_by: name,
+    reason: reason || null
+  }).select().single();
+  await loadData();
+  render();
+  document.getElementById('suggest-title').value = '';
+  document.getElementById('suggest-reason').value = '';
+  // Auto-match TMDB
+  if (inserted) {
+    try {
+      const searchData = await tmdbSearch(title, null);
+      if (searchData.results && searchData.results.length > 0) {
+        const best = searchData.results[0];
+        await db.from('watchlist').update({ tmdb_id: best.id }).eq('id', inserted.id);
+        tmdbCache[best.id] = tmdbCacheFromResult(best);
+        const detailResp = await fetch(`${TMDB_BASE}/movie/${best.id}?api_key=${TMDB_KEY}&append_to_response=watch/providers`);
+        if (detailResp.ok) {
+          const detail = await detailResp.json();
+          const usP = detail['watch/providers']?.results?.US;
+          if (usP) {
+            tmdbCache[best.id].providers = {
+              flatrate: (usP.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+              rent: (usP.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+              buy: (usP.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
+            };
+          }
+        }
+        saveTMDBCache();
+        await loadData();
+        render();
+      }
+    } catch(e) {}
+  }
+}
+
 function render() {
   computeAdjustedScores();
   populateGenreFilter();
+  populateWatchSourceFilter();
   renderStats();
   if (activeTab === 'rankings') renderRatings();
   else renderWatchlist();
@@ -2262,7 +2346,15 @@ function renderEditRow(m) {
 
 function renderWatchlist() {
   const filter = document.getElementById('filter-watch').value.toLowerCase();
-  const filtered = watchlist.filter(w => w.title.toLowerCase().includes(filter));
+  const sourceFilter = document.getElementById('watch-source-filter')?.value || '';
+  let filtered = watchlist.filter(w => w.title.toLowerCase().includes(filter));
+  if (sourceFilter === 'mine') {
+    filtered = filtered.filter(w => !w.suggested_by);
+  } else if (sourceFilter === '__suggestions__') {
+    filtered = filtered.filter(w => w.suggested_by);
+  } else if (sourceFilter) {
+    filtered = filtered.filter(w => w.suggested_by === sourceFilter);
+  }
   let html = '';
   filtered.forEach((w, i) => {
     const actions = mode === 'edit' ? `
@@ -2296,6 +2388,7 @@ function renderWatchlist() {
       <span class="watch-num">${i + 1}.</span>
       <div class="watch-title-wrap">
         <span class="watch-title">${escHtml(w.title)}</span>
+        ${w.suggested_by ? `<div class="watch-suggested">Suggested by ${escHtml(w.suggested_by)}${w.reason ? ` &mdash; &ldquo;${escHtml(w.reason)}&rdquo;` : ''}</div>` : ''}
         ${providersHtml}
       </div>
       ${actions}
