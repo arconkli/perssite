@@ -674,6 +674,13 @@
       color: #888;
       text-align: right;
     }
+    .public-score {
+      display: block;
+      font-size: 9px;
+      font-weight: normal;
+      color: #999;
+      text-align: right;
+    }
 
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
 
@@ -1442,6 +1449,7 @@
             <span><span class="tag tag-opening">OD</span> Opening Day</span>
             <span><span class="tag tag-prelist">PL</span> Pre-List</span>
           </div>
+          <div style="font-size:9px;color:#999;margin-top:3px">Small number below rating = public avg (IMDb 50%, RT 25%, MC 25%)</div>
         </div>
         <div class="search-bar">
           <label for="filter-input">Find:</label>
@@ -1792,6 +1800,32 @@ function ratingClass(r) {
 function ratingDisplay(r) {
   if (r === 'DNF') return 'DNF';
   return Number.isInteger(r) ? r.toString() : r.toFixed(2).replace(/0$/, '');
+}
+
+function calcPublicScore(externalRatings) {
+  if (!externalRatings || !externalRatings.length) return null;
+  let imdb = null, rt = null, mc = null;
+  externalRatings.forEach(r => {
+    if (r.source === 'Internet Movie Database') {
+      const v = parseFloat(r.value);
+      if (!isNaN(v)) imdb = v; // already 0-10
+    } else if (r.source === 'Rotten Tomatoes') {
+      const v = parseFloat(r.value);
+      if (!isNaN(v)) rt = v / 10; // percentage → 0-10
+    } else if (r.source === 'Metacritic') {
+      const v = parseFloat(r.value);
+      if (!isNaN(v)) mc = v / 10; // 0-100 → 0-10
+    }
+  });
+  // Need at least IMDb to calculate
+  if (imdb === null) return null;
+  // Weighted: IMDb 50%, RT 25%, MC 25% (adjust weights if some are missing)
+  let total = 0, weight = 0;
+  total += imdb * 0.5; weight += 0.5;
+  if (rt !== null) { total += rt * 0.25; weight += 0.25; }
+  if (mc !== null) { total += mc * 0.25; weight += 0.25; }
+  const score = total / weight;
+  return score.toFixed(1);
 }
 
 function escHtml(s) {
@@ -2655,6 +2689,13 @@ function renderMovieRow(m) {
   const rwCount = rewatchCounts[m.id] || 0;
   const rwBadge = rwCount > 0 ? `<span class="rewatch-badge" title="${rwCount + 1} total viewings">\u00D7${rwCount + 1}</span>` : '';
 
+  // Public score: weighted average of IMDb (50%), RT (25%), MC (25%)
+  let publicScoreHtml = '';
+  if (tmdb && tmdb.externalRatings) {
+    const ps = calcPublicScore(tmdb.externalRatings);
+    if (ps !== null) publicScoreHtml = `<span class="public-score" title="Avg: IMDb 50%, RT 25%, MC 25%">${ps}</span>`;
+  }
+
   const clickHandler = m.tmdb_id ? `onclick="showMovieDetail(${m.tmdb_id})"` : '';
   return `<div class="movie-row" ${clickHandler}>
     ${posterHtml}
@@ -2664,7 +2705,7 @@ function renderMovieRow(m) {
       ${infoHtml}
     </div>
     <span class="movie-tags">${tags}</span>
-    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}${adjustedScores[m.id] !== undefined ? `<span class="adjusted-score">${adjustedScores[m.id].toFixed(1)}</span>` : ''}</span>
+    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}${publicScoreHtml}${adjustedScores[m.id] !== undefined ? `<span class="adjusted-score">${adjustedScores[m.id].toFixed(1)}</span>` : ''}</span>
     ${actions}
   </div>`;
 }
