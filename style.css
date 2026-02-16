@@ -78,6 +78,7 @@ body {
     white-space: nowrap;
     animation: scroll-left 30s linear infinite;
     animation-play-state: running;
+    width: max-content;
 }
 
 .ticker-half {
