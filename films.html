@@ -1775,7 +1775,17 @@ async function autoMatchTMDB() {
     const batch = unmatchedWatch.slice(i, i + 3);
     const promises = batch.map(async item => {
       try {
-        const data = await tmdbSearch(item.title, null);
+        let searchTitle = item.title;
+        let yearFilter = null;
+        const ym = item.title.match(/\((\d{4})\)$/);
+        if (ym) {
+          yearFilter = ym[1];
+          searchTitle = item.title.replace(/\s*\(\d{4}\)$/, '');
+        }
+        let data = await tmdbSearch(searchTitle, yearFilter);
+        if ((!data.results || data.results.length === 0) && yearFilter) {
+          data = await tmdbSearch(searchTitle, null);
+        }
         if (data.results && data.results.length > 0) {
           const best = data.results[0];
           item.tmdb_id = best.id;
@@ -2194,8 +2204,7 @@ function render() {
   if (activeTab === 'rankings') renderRatings();
   else renderWatchlist();
   renderEditSections();
-  const numericCount = ratings.filter(r => r.rating !== 'DNF').length;
-  document.getElementById('sb-count').textContent = numericCount + ' films rated';
+  document.getElementById('sb-count').textContent = ratings.length + ' films rated';
   // Undo bar
   const undoEl = document.getElementById('undo-container');
   if (undoEl) {
@@ -2209,8 +2218,8 @@ function render() {
 
 function renderStats() {
   const nr = ratings.filter(r => r.rating !== 'DNF');
-  const total = nr.length;
-  const avg = total ? (nr.reduce((s,r) => s + r.rating, 0) / total).toFixed(2) : '0';
+  const total = ratings.length;
+  const avg = nr.length ? (nr.reduce((s,r) => s + r.rating, 0) / nr.length).toFixed(2) : '0';
   const tens = nr.filter(r => r.rating === 10).length;
   document.getElementById('s-total').textContent = total;
   document.getElementById('s-avg').textContent = avg;
@@ -2401,13 +2410,16 @@ function renderEditSections() {
   const ars = document.getElementById('add-rating-section');
   const aws = document.getElementById('add-watch-section');
   const es = document.getElementById('export-section');
+  const ss = document.getElementById('suggest-section');
 
   if (mode !== 'edit') {
     if (ars) ars.innerHTML = '';
     if (aws) aws.innerHTML = '';
     if (es) es.innerHTML = '';
+    if (ss) ss.style.display = '';
     return;
   }
+  if (ss) ss.style.display = 'none';
 
   if (activeTab === 'rankings' && ars) {
     ars.innerHTML = `
