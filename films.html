@@ -1680,12 +1680,8 @@ function getTMDBInfo(tmdbId) {
 
 async function autoMatchTMDB() {
   if (tmdbMatchRunning) return;
-  const unmatched = ratings.filter(r => !r.tmdb_id);
-  if (unmatched.length === 0) {
-    document.getElementById('sb-tmdb').textContent = 'TMDB: Ready';
-    return;
-  }
   tmdbMatchRunning = true;
+  const unmatched = ratings.filter(r => !r.tmdb_id);
   let matched = 0;
   const total = unmatched.length;
 
@@ -1763,7 +1759,7 @@ async function warmCache() {
     const batch = unique.slice(i, i + 3);
     await Promise.all(batch.map(async m => {
       try {
-        const url = `${TMDB_BASE}/movie/${m.tmdb_id}?api_key=${TMDB_KEY}`;
+        const url = `${TMDB_BASE}/movie/${m.tmdb_id}?api_key=${TMDB_KEY}&append_to_response=watch/providers`;
         const resp = await fetch(url);
         if (!resp.ok) return;
         const data = await resp.json();
@@ -1773,6 +1769,14 @@ async function warmCache() {
           genres: (data.genres || []).map(g => g.name).slice(0, 3),
           ts: Date.now()
         };
+        const usProviders = data['watch/providers']?.results?.US;
+        if (usProviders) {
+          tmdbCache[m.tmdb_id].providers = {
+            flatrate: (usProviders.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+            rent: (usProviders.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+            buy: (usProviders.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
+          };
+        }
       } catch(e) { /* skip */ }
     }));
     saveTMDBCache();
@@ -2351,10 +2355,36 @@ async function saveEdit(id) {
 async function addWatch() {
   const title = document.getElementById('new-watch-title').value.trim();
   if (!title) return;
-  await db.from('watchlist').insert({ title });
+  const { data: inserted } = await db.from('watchlist').insert({ title }).select().single();
   await loadData();
   render();
   document.getElementById('new-watch-title').value = '';
+  // Auto-match TMDB immediately
+  if (inserted) {
+    try {
+      const searchData = await tmdbSearch(title, null);
+      if (searchData.results && searchData.results.length > 0) {
+        const best = searchData.results[0];
+        await db.from('watchlist').update({ tmdb_id: best.id }).eq('id', inserted.id);
+        tmdbCache[best.id] = tmdbCacheFromResult(best);
+        const detailResp = await fetch(`${TMDB_BASE}/movie/${best.id}?api_key=${TMDB_KEY}&append_to_response=watch/providers`);
+        if (detailResp.ok) {
+          const detail = await detailResp.json();
+          const usP = detail['watch/providers']?.results?.US;
+          if (usP) {
+            tmdbCache[best.id].providers = {
+              flatrate: (usP.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+              rent: (usP.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+              buy: (usP.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
+            };
+          }
+        }
+        saveTMDBCache();
+        await loadData();
+        render();
+      }
+    } catch(e) { /* TMDB match failed, will retry on next page load */ }
+  }
 }
 
 async function deleteWatch(id) {
