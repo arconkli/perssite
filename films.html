@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow">
   <title>Film Rankings</title>
   <style>
@@ -1199,15 +1199,18 @@
       .watch-item { padding: 5px 8px; min-height: 40px; gap: 5px; }
       .watch-title { font-size: 12px; }
 
-      /* Prevent iOS zoom on focus — all inputs must be >= 16px */
-      input, select, textarea { font-size: 16px !important; }
+      /* Text inputs: comfortable typing size; selects: compact */
+      input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea {
+        font-size: 16px !important;
+      }
+      select { font-size: 12px !important; }
 
       /* Search bar */
       .search-bar { flex-wrap: wrap; gap: 4px; margin: 4px 0; }
       .search-bar .mac-input { min-height: 30px; padding: 3px 6px; }
       #filter-input, #filter-watch { flex: 1 1 100%; order: -1; min-height: 30px; }
       #sort-select, #genre-filter, #tag-filter, #watch-source-filter {
-        flex: 1 1 auto; min-height: 26px; padding: 2px 4px;
+        flex: 1 1 auto; min-height: 24px; padding: 1px 3px;
       }
 
       /* Forms: stack vertically */
@@ -1853,7 +1856,8 @@ async function loadData() {
       title: r.title,
       rating: r.rating === 'DNF' ? 'DNF' : parseFloat(r.rating),
       tags: r.tags || [],
-      tmdb_id: r.tmdb_id
+      tmdb_id: r.tmdb_id,
+      suggested_by: r.suggested_by || null
     }));
   } else if (!seeding) {
     await seedDefaults();
@@ -2314,12 +2318,18 @@ async function showMovieDetail(tmdbId) {
     }
   }
 
+  let suggestedHtml = '';
+  if (ratingEntry && ratingEntry.suggested_by) {
+    suggestedHtml = `<div class="detail-section"><div class="detail-section-title">Suggested by</div><div class="detail-section-content">${escHtml(ratingEntry.suggested_by)}</div></div>`;
+  }
+
   bodyEl.innerHTML = `
     <div class="detail-poster">${posterHtml}</div>
     <div class="detail-info">
       <h2>${escHtml(details.title || '')}</h2>
       <div class="detail-meta">${escHtml(metaParts.join(' \u00B7 '))}</div>
       ${sections}
+      ${suggestedHtml}
       ${rewatchHtml}
     </div>`;
 }
@@ -2606,6 +2616,7 @@ function renderEditRow(m) {
     <input class="mac-input date-input" id="edit-date" value="${escHtml(m.date)}">
     <input class="mac-input title-input" id="edit-title" value="${escHtml(m.title)}" oninput="onEditTitleSearch(this.value)">
     <input class="mac-input rating-input" id="edit-rating" value="${m.rating === 'DNF' ? 'DNF' : m.rating}">
+    <input class="mac-input" id="edit-suggested-by" value="${escHtml(m.suggested_by || '')}" placeholder="Suggested by (optional)" style="width:140px">
     <input type="hidden" id="edit-tmdb-id" value="${m.tmdb_id || ''}">
     <div class="form-tags">${tc}</div>
     <button class="mac-btn mac-btn-sm" onclick="saveEdit(${m.id})">Save</button>
@@ -2697,6 +2708,10 @@ function renderEditSections() {
           <input type="hidden" id="new-tmdb-id">
         </div>
         <div id="tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
+        <div class="form-row">
+          <label>Suggested&nbsp;by:</label>
+          <input class="mac-input" id="new-suggested-by" placeholder="(optional)">
+        </div>
         <div class="form-tags">
           <label><input type="checkbox" id="new-tag-t"> Theater</label>
           <label><input type="checkbox" id="new-tag-f"> Festival</label>
@@ -2753,13 +2768,16 @@ async function addRating() {
   if (document.getElementById('new-tag-o').checked) tags.push('o');
   if (document.getElementById('new-tag-r').checked) tags.push('r');
 
+  const suggestedBy = document.getElementById('new-suggested-by')?.value.trim() || null;
+
   await db.from('ratings').insert({
     date,
     title,
     rating: String(rating),
     tags,
     tmdb_id: tmdbId,
-    sort_order: computeSortOrder(date)
+    sort_order: computeSortOrder(date),
+    suggested_by: suggestedBy
   });
   await loadData();
   render();
@@ -2768,6 +2786,8 @@ async function addRating() {
   document.getElementById('new-title').value = '';
   document.getElementById('new-rating').value = '';
   if (tmdbIdEl) tmdbIdEl.value = '';
+  const sbEl = document.getElementById('new-suggested-by');
+  if (sbEl) sbEl.value = '';
   ['new-tag-t','new-tag-f','new-tag-o','new-tag-r'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.checked = false;
@@ -2818,19 +2838,22 @@ async function saveEdit(id) {
   document.querySelectorAll('.edit-inline [data-tag]').forEach(cb => {
     if (cb.checked) newTags.push(cb.dataset.tag);
   });
+  const newSuggestedBy = document.getElementById('edit-suggested-by')?.value.trim() || null;
   await db.from('ratings').update({
     date: newDate,
     title: newTitle,
     rating: String(newRating),
     tags: newTags,
     tmdb_id: newTmdbId,
-    sort_order: computeSortOrder(newDate)
+    sort_order: computeSortOrder(newDate),
+    suggested_by: newSuggestedBy
   }).eq('id', id);
   m.date = newDate;
   m.title = newTitle;
   m.rating = newRating;
   m.tags = newTags;
   m.tmdb_id = newTmdbId;
+  m.suggested_by = newSuggestedBy;
   editingId = null;
   render();
 }
@@ -2932,7 +2955,8 @@ async function confirmWatched() {
   await db.from('ratings').insert({
     date, title: w.title, rating: String(rating),
     tags, tmdb_id: w.tmdb_id,
-    sort_order: computeSortOrder(date)
+    sort_order: computeSortOrder(date),
+    suggested_by: w.suggested_by || null
   });
   closeWatchedModal();
   await loadData();
