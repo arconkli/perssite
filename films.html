@@ -1146,8 +1146,10 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      /* Suggest form: move above watchlist on mobile */
+      /* Add/suggest forms: move above list on mobile */
       #suggest-section { order: -1; }
+      #add-rating-section { order: -1; }
+      #add-watch-section { order: -1; }
 
       /* More padding at top */
       .window-body { padding-top: 12px; }
@@ -1180,9 +1182,12 @@
       .watch-item { padding: 6px 8px; min-height: 44px; gap: 6px; }
       .watch-title { font-size: 13px; }
 
+      /* Prevent iOS zoom on focus — all inputs must be >= 16px */
+      input, select, textarea { font-size: 16px !important; }
+
       /* Search bar */
       .search-bar { flex-wrap: wrap; gap: 6px; margin: 6px 0; }
-      .search-bar .mac-input { min-height: 34px; font-size: 13px; padding: 4px 8px; }
+      .search-bar .mac-input { min-height: 34px; padding: 4px 8px; }
       #filter-input, #filter-watch { flex: 1 1 100%; order: -1; }
       #sort-select, #genre-filter, #tag-filter, #watch-source-filter {
         flex: 1 1 auto; min-height: 34px; font-size: 12px;
@@ -1194,7 +1199,7 @@
       .form-row label { font-size: 12px; }
       .form-row .mac-input {
         width: 100% !important; min-width: 0 !important;
-        min-height: 36px; font-size: 14px; padding: 6px 8px;
+        min-height: 36px; padding: 6px 8px;
       }
       .form-row .mac-input.date-input,
       .form-row .mac-input.title-input,
@@ -1205,7 +1210,7 @@
 
       /* Edit inline: vertical */
       .edit-inline { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
-      .edit-inline .mac-input { width: 100% !important; min-width: 0 !important; min-height: 34px; font-size: 13px; }
+      .edit-inline .mac-input { width: 100% !important; min-width: 0 !important; min-height: 34px; }
       .edit-inline .form-tags { width: 100%; }
       .edit-inline .mac-btn { width: 100%; }
 
@@ -1252,8 +1257,12 @@
       #suggest-section .form-row { flex-direction: column; gap: 6px; }
       #suggest-section .mac-input { width: 100% !important; min-height: 36px; font-size: 14px; }
 
-      /* TMDB dropdown */
-      .tmdb-dropdown { max-height: 240px; }
+      /* TMDB dropdown: in-flow on mobile so it doesn't cover the input */
+      .tmdb-dropdown {
+        position: relative;
+        max-height: 200px;
+        left: auto; right: auto;
+      }
       .tmdb-result { padding: 8px; font-size: 13px; min-height: 44px; }
 
       /* Status bar */
