@@ -888,6 +888,32 @@
 
     .detail-section-content { font-size: 11px; }
 
+    .external-ratings {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+    .ext-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 3px 6px;
+      border: 1px solid var(--mac-dark-border);
+      background: var(--mac-field-bg);
+    }
+    .ext-rating-label {
+      font-weight: bold;
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--mac-text-secondary);
+    }
+    .ext-rating-value {
+      font-weight: bold;
+      font-size: 12px;
+    }
+
     .provider-logos {
       display: flex;
       gap: 4px;
@@ -1539,6 +1565,8 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const TMDB_KEY = '696e0c182f4e0c9df706d94b7bf50021';
 const TMDB_BASE = 'https://api.themoviedb.org/3';
 const TMDB_IMG = 'https://image.tmdb.org/t/p';
+const OMDB_KEY = '2b325fef';
+const OMDB_BASE = 'https://www.omdbapi.com';
 const TMDB_CACHE_KEY = 'ac_films_tmdb';
 const TMDB_GENRES = {
   28:'Action',12:'Adventure',16:'Animation',35:'Comedy',80:'Crime',
@@ -2262,6 +2290,34 @@ async function showMovieDetail(tmdbId) {
 
   titleEl.textContent = details.title || 'Movie Details';
 
+  // Fetch external ratings (IMDb, RT, Metacritic) via OMDb
+  let ratingsHtml = '';
+  try {
+    let externalRatings = tmdbCache[tmdbId]?.externalRatings;
+    if (!externalRatings && details.imdb_id) {
+      const omdbResp = await fetch(`${OMDB_BASE}/?i=${details.imdb_id}&apikey=${OMDB_KEY}`);
+      if (omdbResp.ok) {
+        const omdb = await omdbResp.json();
+        if (omdb.Response !== 'False' && omdb.Ratings) {
+          externalRatings = omdb.Ratings.map(r => ({ source: r.Source, value: r.Value }));
+          if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
+          tmdbCache[tmdbId].externalRatings = externalRatings;
+          saveTMDBCache();
+        }
+      }
+    }
+    if (externalRatings && externalRatings.length) {
+      const badges = externalRatings.map(r => {
+        let label = r.source;
+        if (r.source === 'Internet Movie Database') label = 'IMDb';
+        else if (r.source === 'Rotten Tomatoes') label = 'RT';
+        else if (r.source === 'Metacritic') label = 'MC';
+        return `<div class="ext-rating"><span class="ext-rating-label">${label}</span><span class="ext-rating-value">${escHtml(r.value)}</span></div>`;
+      }).join('');
+      ratingsHtml = `<div class="detail-section"><div class="detail-section-title">Ratings</div><div class="external-ratings">${badges}</div></div>`;
+    }
+  } catch (e) { /* silently skip if OMDb fails */ }
+
   let sections = '';
   if (directors.length) {
     sections += `<div class="detail-section"><div class="detail-section-title">Director</div><div class="detail-section-content">${escHtml(directors.join(', '))}</div></div>`;
@@ -2320,6 +2376,7 @@ async function showMovieDetail(tmdbId) {
     <div class="detail-info">
       <h2>${escHtml(details.title || '')}</h2>
       <div class="detail-meta">${escHtml(metaParts.join(' \u00B7 '))}</div>
+      ${ratingsHtml}
       ${sections}
       ${suggestedHtml}
       ${rewatchHtml}
