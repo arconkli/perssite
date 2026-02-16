@@ -732,6 +732,18 @@
 
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
 
+    .rewatch-badge {
+      font-size: 9px;
+      font-weight: bold;
+      color: #666;
+      background: #E8E8E8;
+      border: 1px solid #CCC;
+      border-radius: 3px;
+      padding: 0 3px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
     /* === WATCHLIST === */
     .watch-item {
       display: flex;
@@ -1550,6 +1562,7 @@ let tmdbCache = {};
 let tmdbMatchRunning = false;
 let seeding = false;
 let adjustedScores = {};
+let rewatchCounts = {};
 let lastDeleted = null;
 
 // === UTILITY ===
@@ -1690,6 +1703,13 @@ async function loadData() {
 
   if (dbWatch && dbWatch.length > 0) {
     watchlist = dbWatch.map(w => ({ id: w.id, title: w.title, tmdb_id: w.tmdb_id, suggested_by: w.suggested_by, reason: w.reason }));
+  }
+
+  // Load rewatch counts
+  const { data: rwData } = await db.from('rewatches').select('rating_id');
+  rewatchCounts = {};
+  if (rwData) {
+    rwData.forEach(r => { rewatchCounts[r.rating_id] = (rewatchCounts[r.rating_id] || 0) + 1; });
   }
 }
 
@@ -2109,12 +2129,27 @@ async function showMovieDetail(tmdbId) {
     sections += renderProviders(usProviders.buy, 'Buy');
   }
 
+  // Fetch rewatch dates for this movie
+  const ratingEntry = ratings.find(r => r.tmdb_id === tmdbId);
+  let rewatchHtml = '';
+  if (ratingEntry) {
+    const { data: rwDates } = await db.from('rewatches').select('watched_at').eq('rating_id', ratingEntry.id).order('watched_at', { ascending: true });
+    if (rwDates && rwDates.length > 0) {
+      const dateList = rwDates.map(r => {
+        const d = new Date(r.watched_at);
+        return `<div style="font-size:11px;color:#333;margin:1px 0">${d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} at ${d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>`;
+      }).join('');
+      rewatchHtml = `<div class="detail-section"><div class="detail-section-title">Rewatches (${rwDates.length})</div><div class="detail-section-content">${dateList}</div></div>`;
+    }
+  }
+
   bodyEl.innerHTML = `
     <div class="detail-poster">${posterHtml}</div>
     <div class="detail-info">
       <h2>${escHtml(details.title || '')}</h2>
       <div class="detail-meta">${escHtml(metaParts.join(' \u00B7 '))}</div>
       ${sections}
+      ${rewatchHtml}
     </div>`;
 }
 
@@ -2186,12 +2221,15 @@ function populateWatchSourceFilter() {
   const sel = document.getElementById('watch-source-filter');
   if (!sel) return;
   const current = sel.value;
-  const names = new Set();
-  watchlist.forEach(w => { if (w.suggested_by) names.add(w.suggested_by); });
-  const sorted = [...names].sort();
-  let html = '<option value="">All</option><option value="mine">My Picks</option>';
-  if (sorted.length) html += '<option value="__suggestions__">All Suggestions</option>';
-  sorted.forEach(n => { html += `<option value="${n}"${n === current ? ' selected' : ''}>${escHtml(n)}</option>`; });
+  const hasSuggestions = watchlist.some(w => w.suggested_by);
+  let html = '<option value="">All</option><option value="mine">Andrew\'s</option>';
+  if (hasSuggestions) html += '<option value="__suggestions__">Suggested</option>';
+  if (mode === 'edit') {
+    const names = new Set();
+    watchlist.forEach(w => { if (w.suggested_by) names.add(w.suggested_by); });
+    const sorted = [...names].sort();
+    sorted.forEach(n => { html += `<option value="${n}"${n === current ? ' selected' : ''}>${escHtml(n)}</option>`; });
+  }
   sel.innerHTML = html;
   if (current && sel.querySelector(`option[value="${CSS.escape(current)}"]`)) sel.value = current;
 }
@@ -2362,12 +2400,15 @@ function renderMovieRow(m) {
     if (parts.length) infoHtml = `<div class="movie-info">${escHtml(parts.join(' \u00B7 '))}</div>`;
   }
 
+  const rwCount = rewatchCounts[m.id] || 0;
+  const rwBadge = rwCount > 0 ? `<span class="rewatch-badge" title="${rwCount + 1} total viewings">\u00D7${rwCount + 1}</span>` : '';
+
   const clickHandler = m.tmdb_id ? `onclick="showMovieDetail(${m.tmdb_id})"` : '';
   return `<div class="movie-row" ${clickHandler}>
     ${posterHtml}
     <span class="movie-date">${escHtml(m.date)}</span>
     <div class="movie-title-wrap">
-      <div class="movie-title">${escHtml(m.title)}</div>
+      <div class="movie-title">${escHtml(m.title)}${rwBadge}</div>
       ${infoHtml}
     </div>
     <span class="movie-tags">${tags}</span>
@@ -2440,7 +2481,7 @@ function renderWatchlist() {
       <span class="watch-num">${i + 1}.</span>
       <div class="watch-title-wrap">
         <span class="watch-title">${escHtml(w.title)}</span>
-        ${w.suggested_by ? `<div class="watch-suggested">Suggested by ${escHtml(w.suggested_by)}${w.reason ? ` &mdash; &ldquo;${escHtml(w.reason)}&rdquo;` : ''}</div>` : ''}
+        ${w.suggested_by ? `<div class="watch-suggested">${mode === 'edit' ? `Suggested by ${escHtml(w.suggested_by)}${w.reason ? ` &mdash; &ldquo;${escHtml(w.reason)}&rdquo;` : ''}` : 'Suggested'}</div>` : ''}
         ${providersHtml}
       </div>
       ${actions}
@@ -2557,8 +2598,10 @@ async function addRating() {
 
 async function logRewatch(ratingId) {
   await db.from('rewatches').insert({ rating_id: ratingId });
+  rewatchCounts[ratingId] = (rewatchCounts[ratingId] || 0) + 1;
+  render();
   const movie = ratings.find(r => r.id === ratingId);
-  if (movie) alert(`Logged rewatch of "${movie.title}"`);
+  if (movie) alert(`Logged rewatch of "${movie.title}" (\u00D7${rewatchCounts[ratingId] + 1} total)`);
 }
 
 async function deleteRating(id) {
