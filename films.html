@@ -1358,7 +1358,7 @@ function focusAppWindow() {
 
 // === DATA ===
 async function loadData() {
-  const { data: dbRatings, error: ratErr } = await supabase
+  const { data: dbRatings, error: ratErr } = await db
     .from('ratings')
     .select('*')
     .order('sort_order', { ascending: false });
@@ -1382,7 +1382,7 @@ async function loadData() {
     return;
   }
 
-  const { data: dbWatch, error: watchErr } = await supabase
+  const { data: dbWatch, error: watchErr } = await db
     .from('watchlist')
     .select('*')
     .order('id', { ascending: true });
