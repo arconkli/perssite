@@ -914,6 +914,22 @@
 
     .watch-item:hover .watch-providers { color: var(--mac-highlight-text); }
 
+    .watch-provider-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      margin-right: 6px;
+    }
+
+    .watch-provider-label {
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-right: 2px;
+    }
+
+    .watch-provider-name { font-size: 9px; }
+
     @media (max-width: 640px) {
       .detail-body { flex-direction: column; }
       .detail-poster { width: 100px; }
@@ -1212,6 +1228,18 @@
     </div>
   </div>
 
+  <!-- Watched Modal -->
+  <div id="watched-modal" class="detail-overlay" style="display:none" onclick="if(event.target===this)closeWatchedModal()">
+    <div class="detail-dialog" style="width:360px">
+      <div class="detail-titlebar">
+        <div class="close-box" onclick="closeWatchedModal()"></div>
+        <span class="detail-titlebar-text" id="watched-modal-title">Mark as Watched</span>
+      </div>
+      <div class="detail-body" id="watched-modal-body" style="flex-direction:column;gap:10px">
+      </div>
+    </div>
+  </div>
+
   <!-- Dock / Launcher Bar -->
   <div id="dock">
     <div class="dock-item dock-active" title="Film Rankings" ondblclick="focusAppWindow()">
@@ -1446,6 +1474,14 @@ function parseDate(d) {
 function computeSortOrder(dateStr) {
   const [mm,dd,yy] = dateStr.split('/').map(Number);
   return (2000+yy)*10000 + mm*100 + dd;
+}
+
+function todayStr() {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const yy = String(d.getFullYear() % 100).padStart(2, '0');
+  return `${mm}/${dd}/${yy}`;
 }
 
 function ratingClass(r) {
@@ -2080,13 +2116,18 @@ function renderWatchlist() {
     }
     let providersHtml = '';
     if (tmdb && tmdb.providers) {
-      const streams = tmdb.providers.flatrate || [];
-      if (streams.length) {
-        const logos = streams.slice(0, 4).map(p =>
-          p.logo ? `<img class="watch-provider-logo" src="${TMDB_IMG}/w45${p.logo}" alt="${escHtml(p.name)}" title="${escHtml(p.name)}">` : ''
+      const { flatrate, rent, buy } = tmdb.providers;
+      const renderGroup = (list, label) => {
+        if (!list || !list.length) return '';
+        const items = list.slice(0, 3).map(p =>
+          p.logo
+            ? `<img class="watch-provider-logo" src="${TMDB_IMG}/w45${p.logo}" alt="${escHtml(p.name)}" title="${escHtml(p.name)}">`
+            : `<span class="watch-provider-name">${escHtml(p.name)}</span>`
         ).join('');
-        providersHtml = `<div class="watch-providers">${logos}</div>`;
-      }
+        return `<span class="watch-provider-group"><span class="watch-provider-label">${label}</span>${items}</span>`;
+      };
+      const groups = [renderGroup(flatrate, 'Stream'), renderGroup(rent, 'Rent'), renderGroup(buy, 'Buy')].filter(Boolean).join('');
+      if (groups) providersHtml = `<div class="watch-providers">${groups}</div>`;
     }
     const clickHandler = w.tmdb_id ? `onclick="showMovieDetail(${w.tmdb_id})"` : '';
     html += `<div class="watch-item" ${clickHandler}>
@@ -2120,7 +2161,7 @@ function renderEditSections() {
         <span class="add-form-label">Add Movie</span>
         <div class="form-row">
           <label>Date:</label>
-          <input class="mac-input date-input" id="new-date" placeholder="MM/DD/YY">
+          <input class="mac-input date-input" id="new-date" placeholder="MM/DD/YY" value="${todayStr()}">
           <label>Title:</label>
           <input class="mac-input title-input" id="new-title" placeholder="Search TMDB..." oninput="onTitleSearch(this.value)">
           <label>Rating:</label>
@@ -2265,27 +2306,61 @@ async function deleteWatch(id) {
   render();
 }
 
-async function watchedMovie(id) {
+let watchedItemId = null;
+function watchedMovie(id) {
   const w = watchlist.find(x => x.id === id);
   if (!w) return;
-  const date = prompt('Date watched (MM/DD/YY):');
-  if (!date) return;
-  const rv = prompt('Rating (0-10 or DNF):');
-  if (rv === null) return;
+  watchedItemId = id;
+  document.getElementById('watched-modal-title').textContent = w.title;
+  document.getElementById('watched-modal-body').innerHTML = `
+    <div class="form-row">
+      <label>Date:</label>
+      <input class="mac-input date-input" id="watched-date" value="${todayStr()}">
+    </div>
+    <div class="form-row">
+      <label>Rating:</label>
+      <input class="mac-input rating-input" id="watched-rating" placeholder="0-10 or DNF">
+    </div>
+    <div class="form-tags">
+      <label><input type="checkbox" id="watched-tag-t"> Theater</label>
+      <label><input type="checkbox" id="watched-tag-f"> Festival</label>
+      <label><input type="checkbox" id="watched-tag-o"> Opening Day</label>
+      <label><input type="checkbox" id="watched-tag-r"> Rewatch</label>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="mac-btn" onclick="closeWatchedModal()">Cancel</button>
+      <button class="mac-btn mac-btn-primary" onclick="confirmWatched()">Save</button>
+    </div>`;
+  document.getElementById('watched-modal').style.display = 'flex';
+}
+
+async function confirmWatched() {
+  const w = watchlist.find(x => x.id === watchedItemId);
+  if (!w) return;
+  const date = document.getElementById('watched-date').value.trim();
+  const rv = document.getElementById('watched-rating').value.trim();
+  if (!date || !rv) return;
   const rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
   if (rating !== 'DNF' && isNaN(rating)) return;
-
-  await db.from('watchlist').delete().eq('id', id);
+  const tags = [];
+  if (document.getElementById('watched-tag-t').checked) tags.push('t');
+  if (document.getElementById('watched-tag-f').checked) tags.push('f');
+  if (document.getElementById('watched-tag-o').checked) tags.push('o');
+  if (document.getElementById('watched-tag-r').checked) tags.push('r');
+  await db.from('watchlist').delete().eq('id', watchedItemId);
   await db.from('ratings').insert({
-    date,
-    title: w.title,
-    rating: String(rating),
-    tags: [],
-    tmdb_id: null,
+    date, title: w.title, rating: String(rating),
+    tags, tmdb_id: w.tmdb_id,
     sort_order: computeSortOrder(date)
   });
+  closeWatchedModal();
   await loadData();
   render();
+}
+
+function closeWatchedModal() {
+  document.getElementById('watched-modal').style.display = 'none';
+  watchedItemId = null;
 }
 
 // === EXPORT / RESET ===
