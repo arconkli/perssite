@@ -1196,7 +1196,7 @@
       .search-bar { flex-wrap: wrap; gap: 4px; margin: 4px 0; }
       .search-bar .mac-input { min-height: 30px; padding: 3px 6px; }
       #filter-input, #filter-watch { flex: 1 1 100%; order: -1; min-height: 30px; }
-      #sort-select, #genre-filter, #tag-filter, #watch-source-filter {
+      #sort-select, #genre-filter, #tag-filter, #watch-source-filter, #watch-genre-filter {
         flex: 1 1 auto; min-height: 24px; padding: 1px 3px;
       }
 
@@ -1447,6 +1447,9 @@
         <div class="search-bar">
           <label for="filter-watch">Find:</label>
           <input type="text" class="mac-input" id="filter-watch" placeholder="Search watchlist..." oninput="render()">
+          <select class="mac-input" id="watch-genre-filter" onchange="render()" style="width:auto">
+            <option value="">All Genres</option>
+          </select>
           <select class="mac-input" id="watch-source-filter" onchange="render()" style="width:auto">
             <option value="">All</option>
             <option value="mine">My Picks</option>
@@ -2404,6 +2407,20 @@ function populateWatchSourceFilter() {
   if (current && sel.querySelector(`option[value="${CSS.escape(current)}"]`)) sel.value = current;
 }
 
+function populateWatchGenreFilter() {
+  const sel = document.getElementById('watch-genre-filter');
+  if (!sel) return;
+  const current = sel.value;
+  const genres = new Set();
+  watchlist.forEach(w => {
+    const tmdb = getTMDBInfo(w.tmdb_id);
+    if (tmdb && tmdb.genres) tmdb.genres.forEach(g => genres.add(g));
+  });
+  const sorted = [...genres].sort();
+  sel.innerHTML = '<option value="">All Genres</option>' +
+    sorted.map(g => `<option value="${g}"${g === current ? ' selected' : ''}>${g}</option>`).join('');
+}
+
 async function submitSuggestion() {
   const title = document.getElementById('suggest-title').value.trim();
   const name = document.getElementById('suggest-name').value.trim();
@@ -2458,6 +2475,7 @@ function render() {
   computeAdjustedScores();
   populateGenreFilter();
   populateWatchSourceFilter();
+  populateWatchGenreFilter();
   renderStats();
   if (activeTab === 'rankings') renderRatings();
   else renderWatchlist();
@@ -2618,6 +2636,7 @@ function renderEditRow(m) {
 function renderWatchlist() {
   const filter = document.getElementById('filter-watch').value.toLowerCase();
   const sourceFilter = document.getElementById('watch-source-filter')?.value || '';
+  const genreFilter = document.getElementById('watch-genre-filter')?.value || '';
   let filtered = watchlist.filter(w => w.title.toLowerCase().includes(filter));
   if (sourceFilter === 'mine') {
     filtered = filtered.filter(w => !w.suggested_by);
@@ -2625,6 +2644,12 @@ function renderWatchlist() {
     filtered = filtered.filter(w => w.suggested_by);
   } else if (sourceFilter) {
     filtered = filtered.filter(w => w.suggested_by === sourceFilter);
+  }
+  if (genreFilter) {
+    filtered = filtered.filter(w => {
+      const tmdb = getTMDBInfo(w.tmdb_id);
+      return tmdb && tmdb.genres && tmdb.genres.includes(genreFilter);
+    });
   }
   let html = '';
   filtered.forEach((w, i) => {
@@ -2653,12 +2678,20 @@ function renderWatchlist() {
       const groups = [renderGroup(flatrate, 'Stream'), renderGroup(rent, 'Rent'), renderGroup(buy, 'Buy')].filter(Boolean).join('');
       if (groups) providersHtml = `<div class="watch-providers">${groups}</div>`;
     }
+    let infoHtml = '';
+    if (tmdb) {
+      const yr = tmdb.release_date ? tmdb.release_date.substring(0, 4) : '';
+      const genres = tmdb.genres ? tmdb.genres.join(', ') : '';
+      const parts = [yr, genres].filter(Boolean);
+      if (parts.length) infoHtml = `<div class="movie-info">${escHtml(parts.join(' \u00B7 '))}</div>`;
+    }
     const clickHandler = w.tmdb_id ? `onclick="showMovieDetail(${w.tmdb_id})"` : '';
     html += `<div class="watch-item" ${clickHandler}>
       ${posterHtml}
       <span class="watch-num">${i + 1}.</span>
       <div class="watch-title-wrap">
         <span class="watch-title">${escHtml(w.title)}</span>
+        ${infoHtml}
         ${providersHtml}
       </div>
       ${actions}
