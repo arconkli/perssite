@@ -754,9 +754,9 @@
 
     /* TMDB Search Dropdown */
     .tmdb-dropdown {
-      position: absolute;
-      left: 0;
-      right: 0;
+      position: relative;
+      left: auto;
+      right: auto;
       z-index: 50;
       background: var(--mac-field-bg);
       border: 2px solid var(--mac-black);
@@ -1311,12 +1311,8 @@
       #suggest-section .form-row { flex-direction: column; gap: 3px; }
       #suggest-section .mac-input { width: 100% !important; min-height: 32px; }
 
-      /* TMDB dropdown: in-flow on mobile so it doesn't cover the input */
-      .tmdb-dropdown {
-        position: relative;
-        max-height: 200px;
-        left: auto; right: auto;
-      }
+      /* TMDB dropdown */
+      .tmdb-dropdown { max-height: 200px; }
       .tmdb-result { padding: 6px 8px; font-size: 12px; min-height: 38px; }
 
       /* Status bar */
