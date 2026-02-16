@@ -1083,10 +1083,8 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 640px) {
-      /* Menu bar */
-      #menu-bar { font-size: 11px; }
-      .menu-item:not(.menu-app-name) { display: none; }
-      .menu-right .menu-item:not(.menu-clock) { display: none; }
+      /* Hide menu bar — no OS chrome on mobile */
+      #menu-bar { display: none !important; }
 
       /* Desktop area: flex container for app */
       #desktop-area {
@@ -1124,18 +1122,28 @@
       .window-titlebar { cursor: default; }
       .window-resize-handle { display: none; }
 
-      /* Window body fills remaining space */
+      /* Window body: flex column so children stretch */
       .window-body {
         flex: 1;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         padding: 6px;
+        display: flex;
+        flex-direction: column;
       }
 
-      /* Content area: no fixed max, fill available */
+      /* Tab panel: stretch to fill window-body */
+      .tab-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Content area: stretch to fill tab-panel */
       .content-area {
         max-height: none;
-        min-height: 200px;
+        min-height: 0;
+        flex: 1;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
       }
