@@ -1065,12 +1065,17 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // === CONFIG ===
 const VIEW_HASH = 'db944067d6c7762bee2cd7cc3c55e9f35ccea4e885fa17930856aefe784a1b52';
 const EDIT_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
-const STORAGE_KEY = 'ac_films_data';
 const SESSION_KEY = 'ac_films_mode';
+
+// === SUPABASE CONFIG ===
+const SUPABASE_URL = 'https://jubkcyjmzykndwlaobus.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1YmtjeWptenlrbmR3bGFvYnVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExOTUzODAsImV4cCI6MjA4Njc3MTM4MH0.TZETJCf3fjBSWgXE4SviUuMh5j18rvv55QW5TYacO0I';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // === TMDB CONFIG ===
 const TMDB_KEY = '696e0c182f4e0c9df706d94b7bf50021';
@@ -1086,156 +1091,156 @@ const TMDB_GENRES = {
 
 // === DEFAULT DATA ===
 const DEFAULT_RATINGS = [
-  ["01/31/26","Fallen Angels",7.25,[]],
-  ["01/30/26","The Incredibles",9.25,[]],
-  ["01/29/26","Iron Lung",7.75,[]],
-  ["01/12/26","Marty Supreme",9.75,[]],
-  ["01/02/26","Wicked: For Good",5.75,[]],
-  ["12/28/25","Brightburn",6,[]],
-  ["12/26/25","Public Enemies",7.5,[]],
-  ["12/26/25","Top Gun: Maverick",9.75,[]],
-  ["12/20/25","Five Nights at Freddy's 2",6.5,[]],
-  ["12/18/25","El Camino",7.25,[]],
-  ["12/16/25","Identity",7.25,[]],
-  ["12/14/25","The Island",6.25,[]],
-  ["12/01/25","Frankenstein",7.5,[]],
-  ["11/27/25","True Romance",8.5,[]],
-  ["11/27/25","Everyone's Hero",7.5,[]],
-  ["11/26/25","12 Monkeys",7.25,[]],
-  ["11/24/25","Money Ball",9.25,[]],
-  ["11/19/25","Free Solo",6.5,[]],
-  ["11/15/25","Madagascar 3: Europe's Most Wanted",9.25,[]],
-  ["11/10/25","Troy",6.5,[]],
-  ["10/29/25","John Wick: Chapter 4",9.5,[]],
-  ["10/15/25","Jennifer's Body",7.5,[]],
-  ["09/27/25","One Battle After Another",8,[]],
-  ["09/09/25","Tron: Legacy",8,[]],
-  ["09/08/25","Call Me by Your Name",7.25,[]],
-  ["08/20/25","The King",8.75,[]],
-  ["07/31/25","John Wick: Chapter 3",8.75,[]],
-  ["07/31/25","John Wick: Chapter 2",8.5,[]],
-  ["07/29/25","Ick",8.25,[]],
-  ["07/27/25","The Dark Knight",9.5,[]],
-  ["07/16/25","Shark Tale",7,[]],
-  ["07/01/25","Ballerina",8.5,[]],
-  ["06/30/25","F1",9.25,[]],
-  ["06/21/25","John Wick",9.25,[]],
+  ["01/31/26","Fallen Angels",7.25,["f"]],
+  ["01/30/26","The Incredibles",9.25,["f"]],
+  ["01/29/26","Iron Lung",7.75,["o"]],
+  ["01/12/26","Marty Supreme",9.75,["t"]],
+  ["01/02/26","Wicked: For Good",5.75,["f"]],
+  ["12/28/25","Brightburn",6,["f"]],
+  ["12/26/25","Public Enemies",7.5,["f"]],
+  ["12/26/25","Top Gun: Maverick",9.75,["r"]],
+  ["12/20/25","Five Nights at Freddy's 2",6.5,["t"]],
+  ["12/18/25","El Camino",7.25,["f"]],
+  ["12/16/25","Identity",7.25,["f"]],
+  ["12/14/25","The Island",6.25,["f"]],
+  ["12/01/25","Frankenstein",7.5,["f"]],
+  ["11/27/25","True Romance",8.5,["f"]],
+  ["11/27/25","Everyone's Hero",7.5,["r"]],
+  ["11/26/25","12 Monkeys",7.25,["f"]],
+  ["11/24/25","Money Ball",9.25,["r"]],
+  ["11/19/25","Free Solo",6.5,["f"]],
+  ["11/15/25","Madagascar 3: Europe's Most Wanted",9.25,["r"]],
+  ["11/10/25","Troy",6.5,["f"]],
+  ["10/29/25","John Wick: Chapter 4",9.5,["f"]],
+  ["10/15/25","Jennifer's Body",7.5,["f"]],
+  ["09/27/25","One Battle After Another",8,["t"]],
+  ["09/09/25","Tron: Legacy",8,["f"]],
+  ["09/08/25","Call Me by Your Name",7.25,["f"]],
+  ["08/20/25","The King",8.75,["r"]],
+  ["07/31/25","John Wick: Chapter 3",8.75,["r"]],
+  ["07/31/25","John Wick: Chapter 2",8.5,["r"]],
+  ["07/29/25","Ick",8.25,["t"]],
+  ["07/27/25","The Dark Knight",9.5,["r"]],
+  ["07/16/25","Shark Tale",7,["r"]],
+  ["07/01/25","Ballerina",8.5,["t"]],
+  ["06/30/25","F1",9.25,["t"]],
+  ["06/21/25","John Wick",9.25,["r"]],
   ["06/20/25","The Accountant 2","DNF",[]],
   ["06/13/25","The Girl Next Door",7.75,[]],
   ["05/27/25","Late Night with the Devil",6,[]],
-  ["05/25/25","Tropic Thunder",9,[]],
-  ["05/25/25","How to Train Your Dragon: The Hidden World",8.5,[]],
-  ["05/24/25","How to Train Your Dragon 2",8.5,[]],
-  ["05/24/25","How to Train Your Dragon",9.25,[]],
-  ["05/24/25","Air Force Elite - Thunderbirds",6,[]],
-  ["05/23/25","Mission: Impossible - Final Reckoning",9,[]],
-  ["05/04/25","The Fighter",8.75,[]],
-  ["05/02/25","Thunderbolts",8.25,[]],
-  ["05/02/25","Anora",8.5,[]],
-  ["05/01/25","The White House Effect",5.75,[]],
-  ["04/29/25","OBEX",4.5,[]],
-  ["04/29/25","The Kingdom",9,[]],
-  ["04/28/25","Drive",8,[]],
-  ["04/24/25","Warfare",8,[]],
-  ["04/12/25","Goodfellas",8.75,[]],
-  ["04/04/25","Minecraft",6.25,[]],
-  ["03/26/25","Mickey 17",6,[]],
-  ["03/23/25","Electric State",6,[]],
-  ["02/26/25","The Monkey",5.75,[]],
-  ["02/19/25","Companion",7.5,[]],
-  ["02/05/25","Paul Blart: Mall Cop",7.25,[]],
-  ["01/15/25","Better Man",8.5,[]],
-  ["01/07/25","Wicked",8.5,[]],
-  ["01/06/25","Boy Kills World",6,[]],
-  ["01/03/25","Immaculate",6.5,[]],
-  ["12/30/24","Gladiator 2",7.75,[]],
-  ["12/28/24","Oddity",6.75,[]],
-  ["12/27/24","Split",7.75,[]],
-  ["12/27/24","Gladiator",8.75,[]],
-  ["12/23/24","Transformers One",7.5,[]],
-  ["12/16/24","Spy Game",6,[]],
-  ["12/13/24","Subservience",6,[]],
-  ["11/28/24","Oz",6.5,[]],
-  ["11/27/24","Smile 2",7,[]],
-  ["10/01/24","Wolfs",6.75,[]],
-  ["09/13/24","The Disaster Artist",7,[]],
-  ["05/30/24","Prom Dates",6.5,[]],
-  ["05/20/24","Se7en",8.5,[]],
-  ["05/18/24","Sicario",9,[]],
+  ["05/25/25","Tropic Thunder",9,["f"]],
+  ["05/25/25","How to Train Your Dragon: The Hidden World",8.5,["f"]],
+  ["05/24/25","How to Train Your Dragon 2",8.5,["r"]],
+  ["05/24/25","How to Train Your Dragon",9.25,["r"]],
+  ["05/24/25","Air Force Elite - Thunderbirds",6,["f"]],
+  ["05/23/25","Mission: Impossible - Final Reckoning",9,["t"]],
+  ["05/04/25","The Fighter",8.75,["t"]],
+  ["05/02/25","Thunderbolts",8.25,["t"]],
+  ["05/02/25","Anora",8.5,["f"]],
+  ["05/01/25","The White House Effect",5.75,["f"]],
+  ["04/29/25","OBEX",4.5,["f"]],
+  ["04/29/25","The Kingdom",9,["t"]],
+  ["04/28/25","Drive",8,["f"]],
+  ["04/24/25","Warfare",8,["t"]],
+  ["04/12/25","Goodfellas",8.75,["f"]],
+  ["04/04/25","Minecraft",6.25,["t"]],
+  ["03/26/25","Mickey 17",6,["t"]],
+  ["03/23/25","Electric State",6,["f"]],
+  ["02/26/25","The Monkey",5.75,["t"]],
+  ["02/19/25","Companion",7.5,["t"]],
+  ["02/05/25","Paul Blart: Mall Cop",7.25,["r"]],
+  ["01/15/25","Better Man",8.5,["t"]],
+  ["01/07/25","Wicked",8.5,["f"]],
+  ["01/06/25","Boy Kills World",6,["f"]],
+  ["01/03/25","Immaculate",6.5,["f"]],
+  ["12/30/24","Gladiator 2",7.75,["f"]],
+  ["12/28/24","Oddity",6.75,["f"]],
+  ["12/27/24","Split",7.75,["r"]],
+  ["12/27/24","Gladiator",8.75,["r"]],
+  ["12/23/24","Transformers One",7.5,["r"]],
+  ["12/16/24","Spy Game",6,["f"]],
+  ["12/13/24","Subservience",6,["f"]],
+  ["11/28/24","Oz",6.5,["f"]],
+  ["11/27/24","Smile 2",7,["f"]],
+  ["10/01/24","Wolfs",6.75,["f"]],
+  ["09/13/24","The Disaster Artist",7,["f"]],
+  ["05/30/24","Prom Dates",6.5,["f"]],
+  ["05/20/24","Se7en",8.5,["f"]],
+  ["05/18/24","Sicario",9,["f"]],
   ["05/05/24","Oldboy","DNF",[]],
-  ["04/07/24","The Breath",8,[]],
-  ["04/03/24","Imperium",8,[]],
-  ["04/01/24","High Life",7.5,[]],
-  ["03/02/24","Free Fire",7.5,[]],
+  ["04/07/24","The Breath",8,["f"]],
+  ["04/03/24","Imperium",8,["f"]],
+  ["04/01/24","High Life",7.5,["f"]],
+  ["03/02/24","Free Fire",7.5,["f"]],
   ["03/02/24","Mayhem","DNF",[]],
-  ["03/01/24","Office Space",8,[]],
+  ["03/01/24","Office Space",8,["f"]],
   ["02/29/24","Belko Experiment","DNF",[]],
-  ["02/22/24","Dune: Part Two",10,[]],
-  ["01/22/24","Kidnapping Inc",8.75,[]],
-  ["01/21/24","A Different Man",8.75,[]],
-  ["01/20/24","Love Lies Bleeding",8.25,[]],
-  ["01/19/24","It's What's Inside",7.5,[]],
-  ["01/19/24","Sasquatch Sunset",6,[]],
-  ["01/14/24","Vivarium",6,[]],
-  ["01/05/24","M.I.B",7.5,[]],
-  ["01/05/24","R.I.P.D.",6,[]],
-  ["01/04/24","The Creator",7.5,[]],
-  ["12/25/23","The Other Guys",7.25,[]],
-  ["12/24/23","The Lodge",6.5,[]],
-  ["12/21/23","I'm Thinking of Ending Things",6,[]],
-  ["12/20/23","The Hunger Games (2023)",7,[]],
-  ["11/20/23","Hotel Transylvania: Transformania",5.75,[]],
-  ["11/20/23","Hotel Transylvania 3",6.5,[]],
-  ["11/20/23","Hotel Transylvania 2",7,[]],
-  ["11/20/23","Hotel Transylvania",8.25,[]],
-  ["10/05/23","Rejuvenation",3.5,[]],
-  ["09/30/23","Better Luck Tomorrow",7.25,[]],
-  ["09/17/23","Bottoms",8.25,[]],
+  ["02/22/24","Dune: Part Two",10,["o"]],
+  ["01/22/24","Kidnapping Inc",8.75,["o"]],
+  ["01/21/24","A Different Man",8.75,["o"]],
+  ["01/20/24","Love Lies Bleeding",8.25,["o"]],
+  ["01/19/24","It's What's Inside",7.5,["o"]],
+  ["01/19/24","Sasquatch Sunset",6,["o"]],
+  ["01/14/24","Vivarium",6,["f"]],
+  ["01/05/24","M.I.B",7.5,["r"]],
+  ["01/05/24","R.I.P.D.",6,["f"]],
+  ["01/04/24","The Creator",7.5,["f"]],
+  ["12/25/23","The Other Guys",7.25,["f"]],
+  ["12/24/23","The Lodge",6.5,["f"]],
+  ["12/21/23","I'm Thinking of Ending Things",6,["f"]],
+  ["12/20/23","The Hunger Games (2023)",7,["f"]],
+  ["11/20/23","Hotel Transylvania: Transformania",5.75,["r"]],
+  ["11/20/23","Hotel Transylvania 3",6.5,["r"]],
+  ["11/20/23","Hotel Transylvania 2",7,["r"]],
+  ["11/20/23","Hotel Transylvania",8.25,["r"]],
+  ["10/05/23","Rejuvenation",3.5,["o"]],
+  ["09/30/23","Better Luck Tomorrow",7.25,["f"]],
+  ["09/17/23","Bottoms",8.25,["t"]],
   ["09/17/23","Ted",6.5,[]],
-  ["09/07/23","The Speed Cubers",4.5,[]],
-  ["09/05/23","The Big Short",8.25,[]],
-  ["08/13/23","The Mist",5,[]],
-  ["08/10/23","Sorry to Bother You",9,[]],
-  ["08/10/23","La La Land",9,[]],
-  ["08/10/23","The Nice Guys",6.5,[]],
-  ["08/09/23","Gran Turismo",7.5,[]],
-  ["07/21/23","Barbie",9,[]],
-  ["07/21/23","Oppenheimer",9.5,[]],
-  ["07/14/23","Butch Cassidy and the Sundance Kid",6.5,[]],
-  ["07/10/23","Mission: Impossible - Dead Reckoning",9.5,[]],
-  ["07/09/23","Ex Machina",9.5,[]],
-  ["07/09/23","The Mask",8.75,[]],
-  ["07/08/23","Journey 2: The Mysterious Island",3,[]],
-  ["07/08/23","A Trip to the Moon",9.25,[]],
-  ["07/06/23","Megamind",8.75,[]],
-  ["07/05/23","Catch Me If You Can",8.5,[]],
-  ["07/04/23","I, Tonya",8.5,[]],
-  ["07/03/23","Focus",8.25,[]],
-  ["07/02/23","2001: A Space Odyssey",7.5,[]],
-  ["07/01/23","Amsterdam",5.75,[]],
-  ["06/30/23","Harley Quinn: Birds of Prey",9,[]],
-  ["06/30/23","Indiana Jones and the Dial of Destiny",7,[]],
-  ["06/30/23","Suicide Squad",6,[]],
-  ["06/29/23","Evil Dead Rise",4,[]],
-  ["06/28/23","The Suicide Squad",5.25,[]],
-  ["06/24/23","Spider-Man: Into the Spider-Verse",9.5,[]],
-  ["06/23/23","Spider-Man: Across the Spider-Verse",9.75,[]],
-  ["06/22/23","Asteroid City",8,[]],
-  ["06/20/23","Black Panther: Wakanda Forever",5,[]],
-  ["06/18/23","Inglorious Bastards",9,[]],
-  ["06/17/23","Toy Story 2",8.75,[]],
-  ["06/10/23","Fight Club",8.5,[]],
-  ["06/09/23","Babylon",10,[]],
-  ["06/06/23","Glass Onion: Knives Out",5.5,[]],
-  ["06/04/23","Deadpool 2",7.75,[]],
-  ["06/04/23","Deadpool",8.5,[]],
-  ["06/03/23","Bullet Train",8.75,[]],
-  ["06/03/23","Mario Movie",8.25,[]],
-  ["05/27/23","American Psycho",9,[]],
-  ["05/24/23","Once Upon a Time in Hollywood",7,[]],
-  ["05/19/23","Blade Runner 2049",9.5,[]],
-  ["05/17/23","Dune",9.75,[]],
-  ["05/10/23","Pirates of the Caribbean 1",10,[]]
+  ["09/07/23","The Speed Cubers",4.5,["f"]],
+  ["09/05/23","The Big Short",8.25,["f"]],
+  ["08/13/23","The Mist",5,["f"]],
+  ["08/10/23","Sorry to Bother You",9,["f"]],
+  ["08/10/23","La La Land",9,["f"]],
+  ["08/10/23","The Nice Guys",6.5,["f"]],
+  ["08/09/23","Gran Turismo",7.5,["o"]],
+  ["07/21/23","Barbie",9,["o"]],
+  ["07/21/23","Oppenheimer",9.5,["o"]],
+  ["07/14/23","Butch Cassidy and the Sundance Kid",6.5,["f"]],
+  ["07/10/23","Mission: Impossible - Dead Reckoning",9.5,["o"]],
+  ["07/09/23","Ex Machina",9.5,["f"]],
+  ["07/09/23","The Mask",8.75,["r"]],
+  ["07/08/23","Journey 2: The Mysterious Island",3,["r"]],
+  ["07/08/23","A Trip to the Moon",9.25,["f"]],
+  ["07/06/23","Megamind",8.75,["r"]],
+  ["07/05/23","Catch Me If You Can",8.5,["f"]],
+  ["07/04/23","I, Tonya",8.5,["f"]],
+  ["07/03/23","Focus",8.25,["f"]],
+  ["07/02/23","2001: A Space Odyssey",7.5,["f"]],
+  ["07/01/23","Amsterdam",5.75,["f"]],
+  ["06/30/23","Harley Quinn: Birds of Prey",9,["t"]],
+  ["06/30/23","Indiana Jones and the Dial of Destiny",7,["o"]],
+  ["06/30/23","Suicide Squad",6,["f"]],
+  ["06/29/23","Evil Dead Rise",4,["f"]],
+  ["06/28/23","The Suicide Squad",5.25,["f"]],
+  ["06/24/23","Spider-Man: Into the Spider-Verse",9.5,["f"]],
+  ["06/23/23","Spider-Man: Across the Spider-Verse",9.75,["o"]],
+  ["06/22/23","Asteroid City",8,["o"]],
+  ["06/20/23","Black Panther: Wakanda Forever",5,["f"]],
+  ["06/18/23","Inglorious Bastards",9,["r"]],
+  ["06/17/23","Toy Story 2",8.75,["r"]],
+  ["06/10/23","Fight Club",8.5,["f"]],
+  ["06/09/23","Babylon",10,["f"]],
+  ["06/06/23","Glass Onion: Knives Out",5.5,["f"]],
+  ["06/04/23","Deadpool 2",7.75,["f"]],
+  ["06/04/23","Deadpool",8.5,["f"]],
+  ["06/03/23","Bullet Train",8.75,["r"]],
+  ["06/03/23","Mario Movie",8.25,["f"]],
+  ["05/27/23","American Psycho",9,["f"]],
+  ["05/24/23","Once Upon a Time in Hollywood",7,["f"]],
+  ["05/19/23","Blade Runner 2049",9.5,["r"]],
+  ["05/17/23","Dune",9.75,["r"]],
+  ["05/10/23","Pirates of the Caribbean 1",10,["f"]]
 ];
 
 const DEFAULT_WATCHLIST = [
@@ -1257,9 +1262,9 @@ let ratings = [];
 let watchlist = [];
 let activeTab = 'rankings';
 let editingId = null;
-let nextId = 1;
 let tmdbCache = {};
 let tmdbMatchRunning = false;
+let seeding = false;
 
 // === UTILITY ===
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1272,6 +1277,11 @@ async function sha256(str) {
 function parseDate(d) {
   const [mm,dd,yy] = d.split('/').map(Number);
   return { month: mm, day: dd, year: 2000 + yy, sort: (2000+yy)*10000 + mm*100 + dd };
+}
+
+function computeSortOrder(dateStr) {
+  const [mm,dd,yy] = dateStr.split('/').map(Number);
+  return (2000+yy)*10000 + mm*100 + dd;
 }
 
 function ratingClass(r) {
@@ -1306,7 +1316,7 @@ async function attemptLogin() {
     return;
   }
   sessionStorage.setItem(SESSION_KEY, mode);
-  showApp();
+  await showApp();
 }
 
 function logout() {
@@ -1320,7 +1330,7 @@ function logout() {
   document.getElementById('login-error').textContent = '';
 }
 
-function showApp() {
+async function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   document.getElementById('menu-bar').style.display = 'flex';
@@ -1335,7 +1345,7 @@ function showApp() {
     mode === 'edit' ? 'Edit Mode' : 'View Mode';
   document.getElementById('menu-mode-indicator').textContent =
     mode === 'edit' ? 'Edit' : 'View';
-  loadData();
+  await loadData();
   loadTMDBCache();
   render();
   autoMatchTMDB();
@@ -1347,26 +1357,63 @@ function focusAppWindow() {
 }
 
 // === DATA ===
-function loadData() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      const d = JSON.parse(saved);
-      ratings = d.ratings || [];
-      watchlist = d.watchlist || [];
-      nextId = d.nextId || 1;
-      return;
-    } catch(e) {}
+async function loadData() {
+  const { data: dbRatings, error: ratErr } = await supabase
+    .from('ratings')
+    .select('*')
+    .order('sort_order', { ascending: false });
+
+  if (ratErr) {
+    console.error('Failed to load ratings:', ratErr);
+    return;
   }
-  ratings = DEFAULT_RATINGS.map(r => ({
-    id: nextId++, date: r[0], title: r[1], rating: r[2],
-    tags: r[3] || [], tmdb_id: r[4] || null
-  }));
-  watchlist = DEFAULT_WATCHLIST.map(t => ({ id: nextId++, title: t }));
+
+  if (dbRatings && dbRatings.length > 0) {
+    ratings = dbRatings.map(r => ({
+      id: r.id,
+      date: r.date,
+      title: r.title,
+      rating: r.rating === 'DNF' ? 'DNF' : parseFloat(r.rating),
+      tags: r.tags || [],
+      tmdb_id: r.tmdb_id
+    }));
+  } else if (!seeding) {
+    await seedDefaults();
+    return;
+  }
+
+  const { data: dbWatch, error: watchErr } = await supabase
+    .from('watchlist')
+    .select('*')
+    .order('id', { ascending: true });
+
+  if (watchErr) {
+    console.error('Failed to load watchlist:', watchErr);
+    return;
+  }
+
+  if (dbWatch && dbWatch.length > 0) {
+    watchlist = dbWatch.map(w => ({ id: w.id, title: w.title }));
+  }
 }
 
-function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ratings, watchlist, nextId }));
+async function seedDefaults() {
+  seeding = true;
+  const rows = DEFAULT_RATINGS.map(r => ({
+    date: r[0],
+    title: r[1],
+    rating: String(r[2]),
+    tags: r[3] || [],
+    tmdb_id: r[4] || null,
+    sort_order: computeSortOrder(r[0])
+  }));
+  await supabase.from('ratings').insert(rows);
+
+  const watchRows = DEFAULT_WATCHLIST.map(t => ({ title: t }));
+  await supabase.from('watchlist').insert(watchRows);
+
+  seeding = false;
+  await loadData();
 }
 
 // === TMDB ===
@@ -1438,12 +1485,12 @@ async function autoMatchTMDB() {
           const best = data.results[0];
           movie.tmdb_id = best.id;
           tmdbCache[best.id] = tmdbCacheFromResult(best);
+          await supabase.from('ratings').update({ tmdb_id: best.id }).eq('id', movie.id);
           matched++;
         }
       } catch(e) { /* skip */ }
     });
     await Promise.all(promises);
-    saveData();
     saveTMDBCache();
     document.getElementById('sb-tmdb').textContent =
       `TMDB: ${i + batch.length}/${total}`;
@@ -1692,7 +1739,7 @@ function switchTab(tab) {
 }
 
 // === EDIT ACTIONS ===
-function addRating() {
+async function addRating() {
   const date = document.getElementById('new-date').value.trim();
   const title = document.getElementById('new-title').value.trim();
   const rv = document.getElementById('new-rating').value.trim();
@@ -1709,12 +1756,15 @@ function addRating() {
   if (document.getElementById('new-tag-o').checked) tags.push('o');
   if (document.getElementById('new-tag-r').checked) tags.push('r');
 
-  const newSort = parseDate(date).sort;
-  let idx = ratings.findIndex(r => parseDate(r.date).sort <= newSort);
-  if (idx === -1) idx = ratings.length;
-
-  ratings.splice(idx, 0, { id: nextId++, date, title, rating, tags, tmdb_id: tmdbId });
-  saveData();
+  await supabase.from('ratings').insert({
+    date,
+    title,
+    rating: String(rating),
+    tags,
+    tmdb_id: tmdbId,
+    sort_order: computeSortOrder(date)
+  });
+  await loadData();
   render();
 
   document.getElementById('new-date').value = '';
@@ -1727,43 +1777,57 @@ function addRating() {
   });
 }
 
-function deleteRating(id) {
+async function deleteRating(id) {
+  await supabase.from('ratings').delete().eq('id', id);
   ratings = ratings.filter(r => r.id !== id);
-  saveData(); render();
+  render();
 }
 
 function startEdit(id) { editingId = id; render(); }
 function cancelEdit() { editingId = null; render(); }
 
-function saveEdit(id) {
+async function saveEdit(id) {
   const m = ratings.find(r => r.id === id);
   if (!m) return;
-  m.date = document.getElementById('edit-date').value.trim();
-  m.title = document.getElementById('edit-title').value.trim();
+  const newDate = document.getElementById('edit-date').value.trim();
+  const newTitle = document.getElementById('edit-title').value.trim();
   const rv = document.getElementById('edit-rating').value.trim();
-  m.rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
-  m.tags = [];
+  const newRating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
+  const newTags = [];
   document.querySelectorAll('.edit-inline [data-tag]').forEach(cb => {
-    if (cb.checked) m.tags.push(cb.dataset.tag);
+    if (cb.checked) newTags.push(cb.dataset.tag);
   });
+  await supabase.from('ratings').update({
+    date: newDate,
+    title: newTitle,
+    rating: String(newRating),
+    tags: newTags,
+    sort_order: computeSortOrder(newDate)
+  }).eq('id', id);
+  m.date = newDate;
+  m.title = newTitle;
+  m.rating = newRating;
+  m.tags = newTags;
   editingId = null;
-  saveData(); render();
+  render();
 }
 
-function addWatch() {
+async function addWatch() {
   const title = document.getElementById('new-watch-title').value.trim();
   if (!title) return;
-  watchlist.push({ id: nextId++, title });
-  saveData(); render();
+  await supabase.from('watchlist').insert({ title });
+  await loadData();
+  render();
   document.getElementById('new-watch-title').value = '';
 }
 
-function deleteWatch(id) {
+async function deleteWatch(id) {
+  await supabase.from('watchlist').delete().eq('id', id);
   watchlist = watchlist.filter(w => w.id !== id);
-  saveData(); render();
+  render();
 }
 
-function watchedMovie(id) {
+async function watchedMovie(id) {
   const w = watchlist.find(x => x.id === id);
   if (!w) return;
   const date = prompt('Date watched (MM/DD/YY):');
@@ -1773,12 +1837,17 @@ function watchedMovie(id) {
   const rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
   if (rating !== 'DNF' && isNaN(rating)) return;
 
-  const newSort = parseDate(date).sort;
-  let idx = ratings.findIndex(r => parseDate(r.date).sort <= newSort);
-  if (idx === -1) idx = ratings.length;
-  ratings.splice(idx, 0, { id: nextId++, date, title: w.title, rating, tags: [], tmdb_id: null });
-  watchlist = watchlist.filter(x => x.id !== id);
-  saveData(); render();
+  await supabase.from('watchlist').delete().eq('id', id);
+  await supabase.from('ratings').insert({
+    date,
+    title: w.title,
+    rating: String(rating),
+    tags: [],
+    tmdb_id: null,
+    sort_order: computeSortOrder(date)
+  });
+  await loadData();
+  render();
 }
 
 // === EXPORT / RESET ===
@@ -1791,13 +1860,13 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-function resetData() {
+async function resetData() {
   if (!confirm('Reset all data to defaults? This will erase any edits and TMDB cache.')) return;
-  localStorage.removeItem(STORAGE_KEY);
+  await supabase.from('ratings').delete().gt('id', 0);
+  await supabase.from('watchlist').delete().gt('id', 0);
   localStorage.removeItem(TMDB_CACHE_KEY);
   tmdbCache = {};
-  nextId = 1;
-  loadData();
+  await seedDefaults();
   render();
   autoMatchTMDB();
 }
