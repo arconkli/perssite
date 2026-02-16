@@ -1546,7 +1546,7 @@ async function showApp() {
   document.getElementById('menu-mode-indicator').textContent =
     mode === 'edit' ? 'Edit' : 'View';
   await loadData();
-  loadTMDBCache();
+  await loadTMDBCache();
   render();
   await warmCache();
   autoMatchTMDB();
@@ -1618,15 +1618,37 @@ async function seedDefaults() {
 }
 
 // === TMDB ===
-function loadTMDBCache() {
+async function loadTMDBCache() {
+  // Fast local load first
   try {
     const s = localStorage.getItem(TMDB_CACHE_KEY);
     if (s) tmdbCache = JSON.parse(s);
   } catch(e) { tmdbCache = {}; }
+  // Merge remote data (fills gaps from other browsers/devices)
+  try {
+    const { data } = await db.from('tmdb_cache').select('data').eq('id', 1).single();
+    if (data && data.data) {
+      const remote = data.data;
+      let merged = false;
+      for (const [id, entry] of Object.entries(remote)) {
+        if (!tmdbCache[id]) { tmdbCache[id] = entry; merged = true; }
+      }
+      if (merged) localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache));
+    }
+  } catch(e) { /* Supabase unavailable, localStorage is fine */ }
 }
 
+let tmdbSaveTimer = null;
 function saveTMDBCache() {
   localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache));
+  clearTimeout(tmdbSaveTimer);
+  tmdbSaveTimer = setTimeout(flushTMDBCache, 2000);
+}
+
+async function flushTMDBCache() {
+  try {
+    await db.from('tmdb_cache').upsert({ id: 1, data: tmdbCache, updated_at: new Date().toISOString() });
+  } catch(e) { /* silent - localStorage is the fallback */ }
 }
 
 async function tmdbSearch(query, year) {
@@ -2424,6 +2446,11 @@ function updateClock() {
 }
 updateClock();
 setInterval(updateClock, 30000);
+
+// === BEFOREUNLOAD ===
+window.addEventListener('beforeunload', () => {
+  localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache));
+});
 
 // === INIT ===
 document.getElementById('pwd-input').addEventListener('keydown', e => {
