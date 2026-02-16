@@ -1393,7 +1393,7 @@ async function loadData() {
   }
 
   if (dbWatch && dbWatch.length > 0) {
-    watchlist = dbWatch.map(w => ({ id: w.id, title: w.title }));
+    watchlist = dbWatch.map(w => ({ id: w.id, title: w.title, tmdb_id: w.tmdb_id }));
   }
 }
 
@@ -1497,6 +1497,27 @@ async function autoMatchTMDB() {
     render();
     await new Promise(r => setTimeout(r, 150));
   }
+  // Also match watchlist items
+  const unmatchedWatch = watchlist.filter(w => !w.tmdb_id);
+  for (let i = 0; i < unmatchedWatch.length; i += 5) {
+    const batch = unmatchedWatch.slice(i, i + 5);
+    const promises = batch.map(async item => {
+      try {
+        const data = await tmdbSearch(item.title, null);
+        if (data.results && data.results.length > 0) {
+          const best = data.results[0];
+          item.tmdb_id = best.id;
+          tmdbCache[best.id] = tmdbCacheFromResult(best);
+          await db.from('watchlist').update({ tmdb_id: best.id }).eq('id', item.id);
+        }
+      } catch(e) { /* skip */ }
+    });
+    await Promise.all(promises);
+    saveTMDBCache();
+    render();
+    await new Promise(r => setTimeout(r, 150));
+  }
+
   document.getElementById('sb-tmdb').textContent = `TMDB: ${matched} matched`;
   tmdbMatchRunning = false;
 }
@@ -1664,7 +1685,13 @@ function renderWatchlist() {
         <button class="mac-btn mac-btn-sm" onclick="watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 5px;font-size:10px">Watched</button>
         <button class="mac-btn mac-btn-sm" onclick="deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
       </div>` : '';
+    let posterHtml = '<div class="movie-poster-ph">?</div>';
+    const tmdb = getTMDBInfo(w.tmdb_id);
+    if (tmdb && tmdb.poster_path) {
+      posterHtml = `<img class="movie-poster" src="${getPosterUrl(tmdb.poster_path)}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+    }
     html += `<div class="watch-item">
+      ${posterHtml}
       <span class="watch-num">${i + 1}.</span>
       <span class="watch-title">${escHtml(w.title)}</span>
       ${actions}
@@ -1723,7 +1750,6 @@ function renderEditSections() {
     es.innerHTML = `
       <div class="export-section">
         <button class="mac-btn" onclick="exportData()">Export Data</button>
-        <button class="mac-btn" onclick="resetData()">Reset to Defaults</button>
       </div>`;
   }
 }
@@ -1778,6 +1804,8 @@ async function addRating() {
 }
 
 async function deleteRating(id) {
+  const movie = ratings.find(r => r.id === id);
+  if (!movie || !confirm(`Delete "${movie.title}"?`)) return;
   await db.from('ratings').delete().eq('id', id);
   ratings = ratings.filter(r => r.id !== id);
   render();
@@ -1860,16 +1888,6 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-async function resetData() {
-  if (!confirm('Reset all data to defaults? This will erase any edits and TMDB cache.')) return;
-  await db.from('ratings').delete().gt('id', 0);
-  await db.from('watchlist').delete().gt('id', 0);
-  localStorage.removeItem(TMDB_CACHE_KEY);
-  tmdbCache = {};
-  await seedDefaults();
-  render();
-  autoMatchTMDB();
-}
 
 // === MENU BAR CLOCK ===
 function updateClock() {
