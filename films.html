@@ -1454,7 +1454,7 @@
           </div>
           <div class="tag-items">
             <span><span class="tag tag-theater">T</span> Theater</span>
-            <span><span class="tag tag-festival">F</span> Festival</span>
+            <span><span class="tag tag-festival">FP</span> Festival/Premiere</span>
             <span><span class="tag tag-opening">OD</span> Opening Day</span>
             <span><span class="tag tag-prelist">PL</span> Pre-List</span>
           </div>
@@ -1475,7 +1475,7 @@
           <select class="mac-input" id="tag-filter" onchange="render()" style="width:auto">
             <option value="">All Tags</option>
             <option value="t">Theater</option>
-            <option value="f">Festival</option>
+            <option value="f">Festival/Premiere</option>
             <option value="o">Opening Day</option>
             <option value="r">Pre-List</option>
             <option value="dnf">DNF</option>
@@ -2729,7 +2729,7 @@ function renderRatings() {
 function renderMovieRow(m) {
   const tags = (m.tags || []).map(t => {
     const cls = {t:'tag-theater',f:'tag-festival',o:'tag-opening',r:'tag-prelist'}[t] || '';
-    const label = {t:'T',f:'F',o:'OD',r:'PL'}[t] || t;
+    const label = {t:'T',f:'FP',o:'OD',r:'PL'}[t] || t;
     return `<span class="tag ${cls}">${label}</span>`;
   }).join('');
 
@@ -2784,7 +2784,7 @@ function renderMovieRow(m) {
 
 function renderEditRow(m) {
   const tc = ['t','f','o','r'].map(t => {
-    const l = {t:'Theater',f:'Festival',o:'Opening Day',r:'Pre-List'}[t];
+    const l = {t:'Theater',f:'Festival/Premiere',o:'Opening Day',r:'Pre-List'}[t];
     const ck = (m.tags || []).includes(t) ? 'checked' : '';
     return `<label><input type="checkbox" data-tag="${t}" ${ck}> ${l}</label>`;
   }).join('');
@@ -2905,7 +2905,7 @@ function renderEditSections() {
         </div>
         <div class="form-tags">
           <label><input type="checkbox" id="new-tag-t"> Theater</label>
-          <label><input type="checkbox" id="new-tag-f"> Festival</label>
+          <label><input type="checkbox" id="new-tag-f"> Festival/Premiere</label>
           <label><input type="checkbox" id="new-tag-o"> Opening Day</label>
           <label><input type="checkbox" id="new-tag-r"> Pre-List</label>
         </div>
@@ -3125,7 +3125,7 @@ function watchedMovie(id) {
     </div>
     <div class="form-tags">
       <label><input type="checkbox" id="watched-tag-t"> Theater</label>
-      <label><input type="checkbox" id="watched-tag-f"> Festival</label>
+      <label><input type="checkbox" id="watched-tag-f"> Festival/Premiere</label>
       <label><input type="checkbox" id="watched-tag-o"> Opening Day</label>
       <label><input type="checkbox" id="watched-tag-r"> Pre-List</label>
     </div>
