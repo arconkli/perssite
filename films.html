@@ -674,12 +674,40 @@
       color: #888;
       text-align: right;
     }
-    .public-score {
+    .scores-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .public-score-col {
+      text-align: center;
+      min-width: 28px;
+    }
+    .public-score-label {
       display: block;
-      font-size: 9px;
+      font-size: 7px;
       font-weight: normal;
+      text-transform: uppercase;
       color: #999;
-      text-align: right;
+      letter-spacing: 0.3px;
+    }
+    .public-score-value {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: #5B7FBA;
+    }
+    .my-score-col {
+      text-align: center;
+      min-width: 28px;
+    }
+    .my-score-label {
+      display: block;
+      font-size: 7px;
+      font-weight: normal;
+      text-transform: uppercase;
+      color: #999;
+      letter-spacing: 0.3px;
     }
 
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
@@ -1213,7 +1241,11 @@
       .movie-poster, .movie-poster-ph { width: 30px; height: 44px; }
       .movie-title { font-size: 13px; }
       .movie-date { font-size: 10px; min-width: 56px; }
-      .movie-rating { font-size: 13px; min-width: 32px; }
+      .movie-rating { font-size: 13px; min-width: 24px; }
+      .scores-wrap { gap: 4px; }
+      .public-score-col, .my-score-col { min-width: 24px; }
+      .public-score-value { font-size: 11px; }
+      .public-score-label, .my-score-label { font-size: 6px; }
 
       /* Watch items */
       .watch-item { padding: 5px 8px; min-height: 46px; gap: 5px; }
@@ -1340,7 +1372,9 @@
 
     @media (max-width: 380px) {
       .movie-date { min-width: 42px; font-size: 9px; }
-      .movie-rating { min-width: 26px; font-size: 11px; }
+      .movie-rating { min-width: 20px; font-size: 11px; }
+      .public-score-col, .my-score-col { min-width: 20px; }
+      .public-score-value { font-size: 10px; }
       .movie-poster, .movie-poster-ph { display: none; }
       .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
       .window-toolbar .mac-btn-sm { padding: 3px 6px; font-size: 10px; min-height: 26px; }
@@ -1449,7 +1483,7 @@
             <span><span class="tag tag-opening">OD</span> Opening Day</span>
             <span><span class="tag tag-prelist">PL</span> Pre-List</span>
           </div>
-          <div style="font-size:9px;color:#999;margin-top:3px">Small number below rating = public avg (IMDb 50%, RT 25%, MC 25%)</div>
+          <div style="font-size:9px;color:#999;margin-top:3px"><span style="color:#5B7FBA;font-weight:bold">Public</span> = avg critics score (IMDb 50%, RT 25%, MC 25%) &nbsp; <span style="font-weight:bold">Ours</span> = our rating</div>
         </div>
         <div class="search-bar">
           <label for="filter-input">Find:</label>
@@ -2751,8 +2785,10 @@ function renderMovieRow(m) {
   let publicScoreHtml = '';
   if (tmdb && tmdb.externalRatings) {
     const ps = calcPublicScore(tmdb.externalRatings);
-    if (ps !== null) publicScoreHtml = `<span class="public-score" title="Avg: IMDb 50%, RT 25%, MC 25%">${ps}</span>`;
+    if (ps !== null) publicScoreHtml = `<div class="public-score-col" title="Public avg: IMDb 50%, RT 25%, MC 25%"><span class="public-score-label">Public</span><span class="public-score-value">${ps}</span></div>`;
   }
+
+  const myScoreHtml = `<div class="my-score-col"><span class="my-score-label">Ours</span><span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}</span></div>`;
 
   const clickHandler = m.tmdb_id ? `onclick="showMovieDetail(${m.tmdb_id})"` : '';
   return `<div class="movie-row" ${clickHandler}>
@@ -2763,7 +2799,7 @@ function renderMovieRow(m) {
       ${infoHtml}
     </div>
     <span class="movie-tags">${tags}</span>
-    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}${publicScoreHtml}${adjustedScores[m.id] !== undefined ? `<span class="adjusted-score">${adjustedScores[m.id].toFixed(1)}</span>` : ''}</span>
+    <div class="scores-wrap">${publicScoreHtml}${myScoreHtml}</div>
     ${actions}
   </div>`;
 }
