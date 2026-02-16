@@ -656,7 +656,7 @@
     .tag-theater { background: #D0E0F0; color: #000080; border-color: #A0B0D0; }
     .tag-festival { background: #E0D0F0; color: #600080; border-color: #C0A0D0; }
     .tag-opening { background: #D0F0D0; color: #006000; border-color: #A0D0A0; }
-    .tag-rewatch { background: #E0E0E0; color: #555; border-color: #C0C0C0; }
+    .tag-prelist { background: #E0E0E0; color: #555; border-color: #C0C0C0; }
 
     .movie-rating {
       font-size: 13px;
@@ -1365,7 +1365,7 @@
             <span><span class="tag tag-theater">T</span> Theater</span>
             <span><span class="tag tag-festival">F</span> Festival</span>
             <span><span class="tag tag-opening">OD</span> Opening Day</span>
-            <span><span class="tag tag-rewatch">R</span> Rewatch</span>
+            <span><span class="tag tag-prelist">PL</span> Pre-List</span>
           </div>
         </div>
         <div class="search-bar">
@@ -1385,7 +1385,7 @@
             <option value="t">Theater</option>
             <option value="f">Festival</option>
             <option value="o">Opening Day</option>
-            <option value="r">Rewatch</option>
+            <option value="r">Pre-List</option>
             <option value="dnf">DNF</option>
           </select>
         </div>
@@ -2240,11 +2240,12 @@ async function showMovieDetail(tmdbId) {
   const ratingEntry = ratings.find(r => r.tmdb_id === tmdbId);
   let rewatchHtml = '';
   if (ratingEntry) {
-    const { data: rwDates } = await db.from('rewatches').select('watched_at').eq('rating_id', ratingEntry.id).order('watched_at', { ascending: true });
+    const { data: rwDates } = await db.from('rewatches').select('id, watched_at').eq('rating_id', ratingEntry.id).order('watched_at', { ascending: true });
     if (rwDates && rwDates.length > 0) {
       const dateList = rwDates.map(r => {
         const d = new Date(r.watched_at);
-        return `<div style="font-size:11px;color:#333;margin:1px 0">${d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} at ${d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>`;
+        const deleteBtn = mode === 'edit' ? ` <span onclick="event.stopPropagation();deleteRewatch(${r.id},${tmdbId})" style="cursor:pointer;color:#999;font-size:10px;margin-left:4px" title="Remove">&times;</span>` : '';
+        return `<div style="font-size:11px;color:#333;margin:1px 0">${d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} at ${d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}${deleteBtn}</div>`;
       }).join('');
       rewatchHtml = `<div class="detail-section"><div class="detail-section-title">Rewatches (${rwDates.length})</div><div class="detail-section-content">${dateList}</div></div>`;
     }
@@ -2489,8 +2490,8 @@ function renderRatings() {
 
 function renderMovieRow(m) {
   const tags = (m.tags || []).map(t => {
-    const cls = {t:'tag-theater',f:'tag-festival',o:'tag-opening',r:'tag-rewatch'}[t] || '';
-    const label = {t:'T',f:'F',o:'OD',r:'R'}[t] || t;
+    const cls = {t:'tag-theater',f:'tag-festival',o:'tag-opening',r:'tag-prelist'}[t] || '';
+    const label = {t:'T',f:'F',o:'OD',r:'PL'}[t] || t;
     return `<span class="tag ${cls}">${label}</span>`;
   }).join('');
 
@@ -2533,7 +2534,7 @@ function renderMovieRow(m) {
 
 function renderEditRow(m) {
   const tc = ['t','f','o','r'].map(t => {
-    const l = {t:'Theater',f:'Festival',o:'Opening Day',r:'Rewatch'}[t];
+    const l = {t:'Theater',f:'Festival',o:'Opening Day',r:'Pre-List'}[t];
     const ck = (m.tags || []).includes(t) ? 'checked' : '';
     return `<label><input type="checkbox" data-tag="${t}" ${ck}> ${l}</label>`;
   }).join('');
@@ -2637,7 +2638,7 @@ function renderEditSections() {
           <label><input type="checkbox" id="new-tag-t"> Theater</label>
           <label><input type="checkbox" id="new-tag-f"> Festival</label>
           <label><input type="checkbox" id="new-tag-o"> Opening Day</label>
-          <label><input type="checkbox" id="new-tag-r"> Rewatch</label>
+          <label><input type="checkbox" id="new-tag-r"> Pre-List</label>
         </div>
         <button class="mac-btn" onclick="addRating()">Add</button>
       </div>`;
@@ -2716,6 +2717,17 @@ async function logRewatch(ratingId) {
   render();
   const movie = ratings.find(r => r.id === ratingId);
   if (movie) alert(`Logged rewatch of "${movie.title}" (\u00D7${rewatchCounts[ratingId] + 1} total)`);
+}
+
+async function deleteRewatch(rwId, tmdbId) {
+  await db.from('rewatches').delete().eq('id', rwId);
+  const ratingEntry = ratings.find(r => r.tmdb_id === tmdbId);
+  if (ratingEntry && rewatchCounts[ratingEntry.id]) {
+    rewatchCounts[ratingEntry.id]--;
+    if (rewatchCounts[ratingEntry.id] <= 0) delete rewatchCounts[ratingEntry.id];
+  }
+  render();
+  showMovieDetail(tmdbId);
 }
 
 async function deleteRating(id) {
@@ -2831,7 +2843,7 @@ function watchedMovie(id) {
       <label><input type="checkbox" id="watched-tag-t"> Theater</label>
       <label><input type="checkbox" id="watched-tag-f"> Festival</label>
       <label><input type="checkbox" id="watched-tag-o"> Opening Day</label>
-      <label><input type="checkbox" id="watched-tag-r"> Rewatch</label>
+      <label><input type="checkbox" id="watched-tag-r"> Pre-List</label>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="mac-btn" onclick="closeWatchedModal()">Cancel</button>
