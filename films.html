@@ -1075,7 +1075,7 @@ const SESSION_KEY = 'ac_films_mode';
 // === SUPABASE CONFIG ===
 const SUPABASE_URL = 'https://jubkcyjmzykndwlaobus.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1YmtjeWptenlrbmR3bGFvYnVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExOTUzODAsImV4cCI6MjA4Njc3MTM4MH0.TZETJCf3fjBSWgXE4SviUuMh5j18rvv55QW5TYacO0I';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // === TMDB CONFIG ===
 const TMDB_KEY = '696e0c182f4e0c9df706d94b7bf50021';
@@ -1407,10 +1407,10 @@ async function seedDefaults() {
     tmdb_id: r[4] || null,
     sort_order: computeSortOrder(r[0])
   }));
-  await supabase.from('ratings').insert(rows);
+  await db.from('ratings').insert(rows);
 
   const watchRows = DEFAULT_WATCHLIST.map(t => ({ title: t }));
-  await supabase.from('watchlist').insert(watchRows);
+  await db.from('watchlist').insert(watchRows);
 
   seeding = false;
   await loadData();
@@ -1485,7 +1485,7 @@ async function autoMatchTMDB() {
           const best = data.results[0];
           movie.tmdb_id = best.id;
           tmdbCache[best.id] = tmdbCacheFromResult(best);
-          await supabase.from('ratings').update({ tmdb_id: best.id }).eq('id', movie.id);
+          await db.from('ratings').update({ tmdb_id: best.id }).eq('id', movie.id);
           matched++;
         }
       } catch(e) { /* skip */ }
@@ -1756,7 +1756,7 @@ async function addRating() {
   if (document.getElementById('new-tag-o').checked) tags.push('o');
   if (document.getElementById('new-tag-r').checked) tags.push('r');
 
-  await supabase.from('ratings').insert({
+  await db.from('ratings').insert({
     date,
     title,
     rating: String(rating),
@@ -1778,7 +1778,7 @@ async function addRating() {
 }
 
 async function deleteRating(id) {
-  await supabase.from('ratings').delete().eq('id', id);
+  await db.from('ratings').delete().eq('id', id);
   ratings = ratings.filter(r => r.id !== id);
   render();
 }
@@ -1797,7 +1797,7 @@ async function saveEdit(id) {
   document.querySelectorAll('.edit-inline [data-tag]').forEach(cb => {
     if (cb.checked) newTags.push(cb.dataset.tag);
   });
-  await supabase.from('ratings').update({
+  await db.from('ratings').update({
     date: newDate,
     title: newTitle,
     rating: String(newRating),
@@ -1815,14 +1815,14 @@ async function saveEdit(id) {
 async function addWatch() {
   const title = document.getElementById('new-watch-title').value.trim();
   if (!title) return;
-  await supabase.from('watchlist').insert({ title });
+  await db.from('watchlist').insert({ title });
   await loadData();
   render();
   document.getElementById('new-watch-title').value = '';
 }
 
 async function deleteWatch(id) {
-  await supabase.from('watchlist').delete().eq('id', id);
+  await db.from('watchlist').delete().eq('id', id);
   watchlist = watchlist.filter(w => w.id !== id);
   render();
 }
@@ -1837,8 +1837,8 @@ async function watchedMovie(id) {
   const rating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
   if (rating !== 'DNF' && isNaN(rating)) return;
 
-  await supabase.from('watchlist').delete().eq('id', id);
-  await supabase.from('ratings').insert({
+  await db.from('watchlist').delete().eq('id', id);
+  await db.from('ratings').insert({
     date,
     title: w.title,
     rating: String(rating),
@@ -1862,8 +1862,8 @@ function exportData() {
 
 async function resetData() {
   if (!confirm('Reset all data to defaults? This will erase any edits and TMDB cache.')) return;
-  await supabase.from('ratings').delete().gt('id', 0);
-  await supabase.from('watchlist').delete().gt('id', 0);
+  await db.from('ratings').delete().gt('id', 0);
+  await db.from('watchlist').delete().gt('id', 0);
   localStorage.removeItem(TMDB_CACHE_KEY);
   tmdbCache = {};
   await seedDefaults();
