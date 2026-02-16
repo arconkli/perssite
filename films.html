@@ -1548,6 +1548,7 @@ async function showApp() {
   await loadData();
   loadTMDBCache();
   render();
+  await warmCache();
   autoMatchTMDB();
 }
 
@@ -1666,8 +1667,8 @@ async function autoMatchTMDB() {
   let matched = 0;
   const total = unmatched.length;
 
-  for (let i = 0; i < unmatched.length; i += 5) {
-    const batch = unmatched.slice(i, i + 5);
+  for (let i = 0; i < unmatched.length; i += 3) {
+    const batch = unmatched.slice(i, i + 3);
     const promises = batch.map(async movie => {
       try {
         let searchTitle = movie.title;
@@ -1695,12 +1696,12 @@ async function autoMatchTMDB() {
     document.getElementById('sb-tmdb').textContent =
       `TMDB: ${i + batch.length}/${total}`;
     render();
-    await new Promise(r => setTimeout(r, 150));
+    await new Promise(r => setTimeout(r, 350));
   }
   // Also match watchlist items
   const unmatchedWatch = watchlist.filter(w => !w.tmdb_id);
-  for (let i = 0; i < unmatchedWatch.length; i += 5) {
-    const batch = unmatchedWatch.slice(i, i + 5);
+  for (let i = 0; i < unmatchedWatch.length; i += 3) {
+    const batch = unmatchedWatch.slice(i, i + 3);
     const promises = batch.map(async item => {
       try {
         const data = await tmdbSearch(item.title, null);
@@ -1715,12 +1716,49 @@ async function autoMatchTMDB() {
     await Promise.all(promises);
     saveTMDBCache();
     render();
-    await new Promise(r => setTimeout(r, 150));
+    await new Promise(r => setTimeout(r, 350));
   }
 
   document.getElementById('sb-tmdb').textContent = `TMDB: ${matched} matched`;
   await fetchWatchlistProviders();
   tmdbMatchRunning = false;
+}
+
+async function warmCache() {
+  const needsCache = [
+    ...ratings.filter(r => r.tmdb_id && !tmdbCache[r.tmdb_id]),
+    ...watchlist.filter(w => w.tmdb_id && !tmdbCache[w.tmdb_id])
+  ];
+  const seen = new Set();
+  const unique = needsCache.filter(m => {
+    if (seen.has(m.tmdb_id)) return false;
+    seen.add(m.tmdb_id);
+    return true;
+  });
+  if (!unique.length) return;
+  document.getElementById('sb-tmdb').textContent = `TMDB: warming cache...`;
+  for (let i = 0; i < unique.length; i += 3) {
+    const batch = unique.slice(i, i + 3);
+    await Promise.all(batch.map(async m => {
+      try {
+        const url = `${TMDB_BASE}/movie/${m.tmdb_id}?api_key=${TMDB_KEY}`;
+        const resp = await fetch(url);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        tmdbCache[m.tmdb_id] = {
+          poster_path: data.poster_path,
+          release_date: data.release_date || '',
+          genres: (data.genres || []).map(g => g.name).slice(0, 3),
+          ts: Date.now()
+        };
+      } catch(e) { /* skip */ }
+    }));
+    saveTMDBCache();
+    document.getElementById('sb-tmdb').textContent = `TMDB: cache ${i + batch.length}/${unique.length}`;
+    render();
+    await new Promise(r => setTimeout(r, 350));
+  }
+  document.getElementById('sb-tmdb').textContent = 'TMDB: Ready';
 }
 
 // TMDB search for add form
@@ -1977,7 +2015,7 @@ async function fetchWatchlistProviders() {
     }));
     saveTMDBCache();
     render();
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise(r => setTimeout(r, 350));
   }
 }
 
