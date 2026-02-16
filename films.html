@@ -680,6 +680,14 @@
     .rating-red { color: #E02020; }
     .rating-dnf { color: #808080; font-size: 10px; font-weight: normal; font-style: italic; }
 
+    .adjusted-score {
+      display: block;
+      font-size: 9px;
+      font-weight: normal;
+      color: #888;
+      text-align: right;
+    }
+
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
 
     /* === WATCHLIST === */
@@ -1189,6 +1197,23 @@
         <div class="search-bar">
           <label for="filter-input">Find:</label>
           <input type="text" class="mac-input" id="filter-input" placeholder="Search movies..." oninput="render()">
+          <select class="mac-input" id="sort-select" onchange="render()" style="width:auto">
+            <option value="date">Date</option>
+            <option value="score-desc">Score ↓</option>
+            <option value="score-asc">Score ↑</option>
+            <option value="title">Title</option>
+          </select>
+          <select class="mac-input" id="genre-filter" onchange="render()" style="width:auto">
+            <option value="">All Genres</option>
+          </select>
+          <select class="mac-input" id="tag-filter" onchange="render()" style="width:auto">
+            <option value="">All Tags</option>
+            <option value="t">Theater</option>
+            <option value="f">Festival</option>
+            <option value="o">Opening Day</option>
+            <option value="r">Rewatch</option>
+            <option value="dnf">DNF</option>
+          </select>
         </div>
         <div class="content-area" id="ratings-list"></div>
         <div id="add-rating-section" style="position:relative"></div>
@@ -1456,6 +1481,7 @@ let editingId = null;
 let tmdbCache = {};
 let tmdbMatchRunning = false;
 let seeding = false;
+let adjustedScores = {};
 let lastDeleted = null;
 
 // === UTILITY ===
@@ -2046,7 +2072,35 @@ async function fetchWatchlistProviders() {
 }
 
 // === RENDER ===
+function computeAdjustedScores() {
+  adjustedScores = {};
+  const nr = ratings.filter(r => r.rating !== 'DNF');
+  if (!nr.length) return;
+  const avg = nr.reduce((s, r) => s + r.rating, 0) / nr.length;
+  if (avg === 0) return;
+  const scale = 5 / avg;
+  nr.forEach(r => {
+    adjustedScores[r.id] = Math.round(r.rating * scale * 100) / 100;
+  });
+}
+
+function populateGenreFilter() {
+  const sel = document.getElementById('genre-filter');
+  if (!sel) return;
+  const current = sel.value;
+  const genres = new Set();
+  ratings.forEach(r => {
+    const tmdb = getTMDBInfo(r.tmdb_id);
+    if (tmdb && tmdb.genres) tmdb.genres.forEach(g => genres.add(g));
+  });
+  const sorted = [...genres].sort();
+  sel.innerHTML = '<option value="">All Genres</option>' +
+    sorted.map(g => `<option value="${g}"${g === current ? ' selected' : ''}>${g}</option>`).join('');
+}
+
 function render() {
+  computeAdjustedScores();
+  populateGenreFilter();
   renderStats();
   if (activeTab === 'rankings') renderRatings();
   else renderWatchlist();
@@ -2077,29 +2131,67 @@ function renderStats() {
 
 function renderRatings() {
   const filter = document.getElementById('filter-input').value.toLowerCase();
-  const filtered = ratings.filter(r => r.title.toLowerCase().includes(filter));
-  const years = {};
-  filtered.forEach(r => {
-    const p = parseDate(r.date);
-    if (!years[p.year]) years[p.year] = {};
-    if (!years[p.year][p.month]) years[p.year][p.month] = [];
-    years[p.year][p.month].push(r);
+  const sortBy = document.getElementById('sort-select')?.value || 'date';
+  const genreFilter = document.getElementById('genre-filter')?.value || '';
+  const tagFilter = document.getElementById('tag-filter')?.value || '';
+
+  let filtered = ratings.filter(r => {
+    if (!r.title.toLowerCase().includes(filter)) return false;
+    if (genreFilter) {
+      const tmdb = getTMDBInfo(r.tmdb_id);
+      if (!tmdb || !tmdb.genres || !tmdb.genres.includes(genreFilter)) return false;
+    }
+    if (tagFilter === 'dnf') {
+      if (r.rating !== 'DNF') return false;
+    } else if (tagFilter) {
+      if (!r.tags || !r.tags.includes(tagFilter)) return false;
+    }
+    return true;
   });
 
+  if (sortBy === 'score-desc') {
+    filtered.sort((a, b) => {
+      if (a.rating === 'DNF') return 1;
+      if (b.rating === 'DNF') return -1;
+      return b.rating - a.rating;
+    });
+  } else if (sortBy === 'score-asc') {
+    filtered.sort((a, b) => {
+      if (a.rating === 'DNF') return 1;
+      if (b.rating === 'DNF') return -1;
+      return a.rating - b.rating;
+    });
+  } else if (sortBy === 'title') {
+    filtered.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
   let html = '';
-  Object.keys(years).sort((a,b) => b - a).forEach(year => {
-    const ym = Object.values(years[year]).flat();
-    const yc = ym.filter(r => r.rating !== 'DNF').length;
-    html += `<div class="year-header"><span>//${year}</span><span class="year-count">(${yc})</span></div>`;
-    Object.keys(years[year]).sort((a,b) => b - a).forEach(month => {
-      const movies = years[year][month];
-      const mc = movies.filter(r => r.rating !== 'DNF').length;
-      html += `<div class="month-header">${MONTHS[month-1]} <span class="month-count">(${mc})</span></div>`;
-      movies.forEach(m => {
-        html += editingId === m.id ? renderEditRow(m) : renderMovieRow(m);
+  if (sortBy === 'date') {
+    const years = {};
+    filtered.forEach(r => {
+      const p = parseDate(r.date);
+      if (!years[p.year]) years[p.year] = {};
+      if (!years[p.year][p.month]) years[p.year][p.month] = [];
+      years[p.year][p.month].push(r);
+    });
+    Object.keys(years).sort((a,b) => b - a).forEach(year => {
+      const ym = Object.values(years[year]).flat();
+      const yc = ym.filter(r => r.rating !== 'DNF').length;
+      html += `<div class="year-header"><span>//${year}</span><span class="year-count">(${yc})</span></div>`;
+      Object.keys(years[year]).sort((a,b) => b - a).forEach(month => {
+        const movies = years[year][month];
+        const mc = movies.filter(r => r.rating !== 'DNF').length;
+        html += `<div class="month-header">${MONTHS[month-1]} <span class="month-count">(${mc})</span></div>`;
+        movies.forEach(m => {
+          html += editingId === m.id ? renderEditRow(m) : renderMovieRow(m);
+        });
       });
     });
-  });
+  } else {
+    filtered.forEach(m => {
+      html += editingId === m.id ? renderEditRow(m) : renderMovieRow(m);
+    });
+  }
   document.getElementById('ratings-list').innerHTML = html;
 }
 
@@ -2138,7 +2230,7 @@ function renderMovieRow(m) {
       ${infoHtml}
     </div>
     <span class="movie-tags">${tags}</span>
-    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}</span>
+    <span class="movie-rating ${ratingClass(m.rating)}">${ratingDisplay(m.rating)}${adjustedScores[m.id] !== undefined ? `<span class="adjusted-score">${adjustedScores[m.id].toFixed(1)}</span>` : ''}</span>
     ${actions}
   </div>`;
 }
