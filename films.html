@@ -791,9 +791,22 @@
     .add-form-label {
       font-size: 11px;
       font-weight: bold;
-      margin-bottom: 8px;
-      display: block;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      cursor: default;
+      user-select: none;
     }
+    .add-form-label .collapse-arrow {
+      font-size: 9px;
+      margin-right: 4px;
+      transition: transform 0.15s;
+      display: inline-block;
+    }
+    .add-form-label .collapse-arrow.collapsed { transform: rotate(-90deg); }
+    .add-form.open .add-form-label { margin-bottom: 8px; }
+    .add-form-body { display: none; }
+    .add-form.open .add-form-body { display: block; }
 
     .form-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; align-items: center; }
     .form-row label { font-size: 11px; white-space: nowrap; }
@@ -1509,7 +1522,7 @@
             <span><span class="tag tag-opening">OD</span> Opening Day</span>
             <span><span class="tag tag-prelist">PL</span> Pre-List</span>
           </div>
-          <div style="font-size:9px;color:#999;margin-top:3px"><span style="color:#5B7FBA;font-weight:bold">Pub</span> = public avg (IMDb 50%, RT 25%, MC 25%) &nbsp; <span style="color:#888">Adj</span> = adjusted score</div>
+          <div style="font-size:9px;color:#999;margin-top:3px"><span style="color:#5B7FBA;font-weight:bold">Pub</span> = public avg (IMDb 50%, RT 25%, MC 25%) &nbsp; <span style="color:#888">Adj</span> = list-adjusted mean</div>
         </div>
         <div class="search-bar">
           <label for="filter-input">Find:</label>
@@ -1816,6 +1829,7 @@ let ratings = [];
 let watchlist = [];
 let activeTab = 'rankings';
 let editingId = null;
+const addFormOpen = { rankings: true, watchlist: true };
 let tmdbCache = {};
 let tmdbMatchRunning = false;
 let seeding = false;
@@ -2944,43 +2958,47 @@ function renderEditSections() {
 
   if (activeTab === 'rankings' && ars) {
     ars.innerHTML = `
-      <div class="add-form">
-        <span class="add-form-label">Add Movie</span>
-        <div class="form-row">
-          <label>Date:</label>
-          <input class="mac-input date-input" id="new-date" placeholder="MM/DD/YY" value="${todayStr()}">
-          <label>Title:</label>
-          <input class="mac-input title-input" id="new-title" placeholder="Search TMDB..." oninput="onTitleSearch(this.value)">
-          <label>Rating:</label>
-          <input class="mac-input rating-input" id="new-rating" placeholder="0-10">
-          <input type="hidden" id="new-tmdb-id">
+      <div class="add-form${addFormOpen.rankings ? ' open' : ''}" id="add-form-rankings">
+        <span class="add-form-label" onclick="toggleAddForm('rankings')"><span class="collapse-arrow${addFormOpen.rankings ? '' : ' collapsed'}">&#9660;</span>Add Movie</span>
+        <div class="add-form-body">
+          <div class="form-row">
+            <label>Date:</label>
+            <input class="mac-input date-input" id="new-date" placeholder="MM/DD/YY" value="${todayStr()}">
+            <label>Title:</label>
+            <input class="mac-input title-input" id="new-title" placeholder="Search TMDB..." oninput="onTitleSearch(this.value)">
+            <label>Rating:</label>
+            <input class="mac-input rating-input" id="new-rating" placeholder="0-10">
+            <input type="hidden" id="new-tmdb-id">
+          </div>
+          <div id="tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
+          <div class="form-row">
+            <label>Suggested&nbsp;by:</label>
+            <input class="mac-input" id="new-suggested-by" placeholder="(optional)">
+          </div>
+          <div class="form-tags">
+            <label><input type="checkbox" id="new-tag-t"> Theater</label>
+            <label><input type="checkbox" id="new-tag-f"> Festival/Premiere</label>
+            <label><input type="checkbox" id="new-tag-o"> Opening Day</label>
+            <label><input type="checkbox" id="new-tag-r"> Pre-List</label>
+          </div>
+          <button class="mac-btn" onclick="addRating()">Add</button>
         </div>
-        <div id="tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
-        <div class="form-row">
-          <label>Suggested&nbsp;by:</label>
-          <input class="mac-input" id="new-suggested-by" placeholder="(optional)">
-        </div>
-        <div class="form-tags">
-          <label><input type="checkbox" id="new-tag-t"> Theater</label>
-          <label><input type="checkbox" id="new-tag-f"> Festival/Premiere</label>
-          <label><input type="checkbox" id="new-tag-o"> Opening Day</label>
-          <label><input type="checkbox" id="new-tag-r"> Pre-List</label>
-        </div>
-        <button class="mac-btn" onclick="addRating()">Add</button>
       </div>`;
   } else if (activeTab === 'watchlist' && aws) {
     aws.innerHTML = `
-      <div class="add-form">
-        <span class="add-form-label">Add to Watchlist</span>
-        <div class="form-row">
-          <label>Title:</label>
-          <input class="mac-input title-input" id="new-watch-title" placeholder="Movie title">
+      <div class="add-form${addFormOpen.watchlist ? ' open' : ''}" id="add-form-watchlist">
+        <span class="add-form-label" onclick="toggleAddForm('watchlist')"><span class="collapse-arrow${addFormOpen.watchlist ? '' : ' collapsed'}">&#9660;</span>Add to Watchlist</span>
+        <div class="add-form-body">
+          <div class="form-row">
+            <label>Title:</label>
+            <input class="mac-input title-input" id="new-watch-title" placeholder="Movie title">
+          </div>
+          <div class="form-row">
+            <label>Suggested&nbsp;by:</label>
+            <input class="mac-input" id="new-watch-suggested" placeholder="(optional)">
+          </div>
+          <button class="mac-btn" onclick="addWatch()">Add</button>
         </div>
-        <div class="form-row">
-          <label>Suggested&nbsp;by:</label>
-          <input class="mac-input" id="new-watch-suggested" placeholder="(optional)">
-        </div>
-        <button class="mac-btn" onclick="addWatch()">Add</button>
       </div>`;
   }
 
@@ -3072,6 +3090,16 @@ async function deleteRating(id) {
   ratings = ratings.filter(r => r.id !== id);
   showUndo('rating', movie);
   render();
+}
+
+function toggleAddForm(tab) {
+  addFormOpen[tab] = !addFormOpen[tab];
+  const el = document.getElementById('add-form-' + tab);
+  if (el) {
+    el.classList.toggle('open', addFormOpen[tab]);
+    const arrow = el.querySelector('.collapse-arrow');
+    if (arrow) arrow.classList.toggle('collapsed', !addFormOpen[tab]);
+  }
 }
 
 function toggleKebab(btn) {
