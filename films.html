@@ -692,7 +692,58 @@
       font-weight: normal;
     }
 
-    .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
+    .movie-actions { position: relative; margin-left: 4px; }
+    .kebab-btn {
+      background: var(--mac-platinum);
+      border: 2px solid;
+      border-color: var(--mac-light-border) var(--mac-dark-border) var(--mac-dark-border) var(--mac-light-border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 14px;
+      font-family: var(--mac-font);
+      cursor: default;
+      color: var(--mac-text);
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+    .kebab-btn:active {
+      border-color: var(--mac-dark-border) var(--mac-light-border) var(--mac-light-border) var(--mac-dark-border);
+      background: #CCCCCC;
+    }
+    .kebab-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      z-index: 100;
+      background: var(--mac-platinum);
+      border: 2px solid;
+      border-color: var(--mac-light-border) var(--mac-dark-border) var(--mac-dark-border) var(--mac-light-border);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      min-width: 100px;
+      padding: 2px 0;
+    }
+    .kebab-menu.open { display: block; }
+    .kebab-menu-item {
+      display: block;
+      width: 100%;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-family: var(--mac-font);
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: default;
+      color: var(--mac-text);
+      white-space: nowrap;
+    }
+    .kebab-menu-item:hover {
+      background: #316AC5;
+      color: #FFF;
+    }
+    .kebab-menu-item.danger:hover {
+      background: #CC0000;
+    }
 
     .rewatch-badge {
       font-size: 9px;
@@ -1268,8 +1319,8 @@
       .edit-inline .mac-btn { width: 100%; }
 
       /* Movie action buttons */
-      .movie-actions { gap: 3px; margin-left: 2px; }
-      .movie-actions .mac-btn-sm { min-height: 26px; padding: 2px 6px; font-size: 10px; }
+      .movie-actions { margin-left: 2px; }
+      .kebab-btn { min-height: 26px; padding: 1px 5px; font-size: 13px; }
 
       /* Legend */
       .legend-box { padding: 4px 8px; margin-bottom: 4px; font-size: 10px; }
@@ -2735,9 +2786,12 @@ function renderMovieRow(m) {
 
   const actions = mode === 'edit' ? `
     <div class="movie-actions">
-      <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();logRewatch(${m.id})" title="Log rewatch" style="min-width:auto;padding:1px 5px;font-size:10px">Re</button>
-      <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 5px;font-size:10px">Edit</button>
-      <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
+      <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="Actions">&#8942;</button>
+      <div class="kebab-menu">
+        <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();logRewatch(${m.id})">Rewatch</button>
+        <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();startEdit(${m.id})">Edit</button>
+        <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();deleteRating(${m.id})">Remove</button>
+      </div>
     </div>` : '';
 
   let posterHtml = '<div class="movie-poster-ph">?</div>';
@@ -2825,8 +2879,11 @@ function renderWatchlist() {
   filtered.forEach((w, i) => {
     const actions = mode === 'edit' ? `
       <div class="movie-actions">
-        <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 5px;font-size:10px">Watched</button>
-        <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
+        <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="Actions">&#8942;</button>
+        <div class="kebab-menu">
+          <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();watchedMovie(${w.id})">Watched</button>
+          <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();deleteWatch(${w.id})">Remove</button>
+        </div>
       </div>` : '';
     let posterHtml = '<div class="movie-poster-ph">?</div>';
     const tmdb = getTMDBInfo(w.tmdb_id);
@@ -3016,6 +3073,17 @@ async function deleteRating(id) {
   showUndo('rating', movie);
   render();
 }
+
+function toggleKebab(btn) {
+  const menu = btn.nextElementSibling;
+  const wasOpen = menu.classList.contains('open');
+  closeAllKebabs();
+  if (!wasOpen) menu.classList.add('open');
+}
+function closeAllKebabs() {
+  document.querySelectorAll('.kebab-menu.open').forEach(m => m.classList.remove('open'));
+}
+document.addEventListener('click', closeAllKebabs);
 
 function startEdit(id) { editingId = id; render(); }
 function cancelEdit() { editingId = null; render(); }
