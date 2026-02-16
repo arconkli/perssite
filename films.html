@@ -1639,7 +1639,8 @@ async function loadData() {
   const { data: dbWatch, error: watchErr } = await db
     .from('watchlist')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: true });
 
   if (watchErr) {
     console.error('Failed to load watchlist:', watchErr);
