@@ -333,6 +333,7 @@
       user-select: none;
       flex-shrink: 0;
       position: relative;
+      cursor: grab;
     }
 
     /* Horizontal stripes */
@@ -950,11 +951,6 @@
       text-overflow: ellipsis;
     }
 
-    @media (max-width: 640px) {
-      .detail-body { flex-direction: column; }
-      .detail-poster { width: 100px; }
-    }
-
     /* === STATUS BAR === */
     .window-statusbar {
       border-top: 1px solid var(--mac-dark-border);
@@ -1054,15 +1050,55 @@
     }
     ::-webkit-scrollbar-corner { background: var(--mac-platinum); }
 
+    /* === WINDOW DRAG & RESIZE === */
+    .window-resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 16px;
+      height: 16px;
+      cursor: nwse-resize;
+      z-index: 60;
+    }
+    .window-resize-handle::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 10px;
+      height: 10px;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 1px,
+        var(--mac-dark-border) 1px,
+        var(--mac-dark-border) 2px
+      );
+    }
+    #app.is-dragging {
+      transition: none;
+      user-select: none;
+    }
+    #app.is-dragging .window-titlebar { cursor: grabbing; }
+
     /* === RESPONSIVE === */
     @media (max-width: 640px) {
+      /* Menu bar */
       #menu-bar { font-size: 11px; }
       .menu-item:not(.menu-app-name) { display: none; }
       .menu-right .menu-item:not(.menu-clock) { display: none; }
 
-      #desktop-area { padding: 8px; }
+      /* Desktop area: flex container for app */
+      #desktop-area {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        overflow: hidden;
+      }
       .desktop-icon { display: none; }
 
+      /* App: fill available space */
       #app {
         position: relative;
         top: auto;
@@ -1075,25 +1111,156 @@
         box-shadow: none;
         border-left: none;
         border-right: none;
+        border-top: none;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
 
+      /* Dock hidden */
       #dock { display: none !important; }
 
-      .movie-poster, .movie-poster-ph { width: 24px; height: 36px; }
-      .movie-row { gap: 5px; padding: 2px 4px; }
-      .stats-row { gap: 3px; }
-      .stat-card { min-width: 60px; padding: 3px 4px; }
-      .stat-value { font-size: 14px; }
-      .content-area { max-height: 380px; }
-      .window-toolbar { flex-wrap: wrap; gap: 4px; }
-      .mac-tabs { flex-wrap: wrap; }
+      /* Titlebar: not draggable on mobile */
+      .window-titlebar { cursor: default; }
+      .window-resize-handle { display: none; }
+
+      /* Window body fills remaining space */
+      .window-body {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 6px;
+      }
+
+      /* Content area: no fixed max, fill available */
+      .content-area {
+        max-height: none;
+        min-height: 200px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Stats */
+      .stats-row { gap: 4px; margin-bottom: 8px; }
+      .stat-card { min-width: 0; padding: 6px 4px; flex: 1 1 0; }
+      .stat-value { font-size: 15px; }
+      .stat-label { font-size: 9px; }
+
+      /* Toolbar */
+      .window-toolbar { flex-wrap: wrap; gap: 4px; padding: 6px 8px; }
+
+      /* Tabs: fill width */
+      .mac-tabs { flex-wrap: nowrap; }
+      .mac-tab { flex: 1; text-align: center; padding: 8px; font-size: 13px; }
+
+      /* Buttons: touch-friendly */
+      .mac-btn { min-height: 36px; padding: 6px 14px; font-size: 13px; }
+      .mac-btn-sm { min-height: 32px; padding: 4px 10px; font-size: 12px; }
+
+      /* Movie rows: proper tap targets */
+      .movie-row { gap: 6px; padding: 6px 8px; min-height: 44px; }
+      .movie-poster, .movie-poster-ph { width: 28px; height: 42px; }
+      .movie-title { font-size: 13px; }
+      .movie-date { font-size: 11px; min-width: 60px; }
+      .movie-rating { font-size: 14px; min-width: 34px; }
+
+      /* Watch items */
+      .watch-item { padding: 6px 8px; min-height: 44px; gap: 6px; }
+      .watch-title { font-size: 13px; }
+
+      /* Search bar */
+      .search-bar { flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+      .search-bar .mac-input { min-height: 34px; font-size: 13px; padding: 4px 8px; }
+      #filter-input, #filter-watch { flex: 1 1 100%; order: -1; }
+      #sort-select, #genre-filter, #tag-filter, #watch-source-filter {
+        flex: 1 1 auto; min-height: 34px; font-size: 12px;
+      }
+
+      /* Forms: stack vertically */
+      .add-form { padding: 10px; margin: 8px 0; }
+      .form-row { flex-direction: column; gap: 6px; }
+      .form-row label { font-size: 12px; }
+      .form-row .mac-input {
+        width: 100% !important; min-width: 0 !important;
+        min-height: 36px; font-size: 14px; padding: 6px 8px;
+      }
+      .form-row .mac-input.date-input,
+      .form-row .mac-input.title-input,
+      .form-row .mac-input.rating-input { width: 100% !important; flex: none; }
+      .form-tags { gap: 12px; margin: 6px 0; }
+      .form-tags label { font-size: 13px; gap: 6px; min-height: 32px; display: flex; align-items: center; }
+      .form-tags input[type="checkbox"] { width: 20px; height: 20px; }
+
+      /* Edit inline: vertical */
+      .edit-inline { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
+      .edit-inline .mac-input { width: 100% !important; min-width: 0 !important; min-height: 34px; font-size: 13px; }
+      .edit-inline .form-tags { width: 100%; }
+      .edit-inline .mac-btn { width: 100%; }
+
+      /* Movie action buttons */
+      .movie-actions { gap: 4px; margin-left: 2px; }
+      .movie-actions .mac-btn-sm { min-height: 28px; padding: 2px 8px; font-size: 11px; }
+
+      /* Legend */
+      .legend-box { padding: 6px 8px; margin-bottom: 8px; }
+
+      /* Detail modal: full-screen on mobile */
+      .detail-overlay { align-items: stretch; justify-content: stretch; padding: 0; }
+      .detail-dialog {
+        width: 100%; max-width: 100%; max-height: 100%; height: 100%;
+        border: none; box-shadow: none; border-radius: 0;
+        display: flex; flex-direction: column;
+      }
+      .detail-titlebar { position: sticky; top: 0; z-index: 1; flex-shrink: 0; }
+      .detail-body {
+        flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+        padding: 12px; flex-direction: column;
+      }
+      .detail-poster { width: 120px; margin: 0 auto 12px; }
+      .detail-section-content { font-size: 12px; }
+      .provider-logo { width: 36px; height: 36px; }
+
+      /* Watched modal */
+      #watched-modal .detail-dialog {
+        width: 100% !important; max-width: 100%; height: auto; max-height: 90vh;
+        border: 2px solid var(--mac-black); align-self: center;
+      }
+      #watched-modal .detail-overlay { align-items: center; }
+      #watched-modal .detail-body { padding: 16px; }
+      #watched-modal .mac-input { width: 100% !important; min-height: 36px; font-size: 14px; }
+      #watched-modal .mac-btn { min-height: 40px; font-size: 14px; }
+
+      /* Login dialog */
+      .login-dialog { width: 90%; max-width: 340px; }
+      .login-body { padding: 16px; }
+      .login-fields .mac-input { min-height: 36px; font-size: 14px; padding: 6px 8px; }
+      .login-buttons .mac-btn { min-height: 40px; padding: 8px 24px; font-size: 14px; }
+
+      /* Suggest form */
+      #suggest-section .form-row { flex-direction: column; gap: 6px; }
+      #suggest-section .mac-input { width: 100% !important; min-height: 36px; font-size: 14px; }
+
+      /* TMDB dropdown */
+      .tmdb-dropdown { max-height: 240px; }
+      .tmdb-result { padding: 8px; font-size: 13px; min-height: 44px; }
+
+      /* Status bar */
+      .window-statusbar { font-size: 11px; padding: 4px 8px; }
+
+      /* Scrollbars: thinner on mobile */
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-button { height: 0; width: 0; display: none; }
+
+      /* Undo bar */
+      .undo-bar { font-size: 12px; padding: 8px; }
     }
 
-    /* A bit more space on tiny screens */
     @media (max-width: 380px) {
-      .movie-date { min-width: 50px; font-size: 10px; }
+      .movie-date { min-width: 46px; font-size: 10px; }
       .movie-rating { min-width: 28px; font-size: 12px; }
       .movie-poster, .movie-poster-ph { display: none; }
+      .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+      .window-toolbar .mac-btn-sm { padding: 4px 8px; font-size: 11px; min-height: 30px; }
     }
   </style>
 </head>
@@ -1263,6 +1430,7 @@
       <div class="sb-section" id="sb-count">0 films</div>
       <div class="sb-section" id="sb-tmdb">Ready</div>
     </div>
+    <div class="window-resize-handle" id="resize-handle"></div>
   </div>
 
   <!-- Movie Detail Modal -->
@@ -2729,6 +2897,119 @@ setInterval(updateClock, 30000);
 window.addEventListener('beforeunload', () => {
   localStorage.setItem(TMDB_CACHE_KEY, JSON.stringify(tmdbCache));
 });
+
+// === WINDOW DRAG & RESIZE (Desktop Only) ===
+(function() {
+  const app = document.getElementById('app');
+  const titlebar = app.querySelector('.window-titlebar');
+  const resizeHandle = document.getElementById('resize-handle');
+
+  let isDragging = false;
+  let isResizing = false;
+  let hasDragged = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+  let resizeStartX = 0;
+  let resizeStartY = 0;
+  let resizeStartW = 0;
+  let resizeStartH = 0;
+
+  const MIN_WIDTH = 360;
+  const MIN_HEIGHT = 300;
+
+  function isMobile() { return window.innerWidth <= 640; }
+
+  function convertToAbsolute() {
+    if (hasDragged) return;
+    const rect = app.getBoundingClientRect();
+    app.style.top = rect.top + 'px';
+    app.style.left = rect.left + 'px';
+    app.style.transform = 'none';
+    app.style.width = rect.width + 'px';
+    hasDragged = true;
+  }
+
+  function clampPosition(x, y, w, h) {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    x = Math.max(-w + 40, Math.min(x, vw - 40));
+    y = Math.max(0, Math.min(y, vh - 40));
+    return { x, y };
+  }
+
+  titlebar.addEventListener('mousedown', function(e) {
+    if (isMobile()) return;
+    if (e.target.closest('.close-box') || e.target.closest('.zoom-box')) return;
+    e.preventDefault();
+    convertToAbsolute();
+    const rect = app.getBoundingClientRect();
+    dragOffsetX = e.clientX - rect.left;
+    dragOffsetY = e.clientY - rect.top;
+    isDragging = true;
+    app.classList.add('is-dragging');
+  });
+
+  resizeHandle.addEventListener('mousedown', function(e) {
+    if (isMobile()) return;
+    e.preventDefault();
+    e.stopPropagation();
+    convertToAbsolute();
+    const rect = app.getBoundingClientRect();
+    resizeStartX = e.clientX;
+    resizeStartY = e.clientY;
+    resizeStartW = rect.width;
+    resizeStartH = rect.height;
+    isResizing = true;
+    app.classList.add('is-dragging');
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (isDragging) {
+      const newX = e.clientX - dragOffsetX;
+      const newY = e.clientY - dragOffsetY;
+      const rect = app.getBoundingClientRect();
+      const c = clampPosition(newX, newY, rect.width, rect.height);
+      app.style.left = c.x + 'px';
+      app.style.top = c.y + 'px';
+    }
+    if (isResizing) {
+      const dx = e.clientX - resizeStartX;
+      const dy = e.clientY - resizeStartY;
+      let newW = Math.max(MIN_WIDTH, resizeStartW + dx);
+      let newH = Math.max(MIN_HEIGHT, resizeStartH + dy);
+      const left = parseInt(app.style.left) || 0;
+      const top = parseInt(app.style.top) || 0;
+      newW = Math.min(newW, window.innerWidth - left);
+      newH = Math.min(newH, window.innerHeight - top);
+      app.style.width = newW + 'px';
+      app.style.maxHeight = newH + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (isDragging || isResizing) {
+      isDragging = false;
+      isResizing = false;
+      app.classList.remove('is-dragging');
+    }
+  });
+
+  window.addEventListener('resize', function() {
+    if (isMobile() && hasDragged) {
+      app.style.top = '';
+      app.style.left = '';
+      app.style.transform = '';
+      app.style.width = '';
+      app.style.maxHeight = '';
+      hasDragged = false;
+    } else if (hasDragged) {
+      const rect = app.getBoundingClientRect();
+      const c = clampPosition(rect.left, rect.top, rect.width, rect.height);
+      app.style.left = c.x + 'px';
+      app.style.top = c.y + 'px';
+    }
+  });
+})();
 
 // === INIT ===
 document.getElementById('pwd-input').addEventListener('keydown', e => {
