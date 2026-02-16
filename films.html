@@ -674,10 +674,10 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .rating-gold { color: #B8860B; }
-    .rating-green { color: #006400; }
-    .rating-orange { color: #CC7000; }
-    .rating-red { color: #CC0000; }
+    .rating-gold { color: #DAA520; }
+    .rating-green { color: #2E8B57; }
+    .rating-orange { color: #E88B00; }
+    .rating-red { color: #E02020; }
     .rating-dnf { color: #808080; font-size: 10px; font-weight: normal; font-style: italic; }
 
     .movie-actions { display: flex; gap: 2px; margin-left: 4px; }
@@ -699,7 +699,7 @@
     }
 
     .watch-num { font-size: 10px; color: #999; min-width: 22px; font-variant-numeric: tabular-nums; }
-    .watch-title { flex: 1; font-size: 12px; }
+    .watch-title { font-size: 12px; }
 
     /* === FORMS === */
     .add-form {
@@ -770,6 +770,154 @@
     .edit-inline .mac-input.date-input { width: 72px; }
     .edit-inline .mac-input.title-input { flex: 1; min-width: 120px; }
     .edit-inline .mac-input.rating-input { width: 52px; }
+
+    /* Undo bar */
+    .undo-bar {
+      background: #FFFACC;
+      border: 1px solid var(--mac-dark-border);
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    /* Movie detail modal */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-dialog {
+      background: var(--mac-platinum);
+      border: 2px solid var(--mac-black);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      width: 480px;
+      max-width: 94vw;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .detail-titlebar {
+      height: 20px;
+      background: var(--mac-white);
+      border-bottom: 1px solid var(--mac-black);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .detail-titlebar::after {
+      content: '';
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      top: 3px;
+      bottom: 3px;
+      background: repeating-linear-gradient(
+        0deg,
+        var(--mac-white) 0px,
+        var(--mac-white) 1px,
+        var(--mac-titlebar-stripe) 1px,
+        var(--mac-titlebar-stripe) 2px,
+        var(--mac-white) 2px,
+        var(--mac-white) 3px
+      );
+      pointer-events: none;
+    }
+
+    .detail-titlebar .close-box { z-index: 1; }
+
+    .detail-titlebar-text {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      flex: 1;
+      background: var(--mac-white);
+      padding: 0 8px;
+    }
+
+    .detail-body {
+      padding: 14px;
+      display: flex;
+      gap: 14px;
+    }
+
+    .detail-poster { width: 154px; flex-shrink: 0; }
+    .detail-poster img { width: 100%; border: 1px solid var(--mac-dark-border); }
+
+    .detail-info { flex: 1; min-width: 0; }
+    .detail-info h2 { font-size: 14px; margin-bottom: 4px; }
+
+    .detail-meta {
+      font-size: 11px;
+      color: var(--mac-text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .detail-section { margin-bottom: 8px; }
+
+    .detail-section-title {
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: var(--mac-text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .detail-section-content { font-size: 11px; }
+
+    .provider-logos {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .provider-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid var(--mac-dark-border);
+    }
+
+    /* Watch providers on watchlist */
+    .watch-title-wrap { flex: 1; min-width: 0; }
+
+    .watch-providers {
+      font-size: 10px;
+      color: var(--mac-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-wrap: wrap;
+      margin-top: 1px;
+    }
+
+    .watch-provider-logo {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      border: 1px solid #CCC;
+    }
+
+    .watch-item:hover .watch-providers { color: var(--mac-highlight-text); }
+
+    @media (max-width: 640px) {
+      .detail-body { flex-direction: column; }
+      .detail-poster { width: 100px; }
+    }
 
     /* === STATUS BAR === */
     .window-statusbar {
@@ -996,6 +1144,8 @@
         <div class="stat-card"><div class="stat-value" id="s-watch">0</div><div class="stat-label">Watchlist</div></div>
       </div>
 
+      <div id="undo-container"></div>
+
       <!-- Tabs -->
       <div class="mac-tabs">
         <button class="mac-tab active" data-tab="rankings" onclick="switchTab('rankings')">Rankings</button>
@@ -1007,10 +1157,10 @@
         <div class="legend-box">
           <div class="legend-title">Rating Scale</div>
           <div class="scale-items">
-            <div class="scale-item"><span class="scale-dot" style="background:#B8860B"></span> 9+</div>
-            <div class="scale-item"><span class="scale-dot" style="background:#006400"></span> 7.5+</div>
-            <div class="scale-item"><span class="scale-dot" style="background:#CC7000"></span> 5+</div>
-            <div class="scale-item"><span class="scale-dot" style="background:#CC0000"></span> 0+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#DAA520"></span> 9+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#2E8B57"></span> 7.5+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#E88B00"></span> 5+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#E02020"></span> 0+</div>
             <div class="scale-item"><span class="scale-dot" style="background:#808080"></span> DNF</div>
           </div>
           <div class="tag-items">
@@ -1046,6 +1196,19 @@
       <div class="sb-section" id="sb-mode">View Mode</div>
       <div class="sb-section" id="sb-count">0 films</div>
       <div class="sb-section" id="sb-tmdb">Ready</div>
+    </div>
+  </div>
+
+  <!-- Movie Detail Modal -->
+  <div id="movie-detail-modal" class="detail-overlay" style="display:none" onclick="if(event.target===this)closeMovieDetail()">
+    <div class="detail-dialog">
+      <div class="detail-titlebar">
+        <div class="close-box" onclick="closeMovieDetail()"></div>
+        <span class="detail-titlebar-text" id="detail-title">Movie Details</span>
+      </div>
+      <div class="detail-body" id="detail-body">
+        <div style="padding:20px;text-align:center;font-size:11px">Loading...</div>
+      </div>
     </div>
   </div>
 
@@ -1091,31 +1254,31 @@ const TMDB_GENRES = {
 
 // === DEFAULT DATA ===
 const DEFAULT_RATINGS = [
-  ["01/31/26","Fallen Angels",7.25,["f"]],
-  ["01/30/26","The Incredibles",9.25,["f"]],
-  ["01/29/26","Iron Lung",7.75,["o"]],
-  ["01/12/26","Marty Supreme",9.75,["t"]],
-  ["01/02/26","Wicked: For Good",5.75,["f"]],
-  ["12/28/25","Brightburn",6,["f"]],
-  ["12/26/25","Public Enemies",7.5,["f"]],
+  ["01/31/26","Fallen Angels",7.25,[]],
+  ["01/30/26","The Incredibles",9.25,["r"]],
+  ["01/29/26","Iron Lung",7.75,["t","o"]],
+  ["01/12/26","Marty Supreme",9.75,["t","f"]],
+  ["01/02/26","Wicked: For Good",5.75,[]],
+  ["12/28/25","Brightburn",6,[]],
+  ["12/26/25","Public Enemies",7.5,[]],
   ["12/26/25","Top Gun: Maverick",9.75,["r"]],
   ["12/20/25","Five Nights at Freddy's 2",6.5,["t"]],
-  ["12/18/25","El Camino",7.25,["f"]],
-  ["12/16/25","Identity",7.25,["f"]],
-  ["12/14/25","The Island",6.25,["f"]],
-  ["12/01/25","Frankenstein",7.5,["f"]],
-  ["11/27/25","True Romance",8.5,["f"]],
+  ["12/18/25","El Camino",7.25,[]],
+  ["12/16/25","Identity",7.25,[]],
+  ["12/14/25","The Island",6.25,[]],
+  ["12/01/25","Frankenstein",7.5,[]],
+  ["11/27/25","True Romance",8.5,[]],
   ["11/27/25","Everyone's Hero",7.5,["r"]],
-  ["11/26/25","12 Monkeys",7.25,["f"]],
-  ["11/24/25","Money Ball",9.25,["r"]],
-  ["11/19/25","Free Solo",6.5,["f"]],
-  ["11/15/25","Madagascar 3: Europe's Most Wanted",9.25,["r"]],
-  ["11/10/25","Troy",6.5,["f"]],
+  ["11/26/25","12 Monkeys",7.25,[]],
+  ["11/24/25","Money Ball",9.25,["r","f"]],
+  ["11/19/25","Free Solo",6.5,[]],
+  ["11/15/25","Madagascar 3: Europe's Most Wanted",9.25,["r","f"]],
+  ["11/10/25","Troy",6.5,[]],
   ["10/29/25","John Wick: Chapter 4",9.5,["f"]],
-  ["10/15/25","Jennifer's Body",7.5,["f"]],
+  ["10/15/25","Jennifer's Body",7.5,[]],
   ["09/27/25","One Battle After Another",8,["t"]],
-  ["09/09/25","Tron: Legacy",8,["f"]],
-  ["09/08/25","Call Me by Your Name",7.25,["f"]],
+  ["09/09/25","Tron: Legacy",8,["r"]],
+  ["09/08/25","Call Me by Your Name",7.25,[]],
   ["08/20/25","The King",8.75,["r"]],
   ["07/31/25","John Wick: Chapter 3",8.75,["r"]],
   ["07/31/25","John Wick: Chapter 2",8.5,["r"]],
@@ -1129,118 +1292,118 @@ const DEFAULT_RATINGS = [
   ["06/13/25","The Girl Next Door",7.75,[]],
   ["05/27/25","Late Night with the Devil",6,[]],
   ["05/25/25","Tropic Thunder",9,["f"]],
-  ["05/25/25","How to Train Your Dragon: The Hidden World",8.5,["f"]],
+  ["05/25/25","How to Train Your Dragon: The Hidden World",8.5,[]],
   ["05/24/25","How to Train Your Dragon 2",8.5,["r"]],
-  ["05/24/25","How to Train Your Dragon",9.25,["r"]],
-  ["05/24/25","Air Force Elite - Thunderbirds",6,["f"]],
-  ["05/23/25","Mission: Impossible - Final Reckoning",9,["t"]],
-  ["05/04/25","The Fighter",8.75,["t"]],
-  ["05/02/25","Thunderbolts",8.25,["t"]],
-  ["05/02/25","Anora",8.5,["f"]],
+  ["05/24/25","How to Train Your Dragon",9.25,["r","f"]],
+  ["05/24/25","Air Force Elite - Thunderbirds",6,[]],
+  ["05/23/25","Mission: Impossible - Final Reckoning",9,["t","f","o"]],
+  ["05/04/25","The Fighter",8.75,["f"]],
+  ["05/02/25","Thunderbolts",8.25,["t","o"]],
+  ["05/02/25","Anora",8.5,[]],
   ["05/01/25","The White House Effect",5.75,["f"]],
   ["04/29/25","OBEX",4.5,["f"]],
-  ["04/29/25","The Kingdom",9,["t"]],
-  ["04/28/25","Drive",8,["f"]],
-  ["04/24/25","Warfare",8,["t"]],
-  ["04/12/25","Goodfellas",8.75,["f"]],
-  ["04/04/25","Minecraft",6.25,["t"]],
+  ["04/29/25","The Kingdom",9,["f"]],
+  ["04/28/25","Drive",8,[]],
+  ["04/24/25","Warfare",8,[]],
+  ["04/12/25","Goodfellas",8.75,[]],
+  ["04/04/25","Minecraft",6.25,["t","o"]],
   ["03/26/25","Mickey 17",6,["t"]],
-  ["03/23/25","Electric State",6,["f"]],
+  ["03/23/25","Electric State",6,[]],
   ["02/26/25","The Monkey",5.75,["t"]],
   ["02/19/25","Companion",7.5,["t"]],
   ["02/05/25","Paul Blart: Mall Cop",7.25,["r"]],
   ["01/15/25","Better Man",8.5,["t"]],
-  ["01/07/25","Wicked",8.5,["f"]],
-  ["01/06/25","Boy Kills World",6,["f"]],
-  ["01/03/25","Immaculate",6.5,["f"]],
-  ["12/30/24","Gladiator 2",7.75,["f"]],
-  ["12/28/24","Oddity",6.75,["f"]],
+  ["01/07/25","Wicked",8.5,[]],
+  ["01/06/25","Boy Kills World",6,[]],
+  ["01/03/25","Immaculate",6.5,[]],
+  ["12/30/24","Gladiator 2",7.75,[]],
+  ["12/28/24","Oddity",6.75,[]],
   ["12/27/24","Split",7.75,["r"]],
   ["12/27/24","Gladiator",8.75,["r"]],
   ["12/23/24","Transformers One",7.5,["r"]],
-  ["12/16/24","Spy Game",6,["f"]],
-  ["12/13/24","Subservience",6,["f"]],
-  ["11/28/24","Oz",6.5,["f"]],
-  ["11/27/24","Smile 2",7,["f"]],
-  ["10/01/24","Wolfs",6.75,["f"]],
-  ["09/13/24","The Disaster Artist",7,["f"]],
-  ["05/30/24","Prom Dates",6.5,["f"]],
-  ["05/20/24","Se7en",8.5,["f"]],
+  ["12/16/24","Spy Game",6,[]],
+  ["12/13/24","Subservience",6,[]],
+  ["11/28/24","Oz",6.5,[]],
+  ["11/27/24","Smile 2",7,[]],
+  ["10/01/24","Wolfs",6.75,[]],
+  ["09/13/24","The Disaster Artist",7,[]],
+  ["05/30/24","Prom Dates",6.5,[]],
+  ["05/20/24","Se7en",8.5,[]],
   ["05/18/24","Sicario",9,["f"]],
   ["05/05/24","Oldboy","DNF",[]],
-  ["04/07/24","The Breath",8,["f"]],
-  ["04/03/24","Imperium",8,["f"]],
-  ["04/01/24","High Life",7.5,["f"]],
-  ["03/02/24","Free Fire",7.5,["f"]],
+  ["04/07/24","The Breath",8,[]],
+  ["04/03/24","Imperium",8,[]],
+  ["04/01/24","High Life",7.5,[]],
+  ["03/02/24","Free Fire",7.5,[]],
   ["03/02/24","Mayhem","DNF",[]],
-  ["03/01/24","Office Space",8,["f"]],
+  ["03/01/24","Office Space",8,[]],
   ["02/29/24","Belko Experiment","DNF",[]],
-  ["02/22/24","Dune: Part Two",10,["o"]],
-  ["01/22/24","Kidnapping Inc",8.75,["o"]],
-  ["01/21/24","A Different Man",8.75,["o"]],
-  ["01/20/24","Love Lies Bleeding",8.25,["o"]],
-  ["01/19/24","It's What's Inside",7.5,["o"]],
-  ["01/19/24","Sasquatch Sunset",6,["o"]],
-  ["01/14/24","Vivarium",6,["f"]],
+  ["02/22/24","Dune: Part Two",10,["t","o"]],
+  ["01/22/24","Kidnapping Inc",8.75,["f"]],
+  ["01/21/24","A Different Man",8.75,["f"]],
+  ["01/20/24","Love Lies Bleeding",8.25,["f"]],
+  ["01/19/24","It's What's Inside",7.5,["f"]],
+  ["01/19/24","Sasquatch Sunset",6,["f"]],
+  ["01/14/24","Vivarium",6,[]],
   ["01/05/24","M.I.B",7.5,["r"]],
-  ["01/05/24","R.I.P.D.",6,["f"]],
-  ["01/04/24","The Creator",7.5,["f"]],
-  ["12/25/23","The Other Guys",7.25,["f"]],
-  ["12/24/23","The Lodge",6.5,["f"]],
-  ["12/21/23","I'm Thinking of Ending Things",6,["f"]],
-  ["12/20/23","The Hunger Games (2023)",7,["f"]],
-  ["11/20/23","Hotel Transylvania: Transformania",5.75,["r"]],
+  ["01/05/24","R.I.P.D.",6,[]],
+  ["01/04/24","The Creator",7.5,[]],
+  ["12/25/23","The Other Guys",7.25,[]],
+  ["12/24/23","The Lodge",6.5,[]],
+  ["12/21/23","I'm Thinking of Ending Things",6,[]],
+  ["12/20/23","The Hunger Games (2023)",7,[]],
+  ["11/20/23","Hotel Transylvania: Transformania",5.75,[]],
   ["11/20/23","Hotel Transylvania 3",6.5,["r"]],
   ["11/20/23","Hotel Transylvania 2",7,["r"]],
   ["11/20/23","Hotel Transylvania",8.25,["r"]],
-  ["10/05/23","Rejuvenation",3.5,["o"]],
-  ["09/30/23","Better Luck Tomorrow",7.25,["f"]],
+  ["10/05/23","Rejuvenation",3.5,["t","o"]],
+  ["09/30/23","Better Luck Tomorrow",7.25,[]],
   ["09/17/23","Bottoms",8.25,["t"]],
   ["09/17/23","Ted",6.5,[]],
-  ["09/07/23","The Speed Cubers",4.5,["f"]],
-  ["09/05/23","The Big Short",8.25,["f"]],
-  ["08/13/23","The Mist",5,["f"]],
+  ["09/07/23","The Speed Cubers",4.5,[]],
+  ["09/05/23","The Big Short",8.25,[]],
+  ["08/13/23","The Mist",5,[]],
   ["08/10/23","Sorry to Bother You",9,["f"]],
   ["08/10/23","La La Land",9,["f"]],
-  ["08/10/23","The Nice Guys",6.5,["f"]],
-  ["08/09/23","Gran Turismo",7.5,["o"]],
-  ["07/21/23","Barbie",9,["o"]],
-  ["07/21/23","Oppenheimer",9.5,["o"]],
-  ["07/14/23","Butch Cassidy and the Sundance Kid",6.5,["f"]],
-  ["07/10/23","Mission: Impossible - Dead Reckoning",9.5,["o"]],
-  ["07/09/23","Ex Machina",9.5,["f"]],
+  ["08/10/23","The Nice Guys",6.5,[]],
+  ["08/09/23","Gran Turismo",7.5,["t","o"]],
+  ["07/21/23","Barbie",9,["t","f","o"]],
+  ["07/21/23","Oppenheimer",9.5,["t","f","o"]],
+  ["07/14/23","Butch Cassidy and the Sundance Kid",6.5,[]],
+  ["07/10/23","Mission: Impossible - Dead Reckoning",9.5,["t","f","o"]],
+  ["07/09/23","Ex Machina",9.5,[]],
   ["07/09/23","The Mask",8.75,["r"]],
   ["07/08/23","Journey 2: The Mysterious Island",3,["r"]],
-  ["07/08/23","A Trip to the Moon",9.25,["f"]],
+  ["07/08/23","A Trip to the Moon",9.25,[]],
   ["07/06/23","Megamind",8.75,["r"]],
-  ["07/05/23","Catch Me If You Can",8.5,["f"]],
-  ["07/04/23","I, Tonya",8.5,["f"]],
-  ["07/03/23","Focus",8.25,["f"]],
-  ["07/02/23","2001: A Space Odyssey",7.5,["f"]],
-  ["07/01/23","Amsterdam",5.75,["f"]],
-  ["06/30/23","Harley Quinn: Birds of Prey",9,["t"]],
-  ["06/30/23","Indiana Jones and the Dial of Destiny",7,["o"]],
-  ["06/30/23","Suicide Squad",6,["f"]],
-  ["06/29/23","Evil Dead Rise",4,["f"]],
-  ["06/28/23","The Suicide Squad",5.25,["f"]],
+  ["07/05/23","Catch Me If You Can",8.5,[]],
+  ["07/04/23","I, Tonya",8.5,[]],
+  ["07/03/23","Focus",8.25,[]],
+  ["07/02/23","2001: A Space Odyssey",7.5,[]],
+  ["07/01/23","Amsterdam",5.75,[]],
+  ["06/30/23","Harley Quinn: Birds of Prey",9,[]],
+  ["06/30/23","Indiana Jones and the Dial of Destiny",7,["t","o"]],
+  ["06/30/23","Suicide Squad",6,[]],
+  ["06/29/23","Evil Dead Rise",4,[]],
+  ["06/28/23","The Suicide Squad",5.25,[]],
   ["06/24/23","Spider-Man: Into the Spider-Verse",9.5,["f"]],
-  ["06/23/23","Spider-Man: Across the Spider-Verse",9.75,["o"]],
-  ["06/22/23","Asteroid City",8,["o"]],
-  ["06/20/23","Black Panther: Wakanda Forever",5,["f"]],
+  ["06/23/23","Spider-Man: Across the Spider-Verse",9.75,["t","f"]],
+  ["06/22/23","Asteroid City",8,["t"]],
+  ["06/20/23","Black Panther: Wakanda Forever",5,[]],
   ["06/18/23","Inglorious Bastards",9,["r"]],
   ["06/17/23","Toy Story 2",8.75,["r"]],
-  ["06/10/23","Fight Club",8.5,["f"]],
+  ["06/10/23","Fight Club",8.5,[]],
   ["06/09/23","Babylon",10,["f"]],
-  ["06/06/23","Glass Onion: Knives Out",5.5,["f"]],
-  ["06/04/23","Deadpool 2",7.75,["f"]],
-  ["06/04/23","Deadpool",8.5,["f"]],
+  ["06/06/23","Glass Onion: Knives Out",5.5,[]],
+  ["06/04/23","Deadpool 2",7.75,[]],
+  ["06/04/23","Deadpool",8.5,[]],
   ["06/03/23","Bullet Train",8.75,["r"]],
-  ["06/03/23","Mario Movie",8.25,["f"]],
+  ["06/03/23","Mario Movie",8.25,[]],
   ["05/27/23","American Psycho",9,["f"]],
-  ["05/24/23","Once Upon a Time in Hollywood",7,["f"]],
-  ["05/19/23","Blade Runner 2049",9.5,["r"]],
-  ["05/17/23","Dune",9.75,["r"]],
-  ["05/10/23","Pirates of the Caribbean 1",10,["f"]]
+  ["05/24/23","Once Upon a Time in Hollywood",7,[]],
+  ["05/19/23","Blade Runner 2049",9.5,["r","f"]],
+  ["05/17/23","Dune",9.75,["r","f"]],
+  ["05/10/23","Pirates of the Caribbean 1",10,["r","f"]]
 ];
 
 const DEFAULT_WATCHLIST = [
@@ -1265,6 +1428,7 @@ let editingId = null;
 let tmdbCache = {};
 let tmdbMatchRunning = false;
 let seeding = false;
+let lastDeleted = null;
 
 // === UTILITY ===
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1519,6 +1683,7 @@ async function autoMatchTMDB() {
   }
 
   document.getElementById('sb-tmdb').textContent = `TMDB: ${matched} matched`;
+  await fetchWatchlistProviders();
   tmdbMatchRunning = false;
 }
 
@@ -1570,6 +1735,216 @@ function selectTMDBResult(el) {
   }
 }
 
+// === UNDO ===
+function showUndo(type, data) {
+  if (lastDeleted && lastDeleted.timer) clearTimeout(lastDeleted.timer);
+  lastDeleted = { type, data, timer: setTimeout(clearUndo, 10000) };
+}
+
+function clearUndo() {
+  lastDeleted = null;
+  render();
+}
+
+async function undoDelete() {
+  if (!lastDeleted) return;
+  const { type, data } = lastDeleted;
+  if (type === 'rating') {
+    await db.from('ratings').insert({
+      date: data.date, title: data.title, rating: String(data.rating),
+      tags: data.tags || [], tmdb_id: data.tmdb_id,
+      sort_order: computeSortOrder(data.date)
+    });
+  } else {
+    await db.from('watchlist').insert({ title: data.title, tmdb_id: data.tmdb_id });
+  }
+  clearTimeout(lastDeleted.timer);
+  lastDeleted = null;
+  await loadData();
+  render();
+}
+
+// === EDIT TMDB SEARCH ===
+let editSearchTimeout = null;
+function onEditTitleSearch(val) {
+  clearTimeout(editSearchTimeout);
+  const dd = document.getElementById('edit-tmdb-dropdown');
+  if (!dd) return;
+  if (val.length < 2) { dd.style.display = 'none'; return; }
+  editSearchTimeout = setTimeout(async () => {
+    try {
+      const data = await tmdbSearch(val, null);
+      if (!data.results || data.results.length === 0) {
+        dd.style.display = 'none'; return;
+      }
+      let html = '';
+      data.results.slice(0, 6).forEach(r => {
+        const yr = r.release_date ? r.release_date.substring(0, 4) : '?';
+        const poster = r.poster_path
+          ? `<img src="${getPosterUrl(r.poster_path, 'w92')}" alt="">`
+          : '<div class="tmdb-result-ph"></div>';
+        html += `<div class="tmdb-result" data-id="${r.id}" data-title="${escHtml(r.title)}"
+                  onclick="selectEditTMDBResult(this)">
+          ${poster}<span>${escHtml(r.title)} (${yr})</span>
+        </div>`;
+      });
+      dd.innerHTML = html;
+      dd.style.display = 'block';
+    } catch(e) { dd.style.display = 'none'; }
+  }, 400);
+}
+
+function selectEditTMDBResult(el) {
+  const id = parseInt(el.dataset.id);
+  document.getElementById('edit-title').value = el.dataset.title;
+  document.getElementById('edit-tmdb-id').value = id;
+  document.getElementById('edit-tmdb-dropdown').style.display = 'none';
+  if (!tmdbCache[id]) {
+    tmdbSearch(el.dataset.title, null).then(data => {
+      if (data.results) {
+        const match = data.results.find(r => r.id === id);
+        if (match) { tmdbCache[id] = tmdbCacheFromResult(match); saveTMDBCache(); }
+      }
+    }).catch(() => {});
+  }
+}
+
+function clearEditTmdb() {
+  const el = document.getElementById('edit-tmdb-id');
+  if (el) el.value = '';
+}
+
+// === MOVIE DETAIL MODAL ===
+async function fetchMovieDetails(tmdbId) {
+  const url = `${TMDB_BASE}/movie/${tmdbId}?api_key=${TMDB_KEY}&append_to_response=credits,watch/providers`;
+  const resp = await fetch(url);
+  if (!resp.ok) return null;
+  return resp.json();
+}
+
+function cacheMovieDetails(tmdbId, details) {
+  if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
+  const c = tmdbCache[tmdbId];
+  c.runtime = details.runtime;
+  c.director = (details.credits?.crew || []).filter(p => p.job === 'Director').map(p => p.name);
+  c.cast = (details.credits?.cast || []).slice(0, 5).map(p => p.name);
+  c.producers = (details.credits?.crew || []).filter(p => p.job === 'Producer').map(p => p.name).slice(0, 3);
+  c.companies = (details.production_companies || []).map(co => co.name);
+  const usProviders = details['watch/providers']?.results?.US;
+  if (usProviders) {
+    c.providers = {
+      flatrate: (usProviders.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+      rent: (usProviders.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+      buy: (usProviders.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
+    };
+  }
+  saveTMDBCache();
+}
+
+async function showMovieDetail(tmdbId) {
+  if (!tmdbId) return;
+  const modal = document.getElementById('movie-detail-modal');
+  const titleEl = document.getElementById('detail-title');
+  const bodyEl = document.getElementById('detail-body');
+  modal.style.display = 'flex';
+  bodyEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px">Loading...</div>';
+  titleEl.textContent = 'Movie Details';
+
+  const details = await fetchMovieDetails(tmdbId);
+  if (!details) {
+    bodyEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px">Could not load details.</div>';
+    return;
+  }
+  cacheMovieDetails(tmdbId, details);
+
+  const posterUrl = details.poster_path ? getPosterUrl(details.poster_path, 'w185') : null;
+  const posterHtml = posterUrl
+    ? `<img src="${posterUrl}" alt="">`
+    : '<div style="width:154px;height:231px;background:#EEE;border:1px solid #CCC;display:flex;align-items:center;justify-content:center;font-size:11px;color:#999">No poster</div>';
+
+  const year = details.release_date ? details.release_date.substring(0, 4) : '?';
+  const runtime = details.runtime ? `${details.runtime} min` : '';
+  const genres = (details.genres || []).map(g => g.name).slice(0, 3).join(', ');
+  const metaParts = [year, runtime, genres].filter(Boolean);
+
+  const directors = (details.credits?.crew || []).filter(p => p.job === 'Director').map(p => p.name);
+  const producers = (details.credits?.crew || []).filter(p => p.job === 'Producer').map(p => p.name).slice(0, 3);
+  const cast = (details.credits?.cast || []).slice(0, 5).map(p => p.name);
+  const companies = (details.production_companies || []).map(co => co.name);
+
+  titleEl.textContent = details.title || 'Movie Details';
+
+  let sections = '';
+  if (directors.length) {
+    sections += `<div class="detail-section"><div class="detail-section-title">Director</div><div class="detail-section-content">${escHtml(directors.join(', '))}</div></div>`;
+  }
+  if (cast.length) {
+    sections += `<div class="detail-section"><div class="detail-section-title">Cast</div><div class="detail-section-content">${escHtml(cast.join(', '))}</div></div>`;
+  }
+  if (producers.length) {
+    sections += `<div class="detail-section"><div class="detail-section-title">Producers</div><div class="detail-section-content">${escHtml(producers.join(', '))}</div></div>`;
+  }
+  if (companies.length) {
+    sections += `<div class="detail-section"><div class="detail-section-title">Production</div><div class="detail-section-content">${escHtml(companies.join(', '))}</div></div>`;
+  }
+
+  const usProviders = details['watch/providers']?.results?.US;
+  if (usProviders) {
+    const renderProviders = (list, label) => {
+      if (!list || !list.length) return '';
+      const logos = list.map(p =>
+        p.logo_path
+          ? `<img class="provider-logo" src="${TMDB_IMG}/w45${p.logo_path}" alt="${escHtml(p.provider_name)}" title="${escHtml(p.provider_name)}">`
+          : `<span style="font-size:10px;padding:2px 4px;border:1px solid #CCC;border-radius:3px">${escHtml(p.provider_name)}</span>`
+      ).join('');
+      return `<div class="detail-section"><div class="detail-section-title">${label}</div><div class="provider-logos">${logos}</div></div>`;
+    };
+    sections += renderProviders(usProviders.flatrate, 'Stream');
+    sections += renderProviders(usProviders.rent, 'Rent');
+    sections += renderProviders(usProviders.buy, 'Buy');
+  }
+
+  bodyEl.innerHTML = `
+    <div class="detail-poster">${posterHtml}</div>
+    <div class="detail-info">
+      <h2>${escHtml(details.title || '')}</h2>
+      <div class="detail-meta">${escHtml(metaParts.join(' \u00B7 '))}</div>
+      ${sections}
+    </div>`;
+}
+
+function closeMovieDetail() {
+  document.getElementById('movie-detail-modal').style.display = 'none';
+}
+
+// === WATCH PROVIDERS FETCH ===
+async function fetchWatchlistProviders() {
+  const toFetch = watchlist.filter(w => w.tmdb_id && (!tmdbCache[w.tmdb_id] || !tmdbCache[w.tmdb_id].providers));
+  for (let i = 0; i < toFetch.length; i += 3) {
+    const batch = toFetch.slice(i, i + 3);
+    await Promise.all(batch.map(async w => {
+      try {
+        const url = `${TMDB_BASE}/movie/${w.tmdb_id}?api_key=${TMDB_KEY}&append_to_response=watch/providers`;
+        const resp = await fetch(url);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (!tmdbCache[w.tmdb_id]) tmdbCache[w.tmdb_id] = {};
+        const usProviders = data['watch/providers']?.results?.US;
+        if (usProviders) {
+          tmdbCache[w.tmdb_id].providers = {
+            flatrate: (usProviders.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+            rent: (usProviders.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+            buy: (usProviders.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
+          };
+        }
+      } catch(e) { /* skip */ }
+    }));
+    saveTMDBCache();
+    render();
+    await new Promise(r => setTimeout(r, 200));
+  }
+}
+
 // === RENDER ===
 function render() {
   renderStats();
@@ -1578,6 +1953,15 @@ function render() {
   renderEditSections();
   const numericCount = ratings.filter(r => r.rating !== 'DNF').length;
   document.getElementById('sb-count').textContent = numericCount + ' films rated';
+  // Undo bar
+  const undoEl = document.getElementById('undo-container');
+  if (undoEl) {
+    if (lastDeleted) {
+      undoEl.innerHTML = `<div class="undo-bar">Deleted \u201c${escHtml(lastDeleted.data.title)}\u201d <button class="mac-btn mac-btn-sm" onclick="undoDelete()">Undo</button></div>`;
+    } else {
+      undoEl.innerHTML = '';
+    }
+  }
 }
 
 function renderStats() {
@@ -1628,8 +2012,8 @@ function renderMovieRow(m) {
 
   const actions = mode === 'edit' ? `
     <div class="movie-actions">
-      <button class="mac-btn mac-btn-sm" onclick="startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 5px;font-size:10px">Edit</button>
-      <button class="mac-btn mac-btn-sm" onclick="deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
+      <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();startEdit(${m.id})" title="Edit" style="min-width:auto;padding:1px 5px;font-size:10px">Edit</button>
+      <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();deleteRating(${m.id})" title="Delete" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
     </div>` : '';
 
   let posterHtml = '<div class="movie-poster-ph">?</div>';
@@ -1645,7 +2029,8 @@ function renderMovieRow(m) {
     if (parts.length) infoHtml = `<div class="movie-info">${escHtml(parts.join(' \u00B7 '))}</div>`;
   }
 
-  return `<div class="movie-row">
+  const clickHandler = m.tmdb_id ? `onclick="showMovieDetail(${m.tmdb_id})"` : '';
+  return `<div class="movie-row" ${clickHandler}>
     ${posterHtml}
     <span class="movie-date">${escHtml(m.date)}</span>
     <div class="movie-title-wrap">
@@ -1665,13 +2050,16 @@ function renderEditRow(m) {
     return `<label><input type="checkbox" data-tag="${t}" ${ck}> ${l}</label>`;
   }).join('');
 
-  return `<div class="edit-inline">
+  return `<div class="edit-inline" style="position:relative">
     <input class="mac-input date-input" id="edit-date" value="${escHtml(m.date)}">
-    <input class="mac-input title-input" id="edit-title" value="${escHtml(m.title)}">
+    <input class="mac-input title-input" id="edit-title" value="${escHtml(m.title)}" oninput="onEditTitleSearch(this.value)">
     <input class="mac-input rating-input" id="edit-rating" value="${m.rating === 'DNF' ? 'DNF' : m.rating}">
+    <input type="hidden" id="edit-tmdb-id" value="${m.tmdb_id || ''}">
     <div class="form-tags">${tc}</div>
     <button class="mac-btn mac-btn-sm" onclick="saveEdit(${m.id})">Save</button>
+    <button class="mac-btn mac-btn-sm" onclick="clearEditTmdb()">Not on TMDB</button>
     <button class="mac-btn mac-btn-sm" onclick="cancelEdit()">Cancel</button>
+    <div id="edit-tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
   </div>`;
 }
 
@@ -1682,18 +2070,32 @@ function renderWatchlist() {
   filtered.forEach((w, i) => {
     const actions = mode === 'edit' ? `
       <div class="movie-actions">
-        <button class="mac-btn mac-btn-sm" onclick="watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 5px;font-size:10px">Watched</button>
-        <button class="mac-btn mac-btn-sm" onclick="deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
+        <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();watchedMovie(${w.id})" title="Mark watched" style="min-width:auto;padding:1px 5px;font-size:10px">Watched</button>
+        <button class="mac-btn mac-btn-sm" onclick="event.stopPropagation();deleteWatch(${w.id})" title="Remove" style="min-width:auto;padding:1px 5px;font-size:10px">&times;</button>
       </div>` : '';
     let posterHtml = '<div class="movie-poster-ph">?</div>';
     const tmdb = getTMDBInfo(w.tmdb_id);
     if (tmdb && tmdb.poster_path) {
       posterHtml = `<img class="movie-poster" src="${getPosterUrl(tmdb.poster_path)}" alt="" loading="lazy" onerror="this.style.display='none'">`;
     }
-    html += `<div class="watch-item">
+    let providersHtml = '';
+    if (tmdb && tmdb.providers) {
+      const streams = tmdb.providers.flatrate || [];
+      if (streams.length) {
+        const logos = streams.slice(0, 4).map(p =>
+          p.logo ? `<img class="watch-provider-logo" src="${TMDB_IMG}/w45${p.logo}" alt="${escHtml(p.name)}" title="${escHtml(p.name)}">` : ''
+        ).join('');
+        providersHtml = `<div class="watch-providers">${logos}</div>`;
+      }
+    }
+    const clickHandler = w.tmdb_id ? `onclick="showMovieDetail(${w.tmdb_id})"` : '';
+    html += `<div class="watch-item" ${clickHandler}>
       ${posterHtml}
       <span class="watch-num">${i + 1}.</span>
-      <span class="watch-title">${escHtml(w.title)}</span>
+      <div class="watch-title-wrap">
+        <span class="watch-title">${escHtml(w.title)}</span>
+        ${providersHtml}
+      </div>
       ${actions}
     </div>`;
   });
@@ -1808,6 +2210,7 @@ async function deleteRating(id) {
   if (!movie || !confirm(`Delete "${movie.title}"?`)) return;
   await db.from('ratings').delete().eq('id', id);
   ratings = ratings.filter(r => r.id !== id);
+  showUndo('rating', movie);
   render();
 }
 
@@ -1821,6 +2224,8 @@ async function saveEdit(id) {
   const newTitle = document.getElementById('edit-title').value.trim();
   const rv = document.getElementById('edit-rating').value.trim();
   const newRating = rv.toUpperCase() === 'DNF' ? 'DNF' : parseFloat(rv);
+  const tmdbIdVal = document.getElementById('edit-tmdb-id');
+  const newTmdbId = tmdbIdVal ? (parseInt(tmdbIdVal.value) || null) : m.tmdb_id;
   const newTags = [];
   document.querySelectorAll('.edit-inline [data-tag]').forEach(cb => {
     if (cb.checked) newTags.push(cb.dataset.tag);
@@ -1830,12 +2235,14 @@ async function saveEdit(id) {
     title: newTitle,
     rating: String(newRating),
     tags: newTags,
+    tmdb_id: newTmdbId,
     sort_order: computeSortOrder(newDate)
   }).eq('id', id);
   m.date = newDate;
   m.title = newTitle;
   m.rating = newRating;
   m.tags = newTags;
+  m.tmdb_id = newTmdbId;
   editingId = null;
   render();
 }
@@ -1850,8 +2257,11 @@ async function addWatch() {
 }
 
 async function deleteWatch(id) {
+  const item = watchlist.find(w => w.id === id);
+  if (!item || !confirm(`Remove "${item.title}" from watchlist?`)) return;
   await db.from('watchlist').delete().eq('id', id);
   watchlist = watchlist.filter(w => w.id !== id);
+  showUndo('watch', item);
   render();
 }
 
