@@ -137,57 +137,6 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.7);
     }
 
-    .desktop-icon-trash {
-      margin-top: auto;
-    }
-
-    .trash-icon {
-      width: 18px;
-      height: 22px;
-      border: 2px solid #555;
-      border-top: none;
-      border-radius: 0 0 3px 3px;
-      position: relative;
-      display: inline-block;
-    }
-    .trash-icon::before {
-      content: '';
-      position: absolute;
-      top: -4px;
-      left: -4px;
-      right: -4px;
-      height: 2px;
-      background: #555;
-      border-radius: 1px;
-    }
-    .trash-icon::after {
-      content: '';
-      position: absolute;
-      top: -7px;
-      left: 4px;
-      right: 4px;
-      height: 3px;
-      background: #555;
-      border-radius: 1px;
-    }
-
-    .trash-icon-lg {
-      width: 26px;
-      height: 32px;
-    }
-    .trash-icon-lg::before {
-      top: -5px;
-      left: -5px;
-      right: -5px;
-      height: 3px;
-    }
-    .trash-icon-lg::after {
-      top: -10px;
-      left: 6px;
-      right: 6px;
-      height: 4px;
-    }
-
     .desktop-icon.selected .desktop-icon-label {
       background: var(--mac-highlight);
       color: var(--mac-white);
@@ -1197,10 +1146,6 @@
       <div class="desktop-icon-img">&#127916;</div>
       <span class="desktop-icon-label">Film Rankings</span>
     </div>
-    <div class="desktop-icon desktop-icon-trash">
-      <div class="desktop-icon-img"><div class="trash-icon trash-icon-lg"></div></div>
-      <span class="desktop-icon-label">Trash</span>
-    </div>
   </div>
 
   <!-- App Window -->
@@ -1350,12 +1295,6 @@
     <div class="dock-item dock-active" title="Film Rankings" ondblclick="focusAppWindow()">
       <span class="dock-icon">&#127916;</span>
       <span class="dock-label">Film Rankings</span>
-    </div>
-    <div class="dock-divider"></div>
-    <div class="dock-spacer"></div>
-    <div class="dock-item" title="Trash">
-      <span class="dock-icon"><div class="trash-icon"></div></span>
-      <span class="dock-label">Trash</span>
     </div>
   </div>
 
