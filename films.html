@@ -1086,15 +1086,8 @@
       /* Hide menu bar — no OS chrome on mobile */
       #menu-bar { display: none !important; }
 
-      /* Desktop area: flex container for app */
-      #desktop-area {
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        overflow: hidden;
-      }
-      .desktop-icon { display: none; }
+      /* Desktop area: hidden on mobile (app is a sibling, not child) */
+      #desktop-area { display: none !important; }
 
       /* App: fill available space */
       #app {
