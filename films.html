@@ -2292,7 +2292,7 @@ function render() {
   if (activeTab === 'rankings') renderRatings();
   else renderWatchlist();
   renderEditSections();
-  document.getElementById('sb-count').textContent = ratings.length + ' films rated';
+  document.getElementById('sb-count').textContent = ratings.filter(r => r.rating !== 'DNF').length + ' films rated';
   // Undo bar
   const undoEl = document.getElementById('undo-container');
   if (undoEl) {
@@ -2306,10 +2306,9 @@ function render() {
 
 function renderStats() {
   const nr = ratings.filter(r => r.rating !== 'DNF');
-  const total = ratings.length;
   const avg = nr.length ? (nr.reduce((s,r) => s + r.rating, 0) / nr.length).toFixed(2) : '0';
   const tens = nr.filter(r => r.rating === 10).length;
-  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-total').textContent = nr.length;
   document.getElementById('s-avg').textContent = avg;
   document.getElementById('s-tens').textContent = tens;
   document.getElementById('s-watch').textContent = watchlist.length;
