@@ -667,8 +667,8 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .rating-gold { color: #DAA520; }
     .rating-green { color: #2E8B57; }
+    .rating-gold { color: #DAA520; }
     .rating-orange { color: #E88B00; }
     .rating-red { color: #E02020; }
     .rating-dnf { color: #808080; font-size: 10px; font-weight: normal; font-style: italic; }
@@ -1415,8 +1415,8 @@
         <div class="legend-box">
           <div class="legend-title">Rating Scale</div>
           <div class="scale-items">
-            <div class="scale-item"><span class="scale-dot" style="background:#DAA520"></span> 9+</div>
-            <div class="scale-item"><span class="scale-dot" style="background:#2E8B57"></span> 7.5+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#2E8B57"></span> 9+</div>
+            <div class="scale-item"><span class="scale-dot" style="background:#DAA520"></span> 7.5+</div>
             <div class="scale-item"><span class="scale-dot" style="background:#E88B00"></span> 5+</div>
             <div class="scale-item"><span class="scale-dot" style="background:#E02020"></span> 0+</div>
             <div class="scale-item"><span class="scale-dot" style="background:#808080"></span> DNF</div>
@@ -1763,8 +1763,8 @@ function todayStr() {
 
 function ratingClass(r) {
   if (r === 'DNF') return 'rating-dnf';
-  if (r >= 9) return 'rating-gold';
-  if (r >= 7.5) return 'rating-green';
+  if (r >= 9) return 'rating-green';
+  if (r >= 7.5) return 'rating-gold';
   if (r >= 5) return 'rating-orange';
   return 'rating-red';
 }
