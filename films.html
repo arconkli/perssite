@@ -2447,6 +2447,7 @@ async function showMovieDetail(tmdbId) {
   const runtime = details.runtime ? `${details.runtime} min` : '';
   const genres = (details.genres || []).map(g => g.name).slice(0, 3).join(', ');
   const metaParts = [year, runtime, genres].filter(Boolean);
+  const overview = details.overview || '';
 
   const directors = (details.credits?.crew || []).filter(p => p.job === 'Director').map(p => p.name);
   const producers = (details.credits?.crew || []).filter(p => p.job === 'Producer').map(p => p.name).slice(0, 3);
@@ -2455,34 +2456,37 @@ async function showMovieDetail(tmdbId) {
 
   titleEl.textContent = details.title || 'Movie Details';
 
-  // Fetch external ratings (IMDb, RT, Metacritic) via OMDb
+  // Fetch external ratings (IMDb, RT, Metacritic) via OMDb — skip for watchlist-only movies
+  const isWatchlistOnly = watchlist.some(w => w.tmdb_id === tmdbId) && !ratings.some(r => r.tmdb_id === tmdbId);
   let ratingsHtml = '';
-  try {
-    let externalRatings = tmdbCache[tmdbId]?.externalRatings;
-    if (!externalRatings && details.imdb_id) {
-      const omdbResp = await fetch(`${OMDB_BASE}/?i=${details.imdb_id}&apikey=${OMDB_KEY}`);
-      if (omdbResp.ok) {
-        const omdb = await omdbResp.json();
-        if (omdb.Response !== 'False' && omdb.Ratings) {
-          externalRatings = omdb.Ratings.map(r => ({ source: r.Source, value: r.Value }));
-          if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
-          tmdbCache[tmdbId].externalRatings = externalRatings;
-          tmdbCache[tmdbId].externalRatingsAt = Date.now();
-          saveTMDBCache();
+  if (!isWatchlistOnly) {
+    try {
+      let externalRatings = tmdbCache[tmdbId]?.externalRatings;
+      if (!externalRatings && details.imdb_id) {
+        const omdbResp = await fetch(`${OMDB_BASE}/?i=${details.imdb_id}&apikey=${OMDB_KEY}`);
+        if (omdbResp.ok) {
+          const omdb = await omdbResp.json();
+          if (omdb.Response !== 'False' && omdb.Ratings) {
+            externalRatings = omdb.Ratings.map(r => ({ source: r.Source, value: r.Value }));
+            if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
+            tmdbCache[tmdbId].externalRatings = externalRatings;
+            tmdbCache[tmdbId].externalRatingsAt = Date.now();
+            saveTMDBCache();
+          }
         }
       }
-    }
-    if (externalRatings && externalRatings.length) {
-      const badges = externalRatings.map(r => {
-        let label = r.source;
-        if (r.source === 'Internet Movie Database') label = 'IMDb';
-        else if (r.source === 'Rotten Tomatoes') label = 'RT';
-        else if (r.source === 'Metacritic') label = 'MC';
-        return `<div class="ext-rating"><span class="ext-rating-label">${label}</span><span class="ext-rating-value">${escHtml(r.value)}</span></div>`;
-      }).join('');
-      ratingsHtml = `<div class="detail-section"><div class="detail-section-title">Ratings</div><div class="external-ratings">${badges}</div></div>`;
-    }
-  } catch (e) { /* silently skip if OMDb fails */ }
+      if (externalRatings && externalRatings.length) {
+        const badges = externalRatings.map(r => {
+          let label = r.source;
+          if (r.source === 'Internet Movie Database') label = 'IMDb';
+          else if (r.source === 'Rotten Tomatoes') label = 'RT';
+          else if (r.source === 'Metacritic') label = 'MC';
+          return `<div class="ext-rating"><span class="ext-rating-label">${label}</span><span class="ext-rating-value">${escHtml(r.value)}</span></div>`;
+        }).join('');
+        ratingsHtml = `<div class="detail-section"><div class="detail-section-title">Ratings</div><div class="external-ratings">${badges}</div></div>`;
+      }
+    } catch (e) { /* silently skip if OMDb fails */ }
+  }
 
   let sections = '';
   if (directors.length) {
@@ -2542,6 +2546,7 @@ async function showMovieDetail(tmdbId) {
     <div class="detail-info">
       <h2>${escHtml(details.title || '')}</h2>
       <div class="detail-meta">${escHtml(metaParts.join(' \u00B7 '))}</div>
+      ${overview ? `<p style="font-size:11px;color:#333;margin:4px 0 8px;line-height:1.4">${escHtml(overview)}</p>` : ''}
       ${ratingsHtml}
       ${sections}
       ${suggestedHtml}
