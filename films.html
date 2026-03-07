@@ -2107,6 +2107,7 @@ let ratings = [];
 let watchlist = [];
 let activeTab = 'rankings';
 let editingId = null;
+let editingWatchId = null;
 const addFormOpen = { rankings: true, watchlist: true };
 let tmdbCache = {};
 let tmdbMatchRunning = false;
@@ -2563,6 +2564,52 @@ function selectTMDBResult(el) {
   const hiddenId = document.getElementById('new-tmdb-id');
   if (hiddenId) hiddenId.value = id;
   const dd = document.getElementById('tmdb-dropdown');
+  if (dd) dd.style.display = 'none';
+  if (!tmdbCache[id]) {
+    tmdbSearch(title, null).then(data => {
+      if (data.results) {
+        const match = data.results.find(r => r.id === id);
+        if (match) { tmdbCache[id] = tmdbCacheFromResult(match); saveTMDBCache(); }
+      }
+    }).catch(() => {});
+  }
+}
+
+// TMDB search for watchlist add form
+let watchSearchTimeout = null;
+function onWatchTitleSearch(val) {
+  clearTimeout(watchSearchTimeout);
+  const dd = document.getElementById('watch-tmdb-dropdown');
+  if (!dd) return;
+  if (val.length < 2) { dd.style.display = 'none'; return; }
+  watchSearchTimeout = setTimeout(async () => {
+    try {
+      const data = await tmdbSearch(val, null);
+      if (!data.results || data.results.length === 0) { dd.style.display = 'none'; return; }
+      let html = '';
+      data.results.slice(0, 6).forEach(r => {
+        const yr = r.release_date ? r.release_date.substring(0, 4) : '?';
+        const poster = r.poster_path
+          ? `<img src="${getPosterUrl(r.poster_path, 'w92')}" alt="">`
+          : '<div class="tmdb-result-ph"></div>';
+        html += `<div class="tmdb-result" data-id="${r.id}" data-title="${escHtml(r.title)}"
+                  onclick="selectWatchTMDBResult(this)">
+          ${poster}<span>${escHtml(r.title)} (${yr})</span>
+        </div>`;
+      });
+      dd.innerHTML = html;
+      dd.style.display = 'block';
+    } catch(e) { dd.style.display = 'none'; }
+  }, 400);
+}
+
+function selectWatchTMDBResult(el) {
+  const id = parseInt(el.dataset.id);
+  const title = el.dataset.title;
+  document.getElementById('new-watch-title').value = title;
+  const hiddenId = document.getElementById('new-watch-tmdb-id');
+  if (hiddenId) hiddenId.value = id;
+  const dd = document.getElementById('watch-tmdb-dropdown');
   if (dd) dd.style.display = 'none';
   if (!tmdbCache[id]) {
     tmdbSearch(title, null).then(data => {
@@ -3211,10 +3258,23 @@ function renderWatchlist() {
   }
   let html = '';
   filtered.forEach((w, i) => {
+    if (editingWatchId === w.id) {
+      html += `<div class="edit-inline" style="position:relative">
+        <input class="mac-input title-input" id="edit-watch-title" value="${escHtml(w.title)}" placeholder="Title" oninput="onEditWatchTitleSearch(this.value)">
+        <input type="hidden" id="edit-watch-tmdb-id" value="${w.tmdb_id || ''}">
+        <div id="edit-watch-tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
+        <input class="mac-input" id="edit-watch-suggested" value="${escHtml(w.suggested_by || '')}" placeholder="Suggested by (optional)" style="width:140px">
+        <input class="mac-input" id="edit-watch-reason" value="${escHtml(w.reason || '')}" placeholder="Reason (optional)" style="flex:1;min-width:100px">
+        <button class="mac-btn mac-btn-sm" onclick="saveWatchEdit(${w.id})">Save</button>
+        <button class="mac-btn mac-btn-sm" onclick="cancelWatchEdit()">Cancel</button>
+      </div>`;
+      return;
+    }
     const actions = mode === 'edit' ? `
       <div class="movie-actions">
         <button class="kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="Actions">&#8942;</button>
         <div class="kebab-menu">
+          <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();editWatch(${w.id})">Edit</button>
           <button class="kebab-menu-item" onclick="event.stopPropagation();closeAllKebabs();watchedMovie(${w.id})">Watched</button>
           <button class="kebab-menu-item danger" onclick="event.stopPropagation();closeAllKebabs();deleteWatch(${w.id})">Remove</button>
         </div>
@@ -3311,8 +3371,10 @@ function renderEditSections() {
         <div class="add-form-body">
           <div class="form-row">
             <label>Title:</label>
-            <input class="mac-input title-input" id="new-watch-title" placeholder="Movie title">
+            <input class="mac-input title-input" id="new-watch-title" placeholder="Search TMDB..." oninput="onWatchTitleSearch(this.value)">
+            <input type="hidden" id="new-watch-tmdb-id">
           </div>
+          <div id="watch-tmdb-dropdown" class="tmdb-dropdown" style="display:none"></div>
           <div class="form-row">
             <label>Suggested&nbsp;by:</label>
             <input class="mac-input" id="new-watch-suggested" placeholder="(optional)">
@@ -3481,37 +3543,35 @@ async function addWatch() {
     return;
   }
   const suggestedBy = document.getElementById('new-watch-suggested')?.value.trim() || null;
-  const { data: inserted } = await db.from('watchlist').insert({ title, suggested_by: suggestedBy }).select().single();
+  const tmdbIdEl = document.getElementById('new-watch-tmdb-id');
+  const tmdbId = tmdbIdEl ? parseInt(tmdbIdEl.value) || null : null;
+  const { data: inserted } = await db.from('watchlist').insert({ title, tmdb_id: tmdbId, suggested_by: suggestedBy }).select().single();
   await loadData();
   render();
   document.getElementById('new-watch-title').value = '';
+  if (tmdbIdEl) tmdbIdEl.value = '';
   const wsbEl = document.getElementById('new-watch-suggested');
   if (wsbEl) wsbEl.value = '';
-  // Auto-match TMDB immediately
-  if (inserted) {
+  // Fetch providers for selected TMDB match
+  if (inserted && tmdbId) {
     try {
-      const searchData = await tmdbSearch(title, null);
-      if (searchData.results && searchData.results.length > 0) {
-        const best = searchData.results[0];
-        await db.from('watchlist').update({ tmdb_id: best.id }).eq('id', inserted.id);
-        tmdbCache[best.id] = tmdbCacheFromResult(best);
-        const detailResp = await fetch(`${TMDB_BASE}/movie/${best.id}?api_key=${TMDB_KEY}&append_to_response=watch/providers`);
-        if (detailResp.ok) {
-          const detail = await detailResp.json();
-          const usP = detail['watch/providers']?.results?.US;
-          if (usP) {
-            tmdbCache[best.id].providers = {
-              flatrate: (usP.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
-              rent: (usP.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
-              buy: (usP.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
-            };
-          }
+      const detailResp = await fetch(`${TMDB_BASE}/movie/${tmdbId}?api_key=${TMDB_KEY}&append_to_response=watch/providers`);
+      if (detailResp.ok) {
+        const detail = await detailResp.json();
+        const usP = detail['watch/providers']?.results?.US;
+        if (usP) {
+          if (!tmdbCache[tmdbId]) tmdbCache[tmdbId] = {};
+          tmdbCache[tmdbId].providers = {
+            flatrate: (usP.flatrate || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+            rent: (usP.rent || []).map(p => ({ name: p.provider_name, logo: p.logo_path })),
+            buy: (usP.buy || []).map(p => ({ name: p.provider_name, logo: p.logo_path }))
+          };
         }
-        saveTMDBCache();
-        await loadData();
-        render();
       }
-    } catch(e) { /* TMDB match failed, will retry on next page load */ }
+      saveTMDBCache();
+      await loadData();
+      render();
+    } catch(e) {}
   }
 }
 
@@ -3522,6 +3582,83 @@ async function deleteWatch(id) {
   watchlist = watchlist.filter(w => w.id !== id);
   showUndo('watch', item);
   render();
+}
+
+function editWatch(id) {
+  editingWatchId = id;
+  render();
+}
+
+function cancelWatchEdit() {
+  editingWatchId = null;
+  render();
+}
+
+async function saveWatchEdit(id) {
+  const w = watchlist.find(x => x.id === id);
+  if (!w) return;
+  const newTitle = document.getElementById('edit-watch-title').value.trim();
+  if (!newTitle) return;
+  const tmdbIdEl = document.getElementById('edit-watch-tmdb-id');
+  const newTmdbId = tmdbIdEl ? parseInt(tmdbIdEl.value) || null : null;
+  const newSuggestedBy = document.getElementById('edit-watch-suggested')?.value.trim() || null;
+  const newReason = document.getElementById('edit-watch-reason')?.value.trim() || null;
+  await db.from('watchlist').update({
+    title: newTitle,
+    tmdb_id: newTmdbId,
+    suggested_by: newSuggestedBy,
+    reason: newReason
+  }).eq('id', id);
+  w.title = newTitle;
+  w.tmdb_id = newTmdbId;
+  w.suggested_by = newSuggestedBy;
+  w.reason = newReason;
+  editingWatchId = null;
+  render();
+}
+
+let editWatchSearchTimeout = null;
+function onEditWatchTitleSearch(val) {
+  clearTimeout(editWatchSearchTimeout);
+  const dd = document.getElementById('edit-watch-tmdb-dropdown');
+  if (!dd) return;
+  if (val.length < 2) { dd.style.display = 'none'; return; }
+  editWatchSearchTimeout = setTimeout(async () => {
+    try {
+      const data = await tmdbSearch(val, null);
+      if (!data.results || data.results.length === 0) { dd.style.display = 'none'; return; }
+      let html = '';
+      data.results.slice(0, 6).forEach(r => {
+        const yr = r.release_date ? r.release_date.substring(0, 4) : '?';
+        const poster = r.poster_path
+          ? `<img src="${getPosterUrl(r.poster_path, 'w92')}" alt="">`
+          : '<div class="tmdb-result-ph"></div>';
+        html += `<div class="tmdb-result" data-id="${r.id}" data-title="${escHtml(r.title)}"
+                  onclick="selectEditWatchTMDB(this)">
+          ${poster}<span>${escHtml(r.title)} (${yr})</span>
+        </div>`;
+      });
+      dd.innerHTML = html;
+      dd.style.display = 'block';
+    } catch(e) { dd.style.display = 'none'; }
+  }, 400);
+}
+
+function selectEditWatchTMDB(el) {
+  const id = parseInt(el.dataset.id);
+  const title = el.dataset.title;
+  document.getElementById('edit-watch-title').value = title;
+  const hiddenId = document.getElementById('edit-watch-tmdb-id');
+  if (hiddenId) hiddenId.value = id;
+  document.getElementById('edit-watch-tmdb-dropdown').style.display = 'none';
+  if (!tmdbCache[id]) {
+    tmdbSearch(title, null).then(data => {
+      if (data.results) {
+        const match = data.results.find(r => r.id === id);
+        if (match) { tmdbCache[id] = tmdbCacheFromResult(match); saveTMDBCache(); }
+      }
+    }).catch(() => {});
+  }
 }
 
 let watchedItemId = null;
