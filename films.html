@@ -334,7 +334,7 @@
     .window-titlebar::after {
       content: '';
       position: absolute;
-      left: 28px;
+      left: 48px;
       right: 28px;
       top: 3px;
       bottom: 3px;
@@ -1180,6 +1180,259 @@
     }
     #app.is-dragging .window-titlebar { cursor: grabbing; }
 
+    /* === VIEW MENU DROPDOWN === */
+    .menu-item-wrapper { position: relative; }
+    .menu-bar-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 101;
+      background: var(--mac-white);
+      border: 2px solid var(--mac-black);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      min-width: 160px;
+      padding: 2px 0;
+    }
+    .menu-bar-dropdown.open { display: block; }
+    .menu-bar-dropdown-item {
+      display: block;
+      width: 100%;
+      padding: 3px 16px;
+      font-size: 12px;
+      font-family: var(--mac-font);
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: default;
+      color: var(--mac-text);
+      white-space: nowrap;
+    }
+    .menu-bar-dropdown-item:hover {
+      background: var(--mac-menu-highlight, #316AC5);
+      color: var(--mac-white);
+    }
+
+    /* === DISTRIBUTION CHART WINDOW === */
+    .dist-window {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 420px;
+      background: var(--mac-window-bg);
+      border: 2px solid var(--mac-black);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      z-index: 70;
+    }
+    .dist-body { padding: 16px; }
+    .dist-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 160px;
+      padding: 0 4px;
+      border-bottom: 2px solid var(--mac-black);
+      border-left: 2px solid var(--mac-black);
+    }
+    .dist-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .dist-bar {
+      width: 100%;
+      min-height: 2px;
+      border: 1px solid rgba(0,0,0,0.3);
+    }
+    .dist-bar-count {
+      font-family: var(--mac-font-pixel);
+      font-size: 14px;
+      margin-bottom: 2px;
+      color: var(--mac-text);
+    }
+    .dist-bar-label {
+      font-family: var(--mac-font-pixel);
+      font-size: 12px;
+      margin-top: 4px;
+      color: var(--mac-text-secondary, #555);
+    }
+
+    /* === MINIMIZE BOX === */
+    .minimize-box {
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--mac-black);
+      background: var(--mac-white);
+      cursor: default;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      position: relative;
+      margin-left: 4px;
+    }
+    .minimize-box::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      right: 2px;
+      height: 1px;
+      background: var(--mac-black);
+    }
+    .minimize-box:active { background: var(--mac-black); }
+    .minimize-box:active::after { background: var(--mac-white); }
+
+    /* === GENIE MINIMIZE ANIMATION === */
+    @keyframes genie-minimize {
+      0% {
+        transform-origin: bottom center;
+        transform: scale(1) perspective(600px) rotateX(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform-origin: bottom center;
+        transform: scale(0.5, 0.3) perspective(600px) rotateX(10deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform-origin: bottom center;
+        transform: scale(0.05, 0.02) perspective(600px) rotateX(20deg) translateY(calc(100vh - 60px));
+        opacity: 0;
+      }
+    }
+    @keyframes genie-restore {
+      0% {
+        transform-origin: bottom center;
+        transform: scale(0.05, 0.02) perspective(600px) rotateX(20deg) translateY(calc(100vh - 60px));
+        opacity: 0;
+      }
+      50% {
+        transform-origin: bottom center;
+        transform: scale(0.5, 0.3) perspective(600px) rotateX(10deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform-origin: bottom center;
+        transform: scale(1) perspective(600px) rotateX(0deg);
+        opacity: 1;
+      }
+    }
+    #app.minimizing {
+      animation: genie-minimize 0.5s ease-in forwards;
+      pointer-events: none;
+    }
+    #app.restoring {
+      animation: genie-restore 0.4s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes dock-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .dock-item.dock-minimized {
+      animation: dock-bounce 0.8s ease-in-out infinite;
+    }
+
+    /* === FLYING TOASTERS SCREENSAVER === */
+    #screensaver {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      overflow: hidden;
+      cursor: none;
+    }
+    .toaster {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+    }
+    .toaster-body {
+      position: absolute;
+      width: 48px;
+      height: 32px;
+      bottom: 0;
+      background: #888;
+      border: 2px solid #555;
+      border-radius: 4px 4px 2px 2px;
+    }
+    .toaster-body::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      right: 8px;
+      height: 3px;
+      background: #333;
+      border-radius: 1px;
+    }
+    .toaster-body::after {
+      content: '';
+      position: absolute;
+      right: -4px;
+      top: 8px;
+      width: 4px;
+      height: 10px;
+      background: #AAA;
+      border: 1px solid #666;
+      border-radius: 0 2px 2px 0;
+    }
+    .toaster-wing {
+      position: absolute;
+      width: 20px;
+      height: 16px;
+      top: 0;
+      background: #CCC;
+      border: 1px solid #888;
+      border-radius: 50% 50% 0 0;
+    }
+    .toaster-wing-left {
+      left: 2px;
+      transform-origin: bottom center;
+      animation: wing-flap 0.4s ease-in-out infinite;
+    }
+    .toaster-wing-right {
+      right: 2px;
+      transform-origin: bottom center;
+      animation: wing-flap 0.4s ease-in-out infinite 0.2s;
+    }
+    @keyframes wing-flap {
+      0%, 100% { transform: rotate(-30deg); }
+      50% { transform: rotate(15deg); }
+    }
+    @keyframes fly-diagonal {
+      from { transform: translate(0, 0); }
+      to { transform: translate(calc(-100vw - 100px), calc(100vh + 100px)); }
+    }
+    .toaster {
+      animation: fly-diagonal var(--fly-duration) linear forwards;
+    }
+    .toast-slice {
+      position: absolute;
+      width: 16px;
+      height: 20px;
+      background: #D4A54A;
+      border: 1px solid #A07830;
+      border-radius: 2px 2px 1px 1px;
+      animation: fly-diagonal var(--fly-duration) linear forwards;
+    }
+    .toast-slice::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      background: #E8C46A;
+      border-radius: 1px;
+    }
+
     /* === RESPONSIVE === */
     @media (max-width: 640px) {
       /* Lock viewport — prevent iOS bounce/scroll */
@@ -1199,6 +1452,8 @@
 
       /* Hide menu bar — no OS chrome on mobile */
       #menu-bar { display: none !important; }
+      .minimize-box { display: none; }
+      .dist-window { display: none !important; }
 
       /* Desktop area: hidden on mobile (app is a sibling, not child) */
       #desktop-area { display: none !important; }
@@ -1453,7 +1708,7 @@
     <div class="menu-item menu-app-name">Film Rankings</div>
     <div class="menu-item">File</div>
     <div class="menu-item">Edit</div>
-    <div class="menu-item">View</div>
+    <div class="menu-item-wrapper"><div class="menu-item" onclick="toggleViewMenu(event)">View</div><div class="menu-bar-dropdown" id="view-menu-dropdown"><button class="menu-bar-dropdown-item" onclick="showDistributionChart();closeViewMenu()">Show Distribution</button></div></div>
     <div class="menu-item">Help</div>
     <div class="menu-bar-spacer"></div>
     <div class="menu-right">
@@ -1474,6 +1729,7 @@
   <div id="app">
     <div class="window-titlebar">
       <div class="close-box" onclick="logout()" title="Close"></div>
+      <div class="minimize-box" onclick="minimizeApp()" title="Minimize"></div>
       <span class="window-title" id="titlebar-text">Film Rankings</span>
       <div class="zoom-box" title="Zoom"></div>
     </div>
@@ -1619,7 +1875,7 @@
 
   <!-- Dock / Launcher Bar -->
   <div id="dock">
-    <div class="dock-item dock-active" title="Film Rankings" ondblclick="focusAppWindow()">
+    <div class="dock-item dock-active" title="Film Rankings" onclick="restoreApp()" ondblclick="focusAppWindow()">
       <span class="dock-icon">&#127916;</span>
       <span class="dock-label">Film Rankings</span>
     </div>
@@ -1627,6 +1883,21 @@
 
   <!-- Scroll to top button (mobile) -->
   <div class="scroll-top-btn" id="scroll-top-btn" onclick="scrollToTop()">&uarr;</div>
+
+  <!-- Distribution Chart Window -->
+  <div id="dist-chart-window" class="dist-window" style="display:none">
+    <div class="window-titlebar" id="dist-titlebar">
+      <div class="close-box" onclick="closeDistChart()"></div>
+      <span class="window-title">Rating Distribution</span>
+      <div class="zoom-box"></div>
+    </div>
+    <div class="dist-body" id="dist-body"></div>
+  </div>
+
+  <!-- Flying Toasters Screensaver -->
+  <div id="screensaver" style="display:none">
+    <div id="screensaver-container"></div>
+  </div>
 
 </div>
 
@@ -1908,6 +2179,36 @@ function escHtml(s) {
   return d.innerHTML;
 }
 
+// === STARTUP CHIME ===
+function playStartupChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.3, ctx.currentTime);
+    masterGain.connect(ctx.destination);
+    const notes = [
+      { freq: 523.25, start: 0,    dur: 0.6  },
+      { freq: 659.25, start: 0.08, dur: 0.55 },
+      { freq: 783.99, start: 0.16, dur: 0.5  },
+      { freq: 1046.5, start: 0.24, dur: 0.7  },
+    ];
+    notes.forEach(n => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(n.freq, ctx.currentTime + n.start);
+      gain.gain.setValueAtTime(0, ctx.currentTime + n.start);
+      gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + n.start + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.start + n.dur);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(ctx.currentTime + n.start);
+      osc.stop(ctx.currentTime + n.start + n.dur + 0.1);
+    });
+    setTimeout(() => ctx.close(), 1500);
+  } catch (e) {}
+}
+
 // === AUTH ===
 async function attemptLogin() {
   const pwd = document.getElementById('pwd-input').value;
@@ -1920,13 +2221,17 @@ async function attemptLogin() {
     document.getElementById('pwd-input').value = '';
     return;
   }
-  sessionStorage.setItem(SESSION_KEY, mode);
+  localStorage.setItem(SESSION_KEY, mode);
   await showApp();
+  playStartupChime();
 }
 
 function logout() {
   mode = null;
-  sessionStorage.removeItem(SESSION_KEY);
+  isMinimized = false;
+  clearTimeout(idleTimer);
+  if (screensaverActive) dismissScreensaver();
+  localStorage.removeItem(SESSION_KEY);
   document.getElementById('app').style.display = 'none';
   document.getElementById('menu-bar').style.display = 'none';
   document.getElementById('dock').style.display = 'none';
@@ -1956,9 +2261,11 @@ async function showApp() {
   await warmCache();
   autoMatchTMDB();
   fetchAllPublicScores();
+  resetIdleTimer();
 }
 
 function focusAppWindow() {
+  if (isMinimized) { restoreApp(); return; }
   const app = document.getElementById('app');
   if (app) app.style.display = 'flex';
 }
@@ -2718,6 +3025,7 @@ function render() {
       undoEl.innerHTML = '';
     }
   }
+  if (document.getElementById('dist-chart-window').style.display !== 'none') renderDistChart();
 }
 
 function renderStats() {
@@ -3355,7 +3663,7 @@ function scrollToTop() {
 
   titlebar.addEventListener('mousedown', function(e) {
     if (isMobile()) return;
-    if (e.target.closest('.close-box') || e.target.closest('.zoom-box')) return;
+    if (e.target.closest('.close-box') || e.target.closest('.zoom-box') || e.target.closest('.minimize-box')) return;
     e.preventDefault();
     convertToAbsolute();
     const rect = app.getBoundingClientRect();
@@ -3427,12 +3735,184 @@ function scrollToTop() {
   });
 })();
 
+// === VIEW MENU ===
+function toggleViewMenu(e) {
+  e.stopPropagation();
+  document.getElementById('view-menu-dropdown').classList.toggle('open');
+}
+function closeViewMenu() {
+  document.getElementById('view-menu-dropdown').classList.remove('open');
+}
+document.addEventListener('click', closeViewMenu);
+
+// === DISTRIBUTION CHART ===
+function showDistributionChart() {
+  const win = document.getElementById('dist-chart-window');
+  win.style.display = 'block';
+  renderDistChart();
+  initDistDrag();
+}
+function closeDistChart() {
+  document.getElementById('dist-chart-window').style.display = 'none';
+}
+function renderDistChart() {
+  const buckets = new Array(11).fill(0);
+  ratings.forEach(r => {
+    if (r.rating === 'DNF') return;
+    const bucket = Math.round(r.rating);
+    if (bucket >= 0 && bucket <= 10) buckets[bucket]++;
+  });
+  const max = Math.max(...buckets, 1);
+  function barColor(i) {
+    if (i >= 9) return '#2E8B57';
+    if (i >= 8) return '#DAA520';
+    if (i >= 5) return '#E88B00';
+    return '#E02020';
+  }
+  let html = '<div class="dist-chart">';
+  for (let i = 0; i <= 10; i++) {
+    const pct = (buckets[i] / max) * 100;
+    html += '<div class="dist-bar-wrap">' +
+      '<span class="dist-bar-count">' + (buckets[i] || '') + '</span>' +
+      '<div class="dist-bar" style="height:' + Math.max(pct, 1) + '%;background:' + barColor(i) + '"></div>' +
+      '<span class="dist-bar-label">' + i + '</span>' +
+      '</div>';
+  }
+  html += '</div>';
+  document.getElementById('dist-body').innerHTML = html;
+}
+let distDragInit = false;
+function initDistDrag() {
+  if (distDragInit) return;
+  distDragInit = true;
+  const win = document.getElementById('dist-chart-window');
+  const tb = document.getElementById('dist-titlebar');
+  let dragging = false, ox = 0, oy = 0, converted = false;
+  tb.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.close-box') || e.target.closest('.zoom-box')) return;
+    e.preventDefault();
+    if (!converted) {
+      const rect = win.getBoundingClientRect();
+      win.style.top = rect.top + 'px';
+      win.style.left = rect.left + 'px';
+      win.style.transform = 'none';
+      converted = true;
+    }
+    const rect = win.getBoundingClientRect();
+    ox = e.clientX - rect.left;
+    oy = e.clientY - rect.top;
+    dragging = true;
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    win.style.left = (e.clientX - ox) + 'px';
+    win.style.top = (e.clientY - oy) + 'px';
+  });
+  document.addEventListener('mouseup', function() { dragging = false; });
+}
+
+// === GENIE MINIMIZE ===
+let isMinimized = false;
+function minimizeApp() {
+  if (isMinimized || window.innerWidth <= 640) return;
+  isMinimized = true;
+  const app = document.getElementById('app');
+  // Convert to absolute positioning if still centered via transform
+  const currentTransform = app.style.transform;
+  if (currentTransform !== 'none' && currentTransform !== '') {
+    const rect = app.getBoundingClientRect();
+    app.style.top = rect.top + 'px';
+    app.style.left = rect.left + 'px';
+    app.style.width = rect.width + 'px';
+    app.style.transform = 'none';
+  }
+  app.classList.add('minimizing');
+  app.addEventListener('animationend', function onEnd() {
+    app.removeEventListener('animationend', onEnd);
+    app.style.display = 'none';
+    app.classList.remove('minimizing');
+    const dockItem = document.querySelector('#dock .dock-item');
+    if (dockItem) dockItem.classList.add('dock-minimized');
+  });
+}
+function restoreApp() {
+  if (!isMinimized) return;
+  isMinimized = false;
+  const dockItem = document.querySelector('#dock .dock-item');
+  if (dockItem) dockItem.classList.remove('dock-minimized');
+  const app = document.getElementById('app');
+  app.style.display = 'flex';
+  app.classList.add('restoring');
+  app.addEventListener('animationend', function onEnd() {
+    app.removeEventListener('animationend', onEnd);
+    app.classList.remove('restoring');
+  });
+}
+
+// === FLYING TOASTERS SCREENSAVER ===
+let idleTimer = null;
+let screensaverActive = false;
+let toasterInterval = null;
+const IDLE_TIMEOUT = 120000;
+
+function resetIdleTimer() {
+  if (screensaverActive) { dismissScreensaver(); return; }
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(showScreensaver, IDLE_TIMEOUT);
+}
+function showScreensaver() {
+  if (screensaverActive) return;
+  if (document.getElementById('login-screen').style.display !== 'none') return;
+  screensaverActive = true;
+  document.getElementById('screensaver').style.display = 'block';
+  document.getElementById('screensaver-container').innerHTML = '';
+  spawnToasters();
+}
+function dismissScreensaver() {
+  screensaverActive = false;
+  document.getElementById('screensaver').style.display = 'none';
+  document.getElementById('screensaver-container').innerHTML = '';
+  if (toasterInterval) { clearInterval(toasterInterval); toasterInterval = null; }
+  resetIdleTimer();
+}
+function spawnToasters() {
+  const container = document.getElementById('screensaver-container');
+  function createToaster() {
+    const isToast = Math.random() < 0.3;
+    const el = document.createElement('div');
+    if (isToast) {
+      el.className = 'toast-slice';
+    } else {
+      el.className = 'toaster';
+      el.innerHTML = '<div class="toaster-wing toaster-wing-left"></div>' +
+                     '<div class="toaster-wing toaster-wing-right"></div>' +
+                     '<div class="toaster-body"></div>';
+    }
+    const startX = window.innerWidth + 60;
+    const startY = -60 + Math.random() * (window.innerHeight * 0.3);
+    el.style.left = startX + 'px';
+    el.style.top = startY + 'px';
+    const duration = 6 + Math.random() * 8;
+    el.style.setProperty('--fly-duration', duration + 's');
+    container.appendChild(el);
+    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, duration * 1000 + 500);
+  }
+  for (let i = 0; i < 5; i++) setTimeout(createToaster, i * 800);
+  toasterInterval = setInterval(() => {
+    if (!screensaverActive) return;
+    createToaster();
+  }, 1500 + Math.random() * 1000);
+}
+['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+  document.addEventListener(evt, resetIdleTimer, { passive: true });
+});
+
 // === INIT ===
 document.getElementById('pwd-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') attemptLogin();
 });
 
-const savedMode = sessionStorage.getItem(SESSION_KEY);
+const savedMode = localStorage.getItem(SESSION_KEY);
 if (savedMode === 'view' || savedMode === 'edit') {
   mode = savedMode;
   showApp();
