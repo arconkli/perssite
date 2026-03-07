@@ -508,6 +508,13 @@
       color: var(--mac-text-secondary);
     }
 
+    .dist-icon {
+      font-size: 11px;
+      opacity: 0.4;
+      vertical-align: middle;
+    }
+    .stat-card:hover .dist-icon { opacity: 0.8; }
+
     /* === LEGEND (Rating Scale) === */
     .legend-box {
       border: 1px solid var(--mac-dark-border);
@@ -1453,7 +1460,7 @@
       /* Hide menu bar — no OS chrome on mobile */
       #menu-bar { display: none !important; }
       .minimize-box { display: none; }
-      .dist-window { display: none !important; }
+      .dist-window { position: fixed; width: 90%; max-width: 360px; left: 50%; top: 60px; z-index: 200; }
 
       /* Desktop area: hidden on mobile (app is a sibling, not child) */
       #desktop-area { display: none !important; }
@@ -1748,7 +1755,7 @@
       <!-- Stats -->
       <div class="stats-row">
         <div class="stat-card"><div class="stat-value" id="s-total">0</div><div class="stat-label">Rated</div></div>
-        <div class="stat-card"><div class="stat-value" id="s-avg">0</div><div class="stat-label">Average</div></div>
+        <div class="stat-card" style="cursor:pointer" onclick="showDistributionChart()"><div class="stat-value" id="s-avg">0 <span class="dist-icon" title="Show Distribution">&#9636;</span></div><div class="stat-label">Average</div></div>
         <div class="stat-card"><div class="stat-value" id="s-tens">0</div><div class="stat-label">Perfect 10s</div></div>
         <div class="stat-card"><div class="stat-value" id="s-watch">0</div><div class="stat-label">Watchlist</div></div>
       </div>
