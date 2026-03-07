@@ -3766,7 +3766,7 @@ function renderDistChart() {
   const buckets = new Array(11).fill(0);
   ratings.forEach(r => {
     if (r.rating === 'DNF') return;
-    const bucket = Math.round(r.rating);
+    const bucket = r.rating === 10 ? 10 : Math.floor(r.rating);
     if (bucket >= 0 && bucket <= 10) buckets[bucket]++;
   });
   const max = Math.max(...buckets, 1);
