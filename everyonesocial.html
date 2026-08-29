@@ -238,7 +238,7 @@ html:not(.js) .line > span,html:not(.js) [data-draw],html:not(.js) .fade{transfo
 /* 01 — proof-first, headline hangs in the left margin */
 .f01{display:grid;gap:clamp(1rem,3vw,2.4rem);grid-template-columns:1fr}
 .f01 > *{min-width:0}
-@media (min-width:64rem){.f01{grid-template-columns:15rem 1fr;align-items:start}}
+@media (min-width:64rem){.f01{grid-template-columns:minmax(0,27rem) minmax(0,1fr);align-items:start}}
 /* 02 — tightest block: headline across, ledger under */
 .f02{max-width:44rem}
 /* 03 — chart bleeds, ledger is the caption */
@@ -257,6 +257,45 @@ html:not(.js) .line > span,html:not(.js) [data-draw],html:not(.js) .fade{transfo
 html:not(.js) .bar,.js .bar{transform:scaleY(var(--v))}
 .js .chart:not(.in) .bar{transform:scaleY(0)}
 .axl{font-family:var(--mono);font-size:8px;fill:var(--faint);letter-spacing:.05em}
+
+
+/* ============================================================
+   PROBLEM DISPLAY — lead with the damning number, then the cost.
+   A table of facts is not an argument. This is.
+   ============================================================ */
+.lead{display:flex;align-items:baseline;gap:clamp(.8rem,2vw,1.4rem);flex-wrap:wrap;margin:0 0 .55rem}
+.lead__n{
+  font-family:var(--display);font-stretch:56%;font-weight:600;
+  font-size:clamp(3.4rem,1rem + 6.8vw,5.6rem);line-height:.78;letter-spacing:-.04em;
+  color:var(--signal);font-variant-numeric:tabular-nums lining-nums;
+}
+.lead__n.ok{color:var(--ink)}
+.lead__t{font-family:var(--display);font-stretch:84%;font-weight:600;
+  font-size:var(--s-1);line-height:1.15;letter-spacing:-.01em;color:var(--ink);max-width:22ch}
+.versus{font-family:var(--mono);font-size:var(--s--2);color:var(--muted);
+  text-transform:lowercase;letter-spacing:.08em;margin:0 0 1.1rem}
+
+.cost{margin:1.1rem 0 0;padding-top:.85rem;border-top:1px solid var(--rule-2);max-width:48ch}
+.cost__l{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.16em;
+  text-transform:lowercase;color:var(--signal);margin:0 0 .35rem}
+.cost p{font-size:var(--s-0);line-height:1.55;color:var(--ink);margin:0}
+
+/* ============================================================
+   BUILD LOG — the spec sheet. No kicker, no h2, unlike anything else.
+   ============================================================ */
+.build{border-top:1px solid var(--rule-2);padding-top:1.1rem;margin-top:clamp(2rem,4vw,3rem)}
+.build + .build{margin-top:clamp(2.2rem,4.5vw,3.4rem)}
+.build__h{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.15rem}
+.build__n{font-family:var(--display);font-stretch:120%;font-weight:600;font-size:var(--s-2);
+  letter-spacing:.01em;text-transform:lowercase;color:var(--ink)}
+.build__m{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;color:var(--faint)}
+.build__d{font-family:var(--mono);font-size:var(--s--1);color:var(--muted);margin:0 0 .9rem;text-transform:lowercase}
+.build__l{list-style:none;margin:0;padding:0;display:grid;gap:.32rem clamp(1rem,3vw,2.5rem);
+  grid-template-columns:1fr;font-family:var(--mono);font-size:var(--s--1);color:var(--ink-2);line-height:1.45}
+@media (min-width:52rem){.build__l{grid-template-columns:1fr 1fr}}
+.build__l li{position:relative;padding-left:1.05rem}
+.build__l li::before{content:"\2022";position:absolute;left:0;color:var(--rule-3)}
+.build__l b{color:var(--ink);font-weight:500}
 
 /* ============================================================
    BRIDGE — opens on the number, not on a kicker
@@ -436,12 +475,17 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     <li><span class="n">04</span><span class="t">the catch</span></li>
   </ol>
 
-  <!-- 01 · proof-first, headline hanging in the margin -->
+  <!-- 01 -->
   <article class="find u-wide" style="margin-top:clamp(2rem,4vw,3rem)">
     <div class="f01">
       <div>
         <p class="find__n">01 &middot; the crawlers</p>
-        <h3>Six AI integrations. Eight AI crawlers blocked.</h3>
+        <p class="lead"><span class="lead__n">8</span><span class="lead__t">AI crawlers blocked at your door</span></p>
+        <p class="versus">while you sell integrations for six of them</p>
+        <div class="cost">
+          <p class="cost__l">what it costs</p>
+          <p>A buyer researching you in Claude or ChatGPT can't read a word of your marketing. Every competitor who outranks you can. You ship an MCP server so AI can use your product, and a robots.txt so it can't read your pitch.</p>
+        </div>
         <p class="fix">one toggle.</p>
       </div>
       <div>
@@ -457,13 +501,18 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     </div>
   </article>
 
-  <!-- 02 · tightest block on the page -->
+  <!-- 02 -->
   <article class="find">
     <div class="f02">
       <p class="find__n">02 &middot; the tour</p>
-      <h3>The tour video exists. The tour page doesn't play it.</h3>
+      <p class="lead"><span class="lead__n">0</span><span class="lead__t">video players on the page built to play a video</span></p>
+      <p class="versus">you already own 6:18 of finished footage</p>
+      <div class="cost">
+        <p class="cost__l">what it costs</p>
+        <p>&ldquo;See the platform&nbsp;&rarr;&rdquo; is the only route through your funnel that doesn't require talking to sales. Everyone who takes it lands on four grey boxes. Your schema also promises Google a chaptered video there.</p>
+      </div>
       <p class="fix">embed what you own.</p>
-      <dl class="ledger" style="margin-top:1.1rem">
+      <dl class="ledger" style="margin-top:1.2rem">
         <dt>4 chapters, all of them</dt><dd data-s="no">Placeholder &middot; 0:00</dd>
         <dt>&lt;video&gt; &middot; &lt;iframe&gt; on page</dt><dd data-s="no">0 &middot; 0</dd>
         <dt>Wistia autmy6oxc7</dt><dd>6:18 &middot; works</dd>
@@ -473,13 +522,14 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     </div>
   </article>
 
-  <!-- 03 · the chart bleeds past the gutter, ledger is its caption -->
+  <!-- 03 -->
   <article class="find u-bleed-l" style="padding-left:var(--gutter)">
     <p class="find__n">03 &middot; the cadence</p>
     <div class="f03">
       <div>
-        <h3 style="max-width:20ch">493 posts. Eight in the last year.</h3>
-        <svg class="chart" viewBox="0 0 340 112" role="img" style="margin-top:1.2rem" aria-label="Posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 to date 8.">
+        <p class="lead"><span class="lead__n">8</span><span class="lead__t">posts in twelve months, on a 493-post blog</span></p>
+        <p class="versus">2019 shipped 82</p>
+        <svg class="chart" viewBox="0 0 340 112" role="img" style="margin-top:1rem" aria-label="Posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 to date 8.">
           <g>
             <rect class="bar" style="--i:0"  x="4"   y="6" width="22" height="84" rx="1" data-v=".49" fill="#EDEAE5"/>
             <rect class="bar" style="--i:1"  x="34"  y="6" width="22" height="84" rx="1" data-v=".40" fill="#EDEAE5"/>
@@ -499,8 +549,11 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
         </svg>
       </div>
       <div>
-        <dl class="ledger">
-          <dt>2019 &rarr; last 12 months</dt><dd data-s="no">82 &rarr; 8</dd>
+        <div class="cost" style="border-top:0;padding-top:0;margin-top:0">
+          <p class="cost__l">what it costs</p>
+          <p>You hold benchmark data on 4,000 real programs and the newest post models drop-off on an invented one. Nobody else in this category can publish that. While it sits unused, DSMN8's annual report is what gets cited as the category's number.</p>
+        </div>
+        <dl class="ledger" style="margin-top:1.2rem">
           <dt>Jun 2025 &rarr; Mar 2026</dt><dd data-s="no">257 days, nothing</dd>
           <dt>sitemap &lt;lastmod&gt;</dt><dd data-s="no">0 of 629</dd>
         </dl>
@@ -509,52 +562,80 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     </div>
   </article>
 
-  <!-- 04 · narrowest. the empty right half is deliberate. -->
+  <!-- 04 -->
   <article class="find">
     <div class="f04">
       <p class="find__n">04 &middot; the catch</p>
-      <h3>Nothing catches an email. Nothing tracks an ad.</h3>
-      <dl class="ledger" style="margin-top:1rem">
-        <dt>GA4 &middot; HubSpot</dt><dd>present</dd>
+      <p class="lead"><span class="lead__n">0</span><span class="lead__t">ways for a visitor to leave you their email</span></p>
+      <p class="versus">and no ad tracking of any kind</p>
+      <div class="cost">
+        <p class="cost__l">what it costs</p>
+        <p>Someone models a 50,000-seat program in your calculator and leaves anonymous. And LinkedIn matched audiences need roughly 90 days of tag data before they work &mdash; so paid isn't slow to start, it's impossible to start for a quarter after you decide to.</p>
+      </div>
+      <p class="fix">insight tag, day one.</p>
+      <dl class="ledger" style="margin-top:1.2rem">
         <dt>LinkedIn Insight Tag</dt><dd data-s="no">absent</dd>
         <dt>Meta Pixel &middot; Google Ads</dt><dd data-s="no">absent</dd>
         <dt>ROI calculator &lt;form&gt;</dt><dd data-s="no">0</dd>
         <dt>/newsletter/ /vs/ /compare/ /events/</dt><dd data-s="no">404</dd>
       </dl>
-      <p class="fix">insight tag, day one.</p>
     </div>
   </article>
 </section>
 
-<!-- 4 · BRIDGE — opens on the number ─────────────────────── -->
+<!-- 4 · WHAT I BUILT — the spec sheet ─────────────────────── -->
 <section class="bed" data-rhythm="normal">
   <div class="bridge__num fade">
     <span class="mega">4.95M</span>
     <p class="mlbl" style="max-width:44ch">creator post views tracked &middot; one operator &middot; zero ad spend</p>
   </div>
 
-  <div class="bridge__claim">
+  <div class="bridge__claim" style="margin-top:clamp(1.4rem,3vw,2.2rem)">
     <div>
       <h2 style="max-width:18ch">I built the machine you sell. Mine pointed at creators.</h2>
-      <p style="margin-top:1rem;max-width:40ch">Recruit. Connect their account. Verify it. Nudge them into posting. Measure the post. Built solo, in Claude Code.</p>
+      <p style="margin-top:1rem;max-width:42ch">Recruit. Connect their account. Verify they own it. Nudge them into posting. Measure the post. Two products, both live, both mine end to end &mdash; product, data, payments, growth.</p>
     </div>
-    <p class="note">Mine got paid; employees don't. The incentive doesn't transfer. The funnel does. Both products pre-revenue.</p>
+    <p class="note">Mine got paid; employees don't. The incentive doesn't transfer. The funnel does. Both pre-revenue.</p>
   </div>
 
-  <dl class="ledger" style="margin-top:clamp(1.6rem,3.5vw,2.4rem)">
-    <dt>creators recruited, 17 countries</dt><dd>600+</dd>
-    <dt>ad spend to get there</dt><dd data-s="off">$0</dd>
-    <dt>campaign view &rarr; join</dt><dd>68.6%</dd>
-    <dt>signup &rarr; account connected</dt><dd>64%</dd>
-    <dt>paid creator views, ~$7.7K spend</dt><dd>956K @ ~$0.008</dd>
-  </dl>
+  <div class="u-wide">
+    <div class="build fade">
+      <div class="build__h"><span class="build__n">bounty_os</span><span class="build__m">live &middot; solo &middot; pre-revenue</span></div>
+      <p class="build__d">influencer marketplace &mdash; brands pay creators per view</p>
+      <ul class="build__l">
+        <li><b>ML fraud &amp; bot detection</b> &mdash; naive-Bayes, running in-database</li>
+        <li><b>Escrow payout engine</b> with double-entry reconciliation</li>
+        <li><b>Stripe Connect</b> onboarding, 81 creators</li>
+        <li><b>Automated account verification</b>, 373 accounts</li>
+        <li><b>Bandit-optimised lifecycle email</b>, 85 copy variants</li>
+        <li><b>Campaign analytics</b> &mdash; velocity and anomaly detection</li>
+        <li>600+ creators, 17 countries, $0 ad spend</li>
+        <li>68.6% campaign view &rarr; join &middot; 64% signup &rarr; connected</li>
+      </ul>
+    </div>
+
+    <div class="build fade">
+      <div class="build__h"><span class="build__n">soleil clusters</span><span class="build__m">live &middot; solo &middot; pre-revenue</span></div>
+      <p class="build__d">real-time multiplayer saas, web + ios + android</p>
+      <ul class="build__l">
+        <li><b>CRDT sync engine</b> on Cloudflare Durable Objects &mdash; 64,357 live edit ops</li>
+        <li><b>Semantic search</b> &mdash; OpenAI embeddings into pgvector</li>
+        <li><b>AI SEO engine</b> on Workers AI, closed against Search Console</li>
+        <li><b>Multi-armed bandit</b> experiment engine, nightly</li>
+        <li><b>Behavioural lifecycle email</b>, per-user send-time optimisation</li>
+        <li><b>9-network attribution</b> + Meta CAPI, event-deduped</li>
+        <li>First load cut 1.15&nbsp;MB &rarr; 24&nbsp;KB, native builds via Capacitor</li>
+        <li>Security pass: closed cross-tenant enumeration and IDOR</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <!-- 5 · CHANNELS — a table, tone encodes depth ────────────── -->
 <section class="bed" data-rhythm="loose">
   <div class="u-wide">
     <table class="chan">
-      <thead><tr><th>eight channels, five deep</th><th class="meter"></th><th>the receipt</th></tr></thead>
+      <thead><tr><th>eight channels, personally shipped</th><th class="meter"></th><th>the receipt</th></tr></thead>
       <tbody>
         <tr><td class="ch">website</td><td class="meter"><i style="--w:1"></i></td><td>two front-ends solo. this is one.</td></tr>
         <tr><td class="ch">content</td><td class="meter"><i style="--w:1"></i></td><td>1M+ organic views, self-shot</td></tr>
