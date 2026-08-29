@@ -84,15 +84,15 @@ body::after{
 .kicker{
   font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;
   text-transform:uppercase;color:var(--faint);font-weight:500;
-  display:flex;align-items:center;gap:.7em;margin:0 0 1.6rem;
+  display:flex;align-items:center;gap:.7em;margin:0 0 1.1rem;
 }
 .kicker::before{content:"";width:1.6rem;height:1px;background:var(--accent);flex:none}
 
 h2{
   font-family:var(--display);
-  font-size:clamp(2rem,1.1rem+3.6vw,3.9rem);
+  font-size:clamp(1.8rem,1.1rem+2.9vw,3.2rem);
   line-height:1.02;letter-spacing:-.03em;font-weight:600;
-  margin:0 0 1.4rem;text-wrap:balance;
+  margin:0 0 1.1rem;text-wrap:balance;
   font-variation-settings:"wdth" 100;
 }
 h3{
@@ -107,7 +107,7 @@ p strong,strong{color:var(--ink);font-weight:600}
 .dim{color:var(--muted)}
 .mono{font-family:var(--mono);overflow-wrap:anywhere}
 
-section{padding-block:clamp(5rem,11vw,10rem);position:relative}
+section{padding-block:clamp(3.25rem,6vw,5.5rem);position:relative}
 
 /* ============================================================
    REVEAL — content is visible by default; only JS hides it.
@@ -149,7 +149,7 @@ section{padding-block:clamp(5rem,11vw,10rem);position:relative}
 /* ============================================================
    HERO
    ============================================================ */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:8rem 4rem}
+.hero{min-height:auto;padding-block:7rem 3.5rem;display:flex;flex-direction:column;justify-content:center;padding-block:8rem 4rem}
 .hero .wrap{width:100%}
 .hero__grid{display:grid;gap:clamp(2rem,4vw,4rem);grid-template-columns:1fr;align-items:start}
 .hero__grid>*{min-width:0}
@@ -247,12 +247,12 @@ html:not(.js) .w__in{transform:none}
 /* ============================================================
    FINDINGS — sticky stack
    ============================================================ */
-.stack{display:flex;flex-direction:column;gap:clamp(1rem,2vw,1.6rem)}
+.stack{display:flex;flex-direction:column;gap:.7rem}
 .finding{
   position:sticky;top:9vh;
   background:linear-gradient(180deg,var(--card),var(--bg-2));
   border:1px solid var(--line-2);border-radius:16px;
-  padding:clamp(1.35rem,3.4vw,2.75rem);
+  padding:clamp(1.1rem,2.4vw,1.8rem);
   transform-origin:50% 0%;
 }
 @media (prefers-reduced-motion:no-preference){
@@ -267,25 +267,25 @@ html:not(.js) .w__in{transform:none}
 }
 .finding__n{
   font-family:var(--mono);font-size:.6875rem;letter-spacing:.18em;color:var(--faint);
-  display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem;
+  display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;
 }
 .finding__n i{font-style:normal;color:var(--accent)}
 .finding__n::after{content:"";flex:1;height:1px;background:var(--line)}
-.finding__grid{display:grid;gap:clamp(1.2rem,3vw,2.4rem);grid-template-columns:1fr}
+.finding__grid{display:grid;gap:clamp(1rem,2.2vw,1.8rem);grid-template-columns:1fr}
 .finding__grid>*{min-width:0}
 @media (min-width:900px){
   .finding__grid{grid-template-columns:1fr 1fr;align-items:stretch}
   .finding__grid>div:first-child{display:flex;flex-direction:column}
-  .finding__grid>div:first-child .ship{margin-top:auto;padding-top:.2rem}
+  .finding__grid>div:first-child .ship{margin-top:1rem}
 }
-.finding p{font-size:.9688rem}
+.finding p{font-size:.9375rem;line-height:1.5}
 .finding p:last-child{margin-bottom:0}
 
 /* code / evidence block */
 .ev{
   font-family:var(--mono);font-size:.75rem;line-height:1.75;
   background:#06070A;border:1px solid var(--line);border-radius:10px;
-  padding:1rem 1.1rem;overflow-x:auto;color:var(--ink-2);max-width:100%;
+  padding:.75rem .9rem;overflow-x:auto;color:var(--ink-2);max-width:100%;
   margin:0 0 1rem;white-space:pre;
 }
 .ev .c{color:var(--faint)}
@@ -306,7 +306,7 @@ html:not(.js) .w__in{transform:none}
 
 /* key -> value proof rows: the evidence, scannable in one pass */
 .proof{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 .9rem}
-.proof__r{background:#06070A;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.62rem .85rem;font-family:var(--mono);font-size:.75rem;line-height:1.4}
+.proof__r{background:#06070A;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.5rem .8rem;font-family:var(--mono);font-size:.75rem;line-height:1.4}
 .proof__k{color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
 .proof__v{font-weight:700;white-space:nowrap;flex:none}
 .proof__v.no{color:var(--hotpink)}
@@ -316,7 +316,7 @@ html:not(.js) .w__in{transform:none}
 
 /* ship box */
 .ship{
-  border-left:2px solid var(--accent);padding-left:1.1rem;margin-top:1.4rem;
+  border-left:2px solid var(--accent);padding-left:.9rem;margin-top:1rem;
 }
 .ship .ev-cap{color:var(--accent);margin-bottom:.4rem}
 .ship p{color:var(--ink-2);margin-bottom:0;font-size:.9375rem;line-height:1.45}
@@ -343,7 +343,7 @@ html:not(.js) .bar{transform:scaleY(var(--v))}
    ============================================================ */
 .stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
   grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:2.2rem 0 0}
-.stat{background:var(--bg-2);padding:1.35rem 1.25rem;min-width:0}
+.stat{background:var(--bg-2);padding:1.05rem 1.1rem;min-width:0}
 .stat__n{
   font-family:var(--display);font-weight:600;letter-spacing:-.03em;
   font-size:clamp(1.5rem,1.2rem+1.3vw,2.3rem);line-height:1;color:var(--ink);
@@ -356,7 +356,7 @@ html:not(.js) .bar{transform:scaleY(var(--v))}
    ============================================================ */
 .chan{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
   grid-template-columns:repeat(auto-fit,minmax(238px,1fr))}
-.chan__i{background:var(--bg-2);padding:1.5rem 1.4rem;min-width:0;transition:background .35s var(--ease)}
+.chan__i{background:var(--bg-2);padding:1.15rem 1.15rem;min-width:0;transition:background .35s var(--ease)}
 .chan__i:hover{background:var(--card)}
 .chan__h{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;margin-bottom:.6rem}
 .chan__t{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-.015em}
@@ -377,8 +377,8 @@ html:not(.js) .bar{transform:scaleY(var(--v))}
 .white p{color:#3d4150}
 .white .ev{background:#f4f5f9;border-color:rgba(27,29,30,.1);color:#3d4150}
 
-.board{border:1px solid var(--line-2);border-radius:14px;padding:clamp(1.2rem,3vw,2rem);
-  background:var(--card);margin:0 0 clamp(2rem,4vw,3rem)}
+.board{border:1px solid var(--line-2);border-radius:14px;padding:clamp(1rem,2.2vw,1.5rem);
+  background:var(--card);margin:0 0 clamp(1.5rem,3vw,2.2rem)}
 .board .ev-cap{color:var(--indigo)}
 .board .big{font-family:var(--display);font-weight:600;letter-spacing:-.025em;
   font-size:clamp(1.15rem,1rem+.9vw,1.7rem);line-height:1.2;margin:0 0 .8rem;color:#1b1d1e}
@@ -390,7 +390,7 @@ html:not(.js) .bar{transform:scaleY(var(--v))}
 .tl__c{border-top:2px solid var(--indigo);padding-top:1.1rem}
 .tl__w{font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--indigo);margin:0 0 1rem;font-weight:500}
-.tl__l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.1rem}
+.tl__l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.75rem}
 .tl__l li{font-size:.9375rem;line-height:1.55;color:#3d4150;padding-left:1.15rem;position:relative}
 .tl__l li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--indigo)}
 .tl__l b{color:#1b1d1e;font-weight:600}
@@ -399,7 +399,7 @@ html:not(.js) .bar{transform:scaleY(var(--v))}
    WHAT I'M NOT — restraint is the design
    ============================================================ */
 .not__l{list-style:none;margin:0;padding:0;max-width:64ch;display:flex;flex-direction:column}
-.not__l li{border-top:1px solid var(--line);padding:1.5rem 0}
+.not__l li{border-top:1px solid var(--line);padding:1.05rem 0}
 .not__l li:last-child{border-bottom:1px solid var(--line)}
 .not__l h3{font-size:1.0625rem;margin-bottom:.45rem;color:var(--ink-2);font-weight:600}
 .not__l p{font-size:.9375rem;margin:0;color:var(--muted)}
@@ -471,26 +471,23 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--indigo);outline-off
     <div>
     <h1 data-split>You sell a Claude integration. Your <span class="hl">robots.txt blocks ClaudeBot.</span></h1>
 
-    <p class="lede reveal">Nobody chose that. It's a Cloudflare default nobody owns &mdash; which is roughly the point.</p>
+    <p class="lede reveal">Found in an afternoon. Three more below. This page too.</p>
 
-    <p class="lede reveal" style="--i:1">Three more below. Each with the command to check it.</p>
-
-    <p class="sig reveal" style="--i:2">
+    <p class="sig reveal" style="--i:1">
       <span><b>Andrew Conklin</b></span>
-      <span>Atlanta &middot; remote</span>
       <span>andrew@andrewconklin.com</span>
     </p>
     </div>
 
     <aside class="hero__ev reveal" style="--i:1">
-      <p class="ev-cap">everyonesocial.com/robots.txt &middot; today</p>
-<pre class="ev"><span class="c"># BEGIN Cloudflare Managed content</span>
-User-agent: <span class="bad">ClaudeBot</span>
-Disallow: <span class="bad">/</span>
-
-User-agent: <span class="bad">GPTBot</span>
-Disallow: <span class="bad">/</span></pre>
-      <p>Also Google-Extended, Applebot-Extended, meta-externalagent, Amazonbot, Bytespider, CCBot. Eight in total, on the site that sells six AI integrations and an MCP server.</p>
+      <p class="ev-cap">The afternoon</p>
+      <div class="proof">
+        <div class="proof__r"><span class="proof__k">Your site, audited</span><span class="proof__v yes">4 findings</span></div>
+        <div class="proof__r"><span class="proof__k">Every claim re-checked live</span><span class="proof__v yes">40 checks</span></div>
+        <div class="proof__r"><span class="proof__k">This page</span><span class="proof__v yes">1 file, hand-written</span></div>
+        <div class="proof__r"><span class="proof__k">Framework &middot; build step</span><span class="proof__v dimv">none</span></div>
+      </div>
+      <p>That's the pitch. Below is the proof.</p>
     </aside>
     </div>
   </div>
@@ -508,7 +505,6 @@ Disallow: <span class="bad">/</span></pre>
         </span>
       </button>
     </div>
-    <p class="small dim reveal" style="margin-top:1rem">Everything in the video is written out below. Skip it if you'd rather read.</p>
   </div>
 </section>
 
@@ -517,168 +513,111 @@ Disallow: <span class="bad">/</span></pre>
   <div class="wrap">
     <p class="kicker reveal">What I found</p>
     <h2 class="reveal">Four things. Each takes a minute to check.</h2>
-    <p class="lede reveal" style="margin-bottom:3rem">Commands are printed next to every claim. Checked 28&nbsp;August&nbsp;2026.</p>
 
-    <div class="stack">
+    <div class="stack" style="margin-top:1.8rem">
 
-      <!-- 01 -->
       <article class="finding">
         <p class="finding__n"><i>01</i> The crawlers</p>
         <div class="finding__grid">
           <div>
-            <h3>You sell six AI integrations. You block eight AI crawlers.</h3>
-            <ul class="facts">
-              <li>An assistant can query your product through MCP.</li>
-              <li>It can't read <b>one page</b> of your marketing site.</li>
-              <li>Everyone who outranks you for <span class="mono">best employee advocacy platform</span> is readable.</li>
-            </ul>
+            <h3>Six AI integrations. Eight AI crawlers blocked.</h3>
             <div class="ship">
-              <p class="ev-cap">What I'd ship</p>
-              <p>Turn the block off. Add <span class="mono">llms.txt</span> and <span class="mono">Product</span> schema on <span class="mono">/pricing/</span>.</p>
+              <p class="ev-cap">Fix</p>
+              <p>One toggle.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">robots.txt &middot; blocked</p>
             <div class="proof">
               <div class="proof__r"><span class="proof__k">ClaudeBot</span><span class="proof__v no">Disallow: /</span></div>
               <div class="proof__r"><span class="proof__k">GPTBot</span><span class="proof__v no">Disallow: /</span></div>
-              <div class="proof__r"><span class="proof__k">Google-Extended</span><span class="proof__v no">Disallow: /</span></div>
-              <div class="proof__r"><span class="proof__k">+ Applebot, meta, Amazon, Bytespider, CCBot</span><span class="proof__v no">Disallow: /</span></div>
-            </div>
-            <p class="ev-cap">Same check, competitors</p>
-            <div class="proof">
+              <div class="proof__r"><span class="proof__k">+ Google, Apple, Meta, Amazon &hellip;</span><span class="proof__v no">Disallow: /</span></div>
               <div class="proof__r"><span class="proof__k">hootsuite.com</span><span class="proof__v yes">ai-input=yes</span></div>
-              <div class="proof__r"><span class="proof__k">sproutsocial.com</span><span class="proof__v yes">allows</span></div>
-              <div class="proof__r"><span class="proof__k">sociabble.com</span><span class="proof__v yes">allows</span></div>
-              <div class="proof__r"><span class="proof__k">dsmn8.com</span><span class="proof__v yes">allows</span></div>
-              <div class="proof__r"><span class="proof__k">gaggleamp.com</span><span class="proof__v yes">allows</span></div>
+              <div class="proof__r"><span class="proof__k">sprout &middot; sociabble &middot; dsmn8 &middot; gaggleamp</span><span class="proof__v yes">allows</span></div>
             </div>
-<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/robots.txt \
-  | grep -A1 ClaudeBot</pre>
+<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/robots.txt | grep -A1 ClaudeBot</pre>
           </div>
         </div>
       </article>
 
-      <!-- 02 -->
       <article class="finding">
         <p class="finding__n"><i>02</i> The tour</p>
         <div class="finding__grid">
           <div>
             <h3>The tour video exists. The tour page doesn't play it.</h3>
-            <ul class="facts">
-              <li><b>&ldquo;See the platform&nbsp;&rarr;&rdquo;</b> on your homepage goes here.</li>
-              <li>The Wistia file is real and plays. I watched it.</li>
-              <li>Your schema promises Google four chapters. Three of its anchors aren't on the page.</li>
-            </ul>
             <div class="ship">
-              <p class="ev-cap">What I'd ship</p>
-              <p>Embed the file you already paid for. Cut it to the four chapters you already wrote.</p>
+              <p class="ev-cap">Fix</p>
+              <p>Embed what you own.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">/advocacy-tour/</p>
             <div class="proof">
-              <div class="proof__r"><span class="proof__k">01 &middot; Account setup</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
-              <div class="proof__r"><span class="proof__k">02 &middot; AI throughout</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
-              <div class="proof__r"><span class="proof__k">03 &middot; Supporting scale</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
-              <div class="proof__r"><span class="proof__k">04 &middot; Proving ROI</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
-              <div class="proof__r"><span class="proof__k">&lt;video&gt; on the page</span><span class="proof__v no">0</span></div>
-              <div class="proof__r"><span class="proof__k">&lt;iframe&gt; on the page</span><span class="proof__v no">0</span></div>
+              <div class="proof__r"><span class="proof__k">4 chapters, all of them</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
+              <div class="proof__r"><span class="proof__k">&lt;video&gt; &middot; &lt;iframe&gt; on page</span><span class="proof__v no">0 &middot; 0</span></div>
+              <div class="proof__r"><span class="proof__k">Wistia autmy6oxc7</span><span class="proof__v yes">6:18 &middot; works</span></div>
+              <div class="proof__r"><span class="proof__k">3 chapter anchors in your schema</span><span class="proof__v no">not on page</span></div>
             </div>
-            <p class="ev-cap">Wistia, from your own schema</p>
-            <div class="proof">
-              <div class="proof__r"><span class="proof__k">autmy6oxc7</span><span class="proof__v yes">6:18 &middot; works</span></div>
-              <div class="proof__r"><span class="proof__k">#chapter-share</span><span class="proof__v no">not on page</span></div>
-              <div class="proof__r"><span class="proof__k">#chapter-audience</span><span class="proof__v no">not on page</span></div>
-              <div class="proof__r"><span class="proof__k">#chapter-analytics</span><span class="proof__v no">not on page</span></div>
-            </div>
-<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/advocacy-tour/ \
-  | grep -c "&lt;video"
+<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/advocacy-tour/ | grep -c "&lt;video"
 <span class="bad">0</span></pre>
           </div>
         </div>
       </article>
 
-      <!-- 03 -->
       <article class="finding">
         <p class="finding__n"><i>03</i> The cadence</p>
         <div class="finding__grid">
           <div>
-            <h3>493 posts in the archive. Eight in the last year.</h3>
-            <ul class="facts">
-              <li>Nine months of silence, then three posts after this job went live.</li>
-              <li>The writing is good. There's just no one running it.</li>
-              <li>Your newest post models drop-off on <b>a made-up 400-seat program</b> &mdash; while you hold data on 4,000 real ones.</li>
-            </ul>
+            <h3>493 posts. Eight in the last year.</h3>
+            <p class="small">Newest post models drop-off on a made-up program. You hold data on 4,000 real ones.</p>
             <div class="ship">
-              <p class="ev-cap">What I'd ship</p>
-              <p>Not more posts. Publish the real dataset. Nobody else in the category can.</p>
+              <p class="ev-cap">Fix</p>
+              <p>Publish the real dataset.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">Posts per year &middot; your rss.xml</p>
-            <svg class="chart" viewBox="0 0 340 130" role="img" aria-label="Blog posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 year to date 8.">
+            <svg class="chart" viewBox="0 0 340 118" role="img" aria-label="Posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 to date 8.">
               <g class="bars">
-                <rect class="bar" style="--i:0"  x="4"   y="14" width="22" height="96" rx="2" data-v=".49" fill="#4cc1ea"/>
-                <rect class="bar" style="--i:1"  x="34"  y="14" width="22" height="96" rx="2" data-v=".40" fill="#4cc1ea"/>
-                <rect class="bar" style="--i:2"  x="64"  y="14" width="22" height="96" rx="2" data-v=".60" fill="#4689e7"/>
-                <rect class="bar" style="--i:3"  x="94"  y="14" width="22" height="96" rx="2" data-v="1"   fill="#3f55e5"/>
-                <rect class="bar" style="--i:4"  x="124" y="14" width="22" height="96" rx="2" data-v=".90" fill="#3a2ebc"/>
-                <rect class="bar" style="--i:5"  x="154" y="14" width="22" height="96" rx="2" data-v=".80" fill="#4c099e"/>
-                <rect class="bar" style="--i:6"  x="184" y="14" width="22" height="96" rx="2" data-v=".82" fill="#6606a9"/>
-                <rect class="bar" style="--i:7"  x="214" y="14" width="22" height="96" rx="2" data-v=".40" fill="#a91590"/>
-                <rect class="bar" style="--i:8"  x="244" y="14" width="22" height="96" rx="2" data-v=".16" fill="#f22279"/>
-                <rect class="bar" style="--i:9"  x="274" y="14" width="22" height="96" rx="2" data-v=".085" fill="#f22279"/>
-                <rect class="bar" style="--i:10" x="304" y="14" width="22" height="96" rx="2" data-v=".10" fill="#f22279"/>
+                <rect class="bar" style="--i:0"  x="4"   y="8" width="22" height="88" rx="2" data-v=".49" fill="#4cc1ea"/>
+                <rect class="bar" style="--i:1"  x="34"  y="8" width="22" height="88" rx="2" data-v=".40" fill="#4cc1ea"/>
+                <rect class="bar" style="--i:2"  x="64"  y="8" width="22" height="88" rx="2" data-v=".60" fill="#4689e7"/>
+                <rect class="bar" style="--i:3"  x="94"  y="8" width="22" height="88" rx="2" data-v="1"   fill="#3f55e5"/>
+                <rect class="bar" style="--i:4"  x="124" y="8" width="22" height="88" rx="2" data-v=".90" fill="#3a2ebc"/>
+                <rect class="bar" style="--i:5"  x="154" y="8" width="22" height="88" rx="2" data-v=".80" fill="#4c099e"/>
+                <rect class="bar" style="--i:6"  x="184" y="8" width="22" height="88" rx="2" data-v=".82" fill="#6606a9"/>
+                <rect class="bar" style="--i:7"  x="214" y="8" width="22" height="88" rx="2" data-v=".40" fill="#a91590"/>
+                <rect class="bar" style="--i:8"  x="244" y="8" width="22" height="88" rx="2" data-v=".16" fill="#f22279"/>
+                <rect class="bar" style="--i:9"  x="274" y="8" width="22" height="88" rx="2" data-v=".085" fill="#f22279"/>
+                <rect class="bar" style="--i:10" x="304" y="8" width="22" height="88" rx="2" data-v=".10" fill="#f22279"/>
               </g>
-              <line x1="0" y1="110.5" x2="340" y2="110.5" stroke="rgba(242,243,246,.14)" stroke-width="1"/>
-              <text class="axl" x="4" y="122">'16</text><text class="axl" x="94" y="122">'19</text>
-              <text class="axl" x="184" y="122">'22</text><text class="axl" x="296" y="122">'26</text>
+              <line x1="0" y1="96.5" x2="340" y2="96.5" stroke="rgba(242,243,246,.14)" stroke-width="1"/>
+              <text class="axl" x="4" y="109">'16</text><text class="axl" x="94" y="109">'19</text>
+              <text class="axl" x="184" y="109">'22</text><text class="axl" x="296" y="109">'26</text>
             </svg>
             <div class="proof">
-              <div class="proof__r"><span class="proof__k">2019</span><span class="proof__v yes">82 posts</span></div>
-              <div class="proof__r"><span class="proof__k">2025</span><span class="proof__v no">7 posts</span></div>
-              <div class="proof__r"><span class="proof__k">Last 12 months</span><span class="proof__v no">8 posts</span></div>
+              <div class="proof__r"><span class="proof__k">2019 &rarr; last 12 months</span><span class="proof__v no">82 &rarr; 8</span></div>
               <div class="proof__r"><span class="proof__k">Jun 2025 &rarr; Mar 2026</span><span class="proof__v no">257 days, nothing</span></div>
-              <div class="proof__r"><span class="proof__k">sitemap &lt;lastmod&gt; tags</span><span class="proof__v no">0 of 629</span></div>
-              <div class="proof__r"><span class="proof__k">nav says &ldquo;Guides&rdquo; &rarr; /guides/</span><span class="proof__v no">404</span></div>
+              <div class="proof__r"><span class="proof__k">sitemap &lt;lastmod&gt;</span><span class="proof__v no">0 of 629</span></div>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- 04 -->
       <article class="finding">
         <p class="finding__n"><i>04</i> The catch</p>
         <div class="finding__grid">
           <div>
             <h3>Nothing catches an email. Nothing tracks an ad.</h3>
-            <ul class="facts">
-              <li>Someone models a 50,000-seat program, then leaves with nothing to forward.</li>
-              <li>No retargeting pool exists. At a company whose product <em>is</em> LinkedIn.</li>
-              <li>Matched audiences need ~90 days of data. The calendar is the expensive part.</li>
-            </ul>
             <div class="ship">
-              <p class="ev-cap">What I'd ship</p>
-              <p>Insight Tag on day one. Then &ldquo;email me this business case&rdquo; on the calculator.</p>
+              <p class="ev-cap">Fix</p>
+              <p>Insight Tag, day one.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">Tracking on /, /demo/, /pricing/</p>
             <div class="proof">
-              <div class="proof__r"><span class="proof__k">GA4</span><span class="proof__v yes">present</span></div>
-              <div class="proof__r"><span class="proof__k">HubSpot</span><span class="proof__v yes">present</span></div>
+              <div class="proof__r"><span class="proof__k">GA4 &middot; HubSpot</span><span class="proof__v yes">present</span></div>
               <div class="proof__r"><span class="proof__k">LinkedIn Insight Tag</span><span class="proof__v no">absent</span></div>
-              <div class="proof__r"><span class="proof__k">Meta Pixel</span><span class="proof__v no">absent</span></div>
-              <div class="proof__r"><span class="proof__k">Google Ads conversion</span><span class="proof__v no">absent</span></div>
-            </div>
-            <p class="ev-cap">Capture &amp; comparison pages</p>
-            <div class="proof">
+              <div class="proof__r"><span class="proof__k">Meta Pixel &middot; Google Ads</span><span class="proof__v no">absent</span></div>
               <div class="proof__r"><span class="proof__k">ROI calculator &lt;form&gt;</span><span class="proof__v no">0</span></div>
-              <div class="proof__r"><span class="proof__k">/newsletter/</span><span class="proof__v no">404</span></div>
-              <div class="proof__r"><span class="proof__k">/webinars/ &middot; /events/</span><span class="proof__v no">404</span></div>
-              <div class="proof__r"><span class="proof__k">/vs/ &middot; /compare/</span><span class="proof__v no">404</span></div>
-              <div class="proof__r"><span class="proof__k">/gaggleamp-alternative/</span><span class="proof__v no">404</span></div>
+              <div class="proof__r"><span class="proof__k">/newsletter/ /vs/ /compare/ /events/</span><span class="proof__v no">404</span></div>
             </div>
           </div>
         </div>
@@ -691,27 +630,20 @@ Disallow: <span class="bad">/</span></pre>
 <!-- ============ THE BRIDGE ============ -->
 <section id="bridge">
   <div class="wrap">
-    <p class="kicker reveal">Why this problem</p>
-    <h2 class="reveal">I've built the machine you sell. Mine pointed at creators.</h2>
-    <p class="lede reveal">Recruit someone. Connect their account. Verify they own it. Nudge them into posting. Measure the post. I built that funnel this year, solo, in Claude Code.</p>
+    <p class="kicker reveal">Why me</p>
+    <h2 class="reveal">I built the machine you sell. Mine pointed at creators.</h2>
+    <p class="lede reveal">Recruit. Connect their account. Verify it. Nudge them into posting. Measure the post. Built solo, in Claude Code.</p>
 
     <div class="stats reveal" data-stagger>
       <div class="stat"><span class="stat__n" data-to="600" data-suffix="+">0</span><span class="stat__l">Creators recruited</span></div>
       <div class="stat"><span class="stat__n" data-to="17">0</span><span class="stat__l">Countries</span></div>
       <div class="stat"><span class="stat__n">$0</span><span class="stat__l">Ad spend</span></div>
       <div class="stat"><span class="stat__n" data-to="68.6" data-dec="1" data-suffix="%">0</span><span class="stat__l">View &rarr; join</span></div>
-      <div class="stat"><span class="stat__n" data-to="64" data-suffix="%">0</span><span class="stat__l">Signup &rarr; connected</span></div>
       <div class="stat"><span class="stat__n" data-to="4.95" data-dec="2" data-suffix="M">0</span><span class="stat__l">Post views tracked</span></div>
+      <div class="stat"><span class="stat__n" data-to="956" data-suffix="K">0</span><span class="stat__l">Paid views at ~$0.008</span></div>
     </div>
 
-    <div style="max-width:58ch;margin-top:clamp(2.4rem,5vw,3.6rem)">
-      <h3 class="reveal">Where it breaks</h3>
-      <p class="reveal">My posters got paid per view. Employees don't. The incentive layer doesn't transfer &mdash; the funnel, the nudges, the experiments and the measurement do.</p>
-
-      <h3 class="reveal" style="margin-top:2.2rem">My one activation lever that wasn't money</h3>
-      <p class="reveal">A bandit found image-first onboarding activated <b>100%</b> of users. Note-first activated <b>0%</b>. 3.92 active days against 0.74. A product change, not a payment.</p>
-      <p class="reveal small dim">113 users, so directional, not settled. Both products are pre-revenue &mdash; every dollar I'd quote you is budget or spend, never revenue.</p>
-    </div>
+    <p class="reveal small dim" style="max-width:60ch;margin-top:1.4rem">Mine got paid; employees don't. The incentive doesn't transfer. The funnel does. Pre-revenue.</p>
   </div>
 </section>
 
@@ -720,41 +652,16 @@ Disallow: <span class="bad">/</span></pre>
   <div class="wrap">
     <p class="kicker reveal">The stack you listed</p>
     <h2 class="reveal">Eight channels. Five deep, three thin.</h2>
-    <p class="lede reveal" style="margin-bottom:2.4rem">You should know which three now.</p>
 
-    <div class="chan reveal" data-stagger>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Website</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Two production front-ends, solo. <b>This page is one.</b></p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Content</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p><b>1M+ organic views.</b> I write, shoot and cut it myself.</p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Lifecycle</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Two engines with copy under continuous test. <b>85 variants, 8,384 sends</b> &mdash; ~99 per arm, so I call it directional.</p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Paid</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Real money. <b>956K views at ~$0.008 each</b> on ~$7.7K. Best unit $0.0016.</p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Launches</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Full release strategy, 3&ndash;4 person team. <b>20K &rarr; 250K monthly listeners in six months.</b></p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Outbound</span><span class="chan__tag tag-thin">Thin</span></div>
-        <p>Built the data layer under it. <b>Never run enterprise sequences.</b></p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Partner</span><span class="chan__tag tag-thin">Thin</span></div>
-        <p>Ran both sides of a marketplace. <b>Never run a software partner program.</b></p>
-      </div>
-      <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Events</span><span class="chan__tag tag-thin">Thin</span></div>
-        <p><b>Thinnest of the eight.</b> No B2B field program, no booth.</p>
-      </div>
+    <div class="chan reveal" data-stagger style="margin-top:1.5rem">
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Website</span><span class="chan__tag tag-deep">Deep</span></div><p>Two front-ends solo. This is one.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Content</span><span class="chan__tag tag-deep">Deep</span></div><p>1M+ organic views, self-shot.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Lifecycle</span><span class="chan__tag tag-deep">Deep</span></div><p>Two engines, always testing.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Paid</span><span class="chan__tag tag-deep">Deep</span></div><p>956K views, ~$7.7K spend.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Launches</span><span class="chan__tag tag-deep">Deep</span></div><p>20K &rarr; 250K in six months.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Outbound</span><span class="chan__tag tag-thin">Thin</span></div><p>Data layer, not sequences.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Partner</span><span class="chan__tag tag-thin">Thin</span></div><p>No software partner program.</p></div>
+      <div class="chan__i"><div class="chan__h"><span class="chan__t">Events</span><span class="chan__tag tag-thin">Thin</span></div><p>Thinnest. No field program.</p></div>
     </div>
   </div>
 </section>
@@ -764,37 +671,36 @@ Disallow: <span class="bad">/</span></pre>
   <div class="wrap">
     <p class="kicker reveal">If I had the seat</p>
     <h2 class="reveal">First ninety days.</h2>
-    <p class="lede reveal" style="margin-bottom:2.4rem">Ordered by what expires if it waits. I'd rewrite this after thirty customer calls &mdash; I've had zero.</p>
 
-    <div class="board reveal">
+    <div class="board reveal" style="margin-top:1.4rem">
       <p class="ev-cap">The number I'd put on the board in week one</p>
       <p class="big">Demo requests with a resolved first-touch source.</p>
-      <p>Today that number can't be produced. I'd report it in week four whether or not it flatters me.</p>
+      <p>Today it can't be produced.</p>
     </div>
 
     <div class="tl">
       <div class="tl__c reveal">
         <p class="tl__w">Days 1&ndash;7</p>
         <ul class="tl__l">
-          <li><b>LinkedIn Insight Tag.</b> The 90-day clock starts the day it's live.</li>
-          <li><b>First-touch capture</b> on demo, pricing and both reports.</li>
-          <li><b>Unblock the crawlers.</b> Ship <span class="mono">llms.txt</span> and pricing schema.</li>
+          <li><b>Insight Tag.</b> The 90-day clock starts.</li>
+          <li><b>First-touch capture</b> on demo.</li>
+          <li><b>Unblock the crawlers.</b></li>
         </ul>
       </div>
       <div class="tl__c reveal" style="--i:1">
         <p class="tl__w">Days 8&ndash;30</p>
         <ul class="tl__l">
-          <li><b>Embed the tour</b> you already own. Fix the schema anchors.</li>
-          <li><b>Announce the relaunch.</b> You shipped a new platform in four weeks and told nobody.</li>
-          <li><b>Email capture</b> in the blog. Calculator sends a business case.</li>
+          <li><b>Embed the tour</b> you already own.</li>
+          <li><b>Announce the relaunch.</b> You told nobody.</li>
+          <li><b>Email capture</b> in the blog.</li>
         </ul>
       </div>
       <div class="tl__c reveal" style="--i:2">
         <p class="tl__w">Days 31&ndash;90</p>
         <ul class="tl__l">
-          <li><b>Publish the 4,000-program benchmark.</b> Replace hypotheticals with your data.</li>
-          <li><b>Take back the comparison layer.</b> Others own every &ldquo;alternatives&rdquo; result for your name.</li>
-          <li><b>Run your program on your product</b> and publish the numbers.</li>
+          <li><b>Publish the 4,000-program benchmark.</b></li>
+          <li><b>Take back the comparison pages.</b></li>
+          <li><b>Run your program on your product.</b></li>
         </ul>
       </div>
     </div>
@@ -804,15 +710,13 @@ Disallow: <span class="bad">/</span></pre>
 <!-- ============ WHAT I'M NOT ============ -->
 <section id="not">
   <div class="wrap">
-    <p class="kicker reveal">The other side</p>
+    <p class="kicker reveal">Before you ask</p>
     <h2 class="reveal">What I'm not.</h2>
-    <p class="lede reveal" style="margin-bottom:2.2rem">You'd find these on the call anyway.</p>
-
-    <ul class="not__l">
-      <li class="reveal"><h3>No B2B enterprise SaaS role.</h3><p>Never sold to a Fortune 100 committee. Never carried a pipeline number at a software company. No framing closes that.</p></li>
-      <li class="reveal"><h3>Never sold to a compliance buyer.</h3><p>FINRA, 17a-4, supervision queues. I can read the rules. I haven't lived them. Your newest line, my thinnest ground.</p></li>
-      <li class="reveal"><h3>My numbers are small.</h3><p>600 users against your 50,000-seat rollouts. Same mechanics, but I can't evidence that they scale, so I won't claim it.</p></li>
-      <li class="reveal"><h3>I run my own things.</h3><p>The flight-risk question. You left in 2013, did other people's jobs, came back as CEO in 2015. You know the shape of it.</p></li>
+    <ul class="not__l" style="margin-top:1.4rem">
+      <li class="reveal"><h3>No B2B enterprise SaaS role.</h3><p>Never sold to a Fortune 100 committee.</p></li>
+      <li class="reveal"><h3>Never sold to a compliance buyer.</h3><p>Your newest line, my thinnest ground.</p></li>
+      <li class="reveal"><h3>My numbers are small.</h3><p>600 users against your 50,000-seat rollouts.</p></li>
+      <li class="reveal"><h3>I run my own things.</h3><p>You left in 2013, came back CEO in 2015.</p></li>
     </ul>
   </div>
 </section>
@@ -820,22 +724,14 @@ Disallow: <span class="bad">/</span></pre>
 <!-- ============ CLOSE ============ -->
 <section class="close">
   <div class="wrap">
-    <p class="kicker reveal">The ask</p>
     <h2 class="reveal">Twenty minutes.</h2>
-    <p class="lede reveal">If the four things above are already on someone's list, tell me and I'll stop. If they're not, I've started.</p>
-
+    <p class="lede reveal">If these are already on someone's list, say so.</p>
     <div class="links reveal" data-stagger>
       <a class="lnk lnk--pri" href="mailto:andrew@andrewconklin.com?subject=Head%20of%20Marketing%20%E2%80%94%20Andrew%20Conklin">andrew@andrewconklin.com</a>
       <a class="lnk" href="https://www.linkedin.com/in/andrew-conklin" rel="noopener">LinkedIn</a>
       <a class="lnk" href="https://andrewconklin.com">andrewconklin.com</a>
     </div>
-
-    <p class="colophon reveal">
-      Built by hand in Claude Code &mdash; one HTML file, no framework, no build step, no dependencies.
-      The typeface is the one already on my homepage; the accent ramp and the mono are lifted from your stylesheet.<br>
-      Every claim here was checked against your live site on 28 August 2026, and every command to re-check one is printed next to it.
-      Two findings I'd originally written up didn't survive that check, so they aren't on this page.
-    </p>
+    <p class="colophon reveal">Every claim checked against your live site, 28 Aug 2026.</p>
   </div>
 </section>
 
