@@ -273,7 +273,11 @@ html:not(.js) .w__in{transform:none}
 .finding__n::after{content:"";flex:1;height:1px;background:var(--line)}
 .finding__grid{display:grid;gap:clamp(1.2rem,3vw,2.4rem);grid-template-columns:1fr}
 .finding__grid>*{min-width:0}
-@media (min-width:900px){.finding__grid{grid-template-columns:1.05fr .95fr;align-items:start}}
+@media (min-width:900px){
+  .finding__grid{grid-template-columns:1fr 1fr;align-items:stretch}
+  .finding__grid>div:first-child{display:flex;flex-direction:column}
+  .finding__grid>div:first-child .ship{margin-top:auto;padding-top:.2rem}
+}
 .finding p{font-size:.9688rem}
 .finding p:last-child{margin-bottom:0}
 
@@ -293,12 +297,29 @@ html:not(.js) .w__in{transform:none}
   color:var(--faint);margin:0 0 .55rem;
 }
 
+/* tight fact bullets */
+.facts{list-style:none;margin:0 0 1.15rem;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.facts li{position:relative;padding-left:1.05rem;font-size:.9375rem;line-height:1.45;color:var(--ink-2)}
+.facts li::before{content:"";position:absolute;left:0;top:.6em;width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.facts b{color:var(--ink);font-weight:600}
+.facts .mono{font-size:.875em}
+
+/* key -> value proof rows: the evidence, scannable in one pass */
+.proof{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 .9rem}
+.proof__r{background:#06070A;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.62rem .85rem;font-family:var(--mono);font-size:.75rem;line-height:1.4}
+.proof__k{color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.proof__v{font-weight:700;white-space:nowrap;flex:none}
+.proof__v.no{color:var(--hotpink)}
+.proof__v.yes{color:#4eb89b}
+.proof__v.dimv{color:var(--faint);font-weight:400}
+.white .proof__r{background:#fff}
+
 /* ship box */
 .ship{
   border-left:2px solid var(--accent);padding-left:1.1rem;margin-top:1.4rem;
 }
 .ship .ev-cap{color:var(--accent);margin-bottom:.4rem}
-.ship p{color:var(--ink-2);margin-bottom:0;font-size:.9375rem}
+.ship p{color:var(--ink-2);margin-bottom:0;font-size:.9375rem;line-height:1.45}
 
 /* competitor table */
 .cmp{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.75rem;margin:0 0 1rem}
@@ -450,9 +471,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--indigo);outline-off
     <div>
     <h1 data-split>You sell a Claude integration. Your <span class="hl">robots.txt blocks ClaudeBot.</span></h1>
 
-    <p class="lede reveal">Nobody decided that. It sits inside a <span class="mono">#&#8202;BEGIN Cloudflare Managed content</span> block &mdash; a dashboard default that landed on your marketing site and stayed. Which is about what happens when a function goes unowned for a while.</p>
+    <p class="lede reveal">Nobody chose that. It's a Cloudflare default nobody owns &mdash; which is roughly the point.</p>
 
-    <p class="lede reveal" style="--i:1">I found three more like it. They're below, with the command to check each one, and what I'd do about them.</p>
+    <p class="lede reveal" style="--i:1">Three more below. Each with the command to check it.</p>
 
     <p class="sig reveal" style="--i:2">
       <span><b>Andrew Conklin</b></span>
@@ -495,8 +516,8 @@ Disallow: <span class="bad">/</span></pre>
 <section id="found">
   <div class="wrap">
     <p class="kicker reveal">What I found</p>
-    <h2 class="reveal">Four things. All checkable in about a minute.</h2>
-    <p class="lede reveal" style="margin-bottom:3.5rem">I looked before I wrote any of this. Every claim below has the command or the URL next to it. Checked 2828&nbsp;August&nbsp;2026nbsp;August28&nbsp;August&nbsp;2026nbsp;2026 &mdash; your site changed inside the last month, so re-check anything that reads stale. If one of these has already been fixed, good; delete it and the other three still stand.</p>
+    <h2 class="reveal">Four things. Each takes a minute to check.</h2>
+    <p class="lede reveal" style="margin-bottom:3rem">Commands are printed next to every claim. Checked 28&nbsp;August&nbsp;2026.</p>
 
     <div class="stack">
 
@@ -505,40 +526,33 @@ Disallow: <span class="bad">/</span></pre>
         <p class="finding__n"><i>01</i> The crawlers</p>
         <div class="finding__grid">
           <div>
-            <h3>Six AI integrations on the site. Eight AI crawlers blocked at the door.</h3>
-            <p>You ship <span class="mono">/integrations/</span> pages for Claude, ChatGPT, Gemini, Perplexity, Copilot and Mistral, plus an MCP server so those tools can query advocacy data directly. All live, all returning 200.</p>
-            <p>Meanwhile <span class="mono">robots.txt</span> returns <span class="mono">Disallow: /</span> for ClaudeBot, GPTBot, Google-Extended, Applebot-Extended, meta-externalagent, Amazonbot, Bytespider and CCBot. So an assistant can query your product and cannot read a single page of your marketing.</p>
-            <p>I checked five competitors the same morning. Hootsuite opts in explicitly. Sociabble, DSMN8, GaggleAMP and Sprout have no block at all. Only Haiilo does what you do &mdash; and the sites that own <em>&ldquo;best employee advocacy platform&rdquo;</em> are the ones an assistant can actually read.</p>
+            <h3>You sell six AI integrations. You block eight AI crawlers.</h3>
+            <ul class="facts">
+              <li>An assistant can query your product through MCP.</li>
+              <li>It can't read <b>one page</b> of your marketing site.</li>
+              <li>Everyone who outranks you for <span class="mono">best employee advocacy platform</span> is readable.</li>
+            </ul>
             <div class="ship">
               <p class="ev-cap">What I'd ship</p>
-              <p>Turn the managed block off. Publish <span class="mono">llms.txt</span>. Put <span class="mono">Product</span>/<span class="mono">Offer</span> schema on <span class="mono">/pricing/</span> so your quote-based model is machine-readable &mdash; right now the only pricing figure circulating is a per-seat number you don't charge.</p>
+              <p>Turn the block off. Add <span class="mono">llms.txt</span> and <span class="mono">Product</span> schema on <span class="mono">/pricing/</span>.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">everyonesocial.com/robots.txt</p>
-<pre class="ev"><span class="c"># BEGIN Cloudflare Managed content</span>
-User-agent: <span class="bad">ClaudeBot</span>
-Disallow: <span class="bad">/</span>
-
-User-agent: <span class="bad">GPTBot</span>
-Disallow: <span class="bad">/</span>
-
-User-agent: <span class="bad">Google-Extended</span>
-Disallow: <span class="bad">/</span>
-<span class="c"># ...and Applebot-Extended, meta-
-# externalagent, Amazonbot,
-# Bytespider, CCBot
-# END Cloudflare Managed Content</span></pre>
-            <p class="ev-cap">Same check, everyone else</p>
-            <table class="cmp">
-              <tr><td class="me">everyonesocial.com</td><td class="no">blocks 8</td></tr>
-              <tr><td>hootsuite.com</td><td class="yes">opts in</td></tr>
-              <tr><td>sproutsocial.com</td><td class="yes">allows</td></tr>
-              <tr><td>sociabble.com</td><td class="yes">allows</td></tr>
-              <tr><td>dsmn8.com</td><td class="yes">allows</td></tr>
-              <tr><td>gaggleamp.com</td><td class="yes">allows</td></tr>
-              <tr><td>haiilo.com</td><td class="no">blocks</td></tr>
-            </table>
+            <p class="ev-cap">robots.txt &middot; blocked</p>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">ClaudeBot</span><span class="proof__v no">Disallow: /</span></div>
+              <div class="proof__r"><span class="proof__k">GPTBot</span><span class="proof__v no">Disallow: /</span></div>
+              <div class="proof__r"><span class="proof__k">Google-Extended</span><span class="proof__v no">Disallow: /</span></div>
+              <div class="proof__r"><span class="proof__k">+ Applebot, meta, Amazon, Bytespider, CCBot</span><span class="proof__v no">Disallow: /</span></div>
+            </div>
+            <p class="ev-cap">Same check, competitors</p>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">hootsuite.com</span><span class="proof__v yes">ai-input=yes</span></div>
+              <div class="proof__r"><span class="proof__k">sproutsocial.com</span><span class="proof__v yes">allows</span></div>
+              <div class="proof__r"><span class="proof__k">sociabble.com</span><span class="proof__v yes">allows</span></div>
+              <div class="proof__r"><span class="proof__k">dsmn8.com</span><span class="proof__v yes">allows</span></div>
+              <div class="proof__r"><span class="proof__k">gaggleamp.com</span><span class="proof__v yes">allows</span></div>
+            </div>
 <pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/robots.txt \
   | grep -A1 ClaudeBot</pre>
           </div>
@@ -550,35 +564,34 @@ Disallow: <span class="bad">/</span>
         <p class="finding__n"><i>02</i> The tour</p>
         <div class="finding__grid">
           <div>
-            <h3>You already own the tour video. The page built to show it doesn't play it.</h3>
-            <p><em>&ldquo;See the platform&nbsp;&rarr;&rdquo;</em> on the homepage goes to <span class="mono">/advocacy-tour/</span>. Four chapters are written and titled &mdash; Account setup, AI throughout, Supporting scale, Proving ROI. Each one reads <strong>&ldquo;Placeholder video&rdquo;</strong> at <strong>0:00</strong>. There is no <span class="mono">&lt;video&gt;</span>, no <span class="mono">&lt;iframe&gt;</span> and no player script on the page.</p>
-            <p>But the page's own structured data points at a real Wistia asset &mdash; <span class="mono">autmy6oxc7</span>, <em>&ldquo;ES Product Tour July2024&rdquo;</em>, six minutes eighteen. I played it. It works.</p>
-            <p>So Google is being told there's a chaptered product tour on that URL, and a human who lands there sees four grey boxes. The <span class="mono">hasPart</span> anchors point at <span class="mono">#chapter-share</span>, <span class="mono">#chapter-audience</span> and <span class="mono">#chapter-analytics</span>, none of which exist &mdash; the real IDs are <span class="mono">setup</span>, <span class="mono">ai</span>, <span class="mono">scale</span>, <span class="mono">roi</span>.</p>
+            <h3>The tour video exists. The tour page doesn't play it.</h3>
+            <ul class="facts">
+              <li><b>&ldquo;See the platform&nbsp;&rarr;&rdquo;</b> on your homepage goes here.</li>
+              <li>The Wistia file is real and plays. I watched it.</li>
+              <li>Your schema promises Google four chapters. Three of its anchors aren't on the page.</li>
+            </ul>
             <div class="ship">
               <p class="ev-cap">What I'd ship</p>
-              <p>Embed the asset you already paid for, cut it against the four chapters you already wrote, and make the schema match the page. That's an afternoon, and it's the only no-ask path in a demo-gated funnel.</p>
+              <p>Embed the file you already paid for. Cut it to the four chapters you already wrote.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">What the page renders</p>
-<pre class="ev">01 &middot; Account setup      <span class="bad">0:00</span>
-   <span class="bad">Placeholder video</span>
-02 &middot; AI throughout      <span class="bad">0:00</span>
-   <span class="bad">Placeholder video</span>
-03 &middot; Supporting scale   <span class="bad">0:00</span>
-   <span class="bad">Placeholder video</span>
-04 &middot; Proving ROI        <span class="bad">0:00</span>
-   <span class="bad">Placeholder video</span></pre>
-            <p class="ev-cap">What the schema on that page claims</p>
-<pre class="ev">"@type": <span class="k">"VideoObject"</span>,
-"name": "EveryoneSocial Product Tour",
-"embedUrl": "fast.wistia.net/embed/
-             iframe/<span class="ok">autmy6oxc7</span>",
-"hasPart": [ 4 clips &rarr; <span class="bad">#chapter-share</span>
-             <span class="bad">#chapter-audience</span>
-             <span class="bad">#chapter-analytics</span> ]
-<span class="c">// none of those anchors are on the page</span>
-<span class="c">// wistia says: 378.1s, created Jul 2024</span></pre>
+            <p class="ev-cap">/advocacy-tour/</p>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">01 &middot; Account setup</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
+              <div class="proof__r"><span class="proof__k">02 &middot; AI throughout</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
+              <div class="proof__r"><span class="proof__k">03 &middot; Supporting scale</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
+              <div class="proof__r"><span class="proof__k">04 &middot; Proving ROI</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
+              <div class="proof__r"><span class="proof__k">&lt;video&gt; on the page</span><span class="proof__v no">0</span></div>
+              <div class="proof__r"><span class="proof__k">&lt;iframe&gt; on the page</span><span class="proof__v no">0</span></div>
+            </div>
+            <p class="ev-cap">Wistia, from your own schema</p>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">autmy6oxc7</span><span class="proof__v yes">6:18 &middot; works</span></div>
+              <div class="proof__r"><span class="proof__k">#chapter-share</span><span class="proof__v no">not on page</span></div>
+              <div class="proof__r"><span class="proof__k">#chapter-audience</span><span class="proof__v no">not on page</span></div>
+              <div class="proof__r"><span class="proof__k">#chapter-analytics</span><span class="proof__v no">not on page</span></div>
+            </div>
 <pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/advocacy-tour/ \
   | grep -c "&lt;video"
 <span class="bad">0</span></pre>
@@ -592,16 +605,18 @@ Disallow: <span class="bad">/</span>
         <div class="finding__grid">
           <div>
             <h3>493 posts in the archive. Eight in the last year.</h3>
-            <p>Straight from your own RSS feed. 2019 peaked at 82 posts. 2024 was 13, 2025 was 7, and 2026 is at 8 with the year two-thirds gone. There's a silent stretch from 26&nbsp;June&nbsp;2025 to 10&nbsp;March&nbsp;2026 &mdash; eight and a half months.</p>
-            <p>The recent posts are good, by the way. Bylined, dated, properly marked up, written by people who clearly run programs. This isn't a quality problem.</p>
-            <p>Two smaller things while I was in there: the sitemap has 629 URLs and zero <span class="mono">&lt;lastmod&gt;</span> tags, so nothing signals freshness. And the nav says &ldquo;Guides&rdquo; while <span class="mono">/guides/</span> returns a 404.</p>
+            <ul class="facts">
+              <li>Nine months of silence, then three posts after this job went live.</li>
+              <li>The writing is good. There's just no one running it.</li>
+              <li>Your newest post models drop-off on <b>a made-up 400-seat program</b> &mdash; while you hold data on 4,000 real ones.</li>
+            </ul>
             <div class="ship">
               <p class="ev-cap">What I'd ship</p>
-              <p>Not more posts. Your newest one models month-three drop-off on <em>a hypothetical 400-seat program</em> &mdash; while you sit on benchmarks from 4,000+ real ones. Publish the real numbers, dated, with the method stated. Nobody else in the category can answer that question and you can.</p>
+              <p>Not more posts. Publish the real dataset. Nobody else in the category can.</p>
             </div>
           </div>
           <div>
-            <p class="ev-cap">Posts per year &middot; everyonesocial.com/rss.xml</p>
+            <p class="ev-cap">Posts per year &middot; your rss.xml</p>
             <svg class="chart" viewBox="0 0 340 130" role="img" aria-label="Blog posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 year to date 8.">
               <g class="bars">
                 <rect class="bar" style="--i:0"  x="4"   y="14" width="22" height="96" rx="2" data-v=".49" fill="#4cc1ea"/>
@@ -617,15 +632,17 @@ Disallow: <span class="bad">/</span>
                 <rect class="bar" style="--i:10" x="304" y="14" width="22" height="96" rx="2" data-v=".10" fill="#f22279"/>
               </g>
               <line x1="0" y1="110.5" x2="340" y2="110.5" stroke="rgba(242,243,246,.14)" stroke-width="1"/>
-              <text class="axl" x="4" y="122">'16</text>
-              <text class="axl" x="94" y="122">'19</text>
-              <text class="axl" x="184" y="122">'22</text>
-              <text class="axl" x="274" y="122">'25</text>
-              <text class="axl" x="298" y="122">'26 YTD</text>
+              <text class="axl" x="4" y="122">'16</text><text class="axl" x="94" y="122">'19</text>
+              <text class="axl" x="184" y="122">'22</text><text class="axl" x="296" y="122">'26</text>
             </svg>
-<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/rss.xml \
-  | grep -c "&lt;item&gt;"
-<span class="ok">493</span>   <span class="c">&larr; 8 of them in the last 12 months</span></pre>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">2019</span><span class="proof__v yes">82 posts</span></div>
+              <div class="proof__r"><span class="proof__k">2025</span><span class="proof__v no">7 posts</span></div>
+              <div class="proof__r"><span class="proof__k">Last 12 months</span><span class="proof__v no">8 posts</span></div>
+              <div class="proof__r"><span class="proof__k">Jun 2025 &rarr; Mar 2026</span><span class="proof__v no">257 days, nothing</span></div>
+              <div class="proof__r"><span class="proof__k">sitemap &lt;lastmod&gt; tags</span><span class="proof__v no">0 of 629</span></div>
+              <div class="proof__r"><span class="proof__k">nav says &ldquo;Guides&rdquo; &rarr; /guides/</span><span class="proof__v no">404</span></div>
+            </div>
           </div>
         </div>
       </article>
@@ -635,31 +652,34 @@ Disallow: <span class="bad">/</span>
         <p class="finding__n"><i>04</i> The catch</p>
         <div class="finding__grid">
           <div>
-            <h3>Nothing on the site catches an email. Nothing tracks an ad.</h3>
-            <p>The ROI calculator is the clearest one. Somebody models a 50,000-seat program, gets a number, and leaves &mdash; there's no form on that page, no email field, no PDF, nothing to forward to a CFO. It's your highest-intent page and it identifies nobody.</p>
-            <p><span class="mono">/newsletter/</span>, <span class="mono">/webinars/</span>, <span class="mono">/events/</span>, <span class="mono">/vs/</span>, <span class="mono">/compare/</span> and every competitor-comparison URL I tried all 404. Meanwhile other people own the &ldquo;EveryoneSocial alternatives&rdquo; pages.</p>
-            <p>And the whole tracking stack on the homepage, the demo page and the pricing page is GA4 plus HubSpot. No LinkedIn Insight Tag. At a company whose product <em>is</em> LinkedIn.</p>
+            <h3>Nothing catches an email. Nothing tracks an ad.</h3>
+            <ul class="facts">
+              <li>Someone models a 50,000-seat program, then leaves with nothing to forward.</li>
+              <li>No retargeting pool exists. At a company whose product <em>is</em> LinkedIn.</li>
+              <li>Matched audiences need ~90 days of data. The calendar is the expensive part.</li>
+            </ul>
             <div class="ship">
               <p class="ev-cap">What I'd ship</p>
-              <p>The Insight Tag on day one, before anything else on this list &mdash; matched audiences need roughly 90 days of data before they're usable, so the calendar is the expensive part, not the work. Then an optional &ldquo;email me this business case&rdquo; on the calculator that routes into the same-day quote you already promise.</p>
+              <p>Insight Tag on day one. Then &ldquo;email me this business case&rdquo; on the calculator.</p>
             </div>
           </div>
           <div>
             <p class="ev-cap">Tracking on /, /demo/, /pricing/</p>
-<pre class="ev">GA4                     <span class="ok">present</span>
-HubSpot                 <span class="ok">present</span>
-LinkedIn Insight Tag    <span class="bad">absent</span>
-Meta Pixel              <span class="bad">absent</span>
-Google Ads conversion   <span class="bad">absent</span></pre>
-            <p class="ev-cap">Pages that 404</p>
-<pre class="ev">/guides/        /newsletter/
-/webinars/      /events/
-/vs/            /compare/
-/gaggleamp-alternative/
-/dsmn8-alternative/</pre>
-<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/employee-advocacy-calculator/ \
-  | grep -c "&lt;form"
-<span class="bad">0</span></pre>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">GA4</span><span class="proof__v yes">present</span></div>
+              <div class="proof__r"><span class="proof__k">HubSpot</span><span class="proof__v yes">present</span></div>
+              <div class="proof__r"><span class="proof__k">LinkedIn Insight Tag</span><span class="proof__v no">absent</span></div>
+              <div class="proof__r"><span class="proof__k">Meta Pixel</span><span class="proof__v no">absent</span></div>
+              <div class="proof__r"><span class="proof__k">Google Ads conversion</span><span class="proof__v no">absent</span></div>
+            </div>
+            <p class="ev-cap">Capture &amp; comparison pages</p>
+            <div class="proof">
+              <div class="proof__r"><span class="proof__k">ROI calculator &lt;form&gt;</span><span class="proof__v no">0</span></div>
+              <div class="proof__r"><span class="proof__k">/newsletter/</span><span class="proof__v no">404</span></div>
+              <div class="proof__r"><span class="proof__k">/webinars/ &middot; /events/</span><span class="proof__v no">404</span></div>
+              <div class="proof__r"><span class="proof__k">/vs/ &middot; /compare/</span><span class="proof__v no">404</span></div>
+              <div class="proof__r"><span class="proof__k">/gaggleamp-alternative/</span><span class="proof__v no">404</span></div>
+            </div>
           </div>
         </div>
       </article>
@@ -672,26 +692,25 @@ Google Ads conversion   <span class="bad">absent</span></pre>
 <section id="bridge">
   <div class="wrap">
     <p class="kicker reveal">Why this problem</p>
-    <h2 class="reveal">I've built the machine you sell. Mine was pointed at creators.</h2>
-    <p class="lede reveal">An advocacy program is a funnel with a specific shape: recruit a person, get their account connected, verify they own it, nudge them into actually posting, then measure what the post was worth. I spent this year building exactly that funnel, solo, in Claude Code. The only difference is who was standing at the top of it.</p>
+    <h2 class="reveal">I've built the machine you sell. Mine pointed at creators.</h2>
+    <p class="lede reveal">Recruit someone. Connect their account. Verify they own it. Nudge them into posting. Measure the post. I built that funnel this year, solo, in Claude Code.</p>
 
     <div class="stats reveal" data-stagger>
       <div class="stat"><span class="stat__n" data-to="600" data-suffix="+">0</span><span class="stat__l">Creators recruited</span></div>
       <div class="stat"><span class="stat__n" data-to="17">0</span><span class="stat__l">Countries</span></div>
-      <div class="stat"><span class="stat__n">$0</span><span class="stat__l">Ad spend to get there</span></div>
-      <div class="stat"><span class="stat__n" data-to="68.6" data-dec="1" data-suffix="%">0</span><span class="stat__l">Campaign view &rarr; join</span></div>
-      <div class="stat"><span class="stat__n" data-to="64" data-suffix="%">0</span><span class="stat__l">Signup &rarr; account connected</span></div>
-      <div class="stat"><span class="stat__n" data-to="4.95" data-dec="2" data-suffix="M">0</span><span class="stat__l">Creator post views tracked</span></div>
+      <div class="stat"><span class="stat__n">$0</span><span class="stat__l">Ad spend</span></div>
+      <div class="stat"><span class="stat__n" data-to="68.6" data-dec="1" data-suffix="%">0</span><span class="stat__l">View &rarr; join</span></div>
+      <div class="stat"><span class="stat__n" data-to="64" data-suffix="%">0</span><span class="stat__l">Signup &rarr; connected</span></div>
+      <div class="stat"><span class="stat__n" data-to="4.95" data-dec="2" data-suffix="M">0</span><span class="stat__l">Post views tracked</span></div>
     </div>
 
-    <div style="max-width:62ch;margin-top:clamp(2.5rem,5vw,4rem)">
-      <h3 class="reveal">Where the comparison breaks</h3>
-      <p class="reveal">My posters got paid per view. Employees don't, and your own category's data says recognition beats cash anyway. So the incentive layer doesn't transfer &mdash; I'd rather say that than have you work it out on the call. What does transfer is everything wrapped around it: the connect-and-verify funnel, the nudge engine, the experiment rig, and the measurement layer. Those don't care why someone posts.</p>
+    <div style="max-width:58ch;margin-top:clamp(2.4rem,5vw,3.6rem)">
+      <h3 class="reveal">Where it breaks</h3>
+      <p class="reveal">My posters got paid per view. Employees don't. The incentive layer doesn't transfer &mdash; the funnel, the nudges, the experiments and the measurement do.</p>
 
-      <h3 class="reveal" style="margin-top:2.4rem">The one activation lever I have that didn't involve money</h3>
-      <p class="reveal">On my other product, a bandit engine tested onboarding paths. Users who started with an image activated; users who started with a note did not. Zero versus one hundred percent, and 3.92 active days against 0.74.</p>
-      <p class="reveal">Small sample &mdash; 113 users total &mdash; so I read that as directional, not settled. But the lever was a product change, not a payment, and it moved behaviour. That's the shape of the month-three problem your newest post is about, and it's a measurement problem before it's a content problem.</p>
-      <p class="reveal dim small">Both products are pre-revenue. Bounty_OS funding is paused; the other has no MRR. Every dollar figure I'd ever quote you is budget created or spend deployed, never revenue earned.</p>
+      <h3 class="reveal" style="margin-top:2.2rem">My one activation lever that wasn't money</h3>
+      <p class="reveal">A bandit found image-first onboarding activated <b>100%</b> of users. Note-first activated <b>0%</b>. 3.92 active days against 0.74. A product change, not a payment.</p>
+      <p class="reveal small dim">113 users, so directional, not settled. Both products are pre-revenue &mdash; every dollar I'd quote you is budget or spend, never revenue.</p>
     </div>
   </div>
 </section>
@@ -700,82 +719,82 @@ Google Ads conversion   <span class="bad">absent</span></pre>
 <section id="channels">
   <div class="wrap">
     <p class="kicker reveal">The stack you listed</p>
-    <h2 class="reveal">Eight channels. My receipt on each, including the thin ones.</h2>
-    <p class="lede reveal" style="margin-bottom:2.6rem">Three of these I'd be learning in public. I'd rather you know which three now.</p>
+    <h2 class="reveal">Eight channels. Five deep, three thin.</h2>
+    <p class="lede reveal" style="margin-bottom:2.4rem">You should know which three now.</p>
 
     <div class="chan reveal" data-stagger>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Website</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Two production front-ends shipped solo. <b>This page is one of them</b> &mdash; hand-written, no framework, no build step. Conversion work is the discipline behind the 68.6% and the 64%.</p>
+        <p>Two production front-ends, solo. <b>This page is one.</b></p>
       </div>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Content</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p><b>1M+ organic short-form views.</b> I write it, shoot it and cut it myself. Also a working creative director and on-camera performer, which is why a product tour costs me time and not budget.</p>
+        <p><b>1M+ organic views.</b> I write, shoot and cut it myself.</p>
       </div>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Lifecycle</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Two lifecycle engines built with copy under continuous test rather than a hardcoded sequence. <b>85 variants across 8,384 sends</b> &mdash; about 99 per arm, so I treat the winner as directional. The engine is the transferable part.</p>
+        <p>Two engines with copy under continuous test. <b>85 variants, 8,384 sends</b> &mdash; ~99 per arm, so I call it directional.</p>
       </div>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Paid</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>The one with real money behind it. <b>48 creator videos to 956K views at ~$0.008 blended cost-per-view</b>, best unit $0.0016, on ~$7.7K spend. Instagram campaigns to ~$0.013 per lead.</p>
+        <p>Real money. <b>956K views at ~$0.008 each</b> on ~$7.7K. Best unit $0.0016.</p>
       </div>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Launches</span><span class="chan__tag tag-deep">Deep</span></div>
-        <p>Release strategy end to end &mdash; timelines, assets, cross-functional delivery, a 3&ndash;4 person team. <b>One artist from 20K to 250K monthly listeners in six months.</b></p>
+        <p>Full release strategy, 3&ndash;4 person team. <b>20K &rarr; 250K monthly listeners in six months.</b></p>
       </div>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Outbound</span><span class="chan__tag tag-thin">Thin</span></div>
-        <p>I've built the data layer underneath outbound &mdash; enrichment, verification, scoring, sequencing infrastructure. <b>I have not personally run enterprise sequences into a buying committee.</b></p>
+        <p>Built the data layer under it. <b>Never run enterprise sequences.</b></p>
       </div>
       <div class="chan__i">
-        <div class="chan__h"><span class="chan__t">Partner marketing</span><span class="chan__tag tag-thin">Thin</span></div>
-        <p>I've run both sides of a two-sided market and structured brand&ndash;creator partnerships. <b>I have never run a software partner program</b> with co-marketing and referral mechanics.</p>
+        <div class="chan__h"><span class="chan__t">Partner</span><span class="chan__tag tag-thin">Thin</span></div>
+        <p>Ran both sides of a marketplace. <b>Never run a software partner program.</b></p>
       </div>
       <div class="chan__i">
         <div class="chan__h"><span class="chan__t">Events</span><span class="chan__tag tag-thin">Thin</span></div>
-        <p>Promotions and events around releases, and event photography and journalism on the other side of the camera. <b>Thinnest of the eight.</b> No B2B field program, no conference calendar, no booth.</p>
+        <p><b>Thinnest of the eight.</b> No B2B field program, no booth.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 90 DAYS — hard cut to white ============ -->
+<!-- ============ 90 DAYS ============ -->
 <section id="ninety" class="white">
   <div class="wrap">
     <p class="kicker reveal">If I had the seat</p>
     <h2 class="reveal">First ninety days.</h2>
-    <p class="lede reveal" style="margin-bottom:2.6rem">Ordered by what expires if it waits, not by what's most fun. This is a plan I'd expect to revise after thirty customer conversations &mdash; I've had zero, and that's the honest limit on everything below.</p>
+    <p class="lede reveal" style="margin-bottom:2.4rem">Ordered by what expires if it waits. I'd rewrite this after thirty customer calls &mdash; I've had zero.</p>
 
     <div class="board reveal">
       <p class="ev-cap">The number I'd put on the board in week one</p>
       <p class="big">Demo requests with a resolved first-touch source.</p>
-      <p>Right now that number can't be produced &mdash; there's no Insight Tag and no first-touch capture, so nothing attributes. I'd stand it up in week one and report it in week four whether or not it flatters me. Everything else on this page is an input to it.</p>
+      <p>Today that number can't be produced. I'd report it in week four whether or not it flatters me.</p>
     </div>
 
     <div class="tl">
       <div class="tl__c reveal">
         <p class="tl__w">Days 1&ndash;7</p>
         <ul class="tl__l">
-          <li><b>LinkedIn Insight Tag, first.</b> Plus a Google Ads conversion tag and first-touch capture on the demo, pricing and both report pages. The 90-day audience clock starts the day it's live, so every day it isn't is a day added to the first paid test.</li>
-          <li><b>Reconcile the tags with GA4 and HubSpot</b> so one demo request produces one record instead of three.</li>
-          <li><b>Turn off the managed crawler block</b>, publish <span class="mono">llms.txt</span>, and put Product/Offer schema on pricing so the model you actually charge is machine-readable.</li>
+          <li><b>LinkedIn Insight Tag.</b> The 90-day clock starts the day it's live.</li>
+          <li><b>First-touch capture</b> on demo, pricing and both reports.</li>
+          <li><b>Unblock the crawlers.</b> Ship <span class="mono">llms.txt</span> and pricing schema.</li>
         </ul>
       </div>
       <div class="tl__c reveal" style="--i:1">
         <p class="tl__w">Days 8&ndash;30</p>
         <ul class="tl__l">
-          <li><b>Embed the tour you already own.</b> Cut the Wistia asset against the four chapters already written, fix the schema anchors so the markup matches the page.</li>
-          <li><b>Ship the launch that never happened.</b> You rebuilt the platform and relaunched the site inside four weeks &mdash; Wayback still shows the old homepage on 30 July &mdash; with no post, no changelog, and a fourth product line nobody outside the building has been told about.</li>
-          <li><b>Put an email capture in the blog template</b> and make the ROI calculator send a one-page business case a champion can forward.</li>
+          <li><b>Embed the tour</b> you already own. Fix the schema anchors.</li>
+          <li><b>Announce the relaunch.</b> You shipped a new platform in four weeks and told nobody.</li>
+          <li><b>Email capture</b> in the blog. Calculator sends a business case.</li>
         </ul>
       </div>
       <div class="tl__c reveal" style="--i:2">
         <p class="tl__w">Days 31&ndash;90</p>
         <ul class="tl__l">
-          <li><b>Replace the hypotheticals with your own data.</b> Turn the 4,000+ program benchmark into a dated report with the method stated, and a recurring month-three activation index. You're the only one who can publish it.</li>
-          <li><b>Take back the comparison layer.</b> Five comparison pages and a plain page stating you're independent, because other people currently own every &ldquo;alternatives&rdquo; result for your own name.</li>
-          <li><b>Run your program on your product</b> and publish the mechanics and the numbers openly. It's the only channel that costs nothing, and it's the product demo.</li>
+          <li><b>Publish the 4,000-program benchmark.</b> Replace hypotheticals with your data.</li>
+          <li><b>Take back the comparison layer.</b> Others own every &ldquo;alternatives&rdquo; result for your name.</li>
+          <li><b>Run your program on your product</b> and publish the numbers.</li>
         </ul>
       </div>
     </div>
@@ -787,13 +806,13 @@ Google Ads conversion   <span class="bad">absent</span></pre>
   <div class="wrap">
     <p class="kicker reveal">The other side</p>
     <h2 class="reveal">What I'm not.</h2>
-    <p class="lede reveal" style="margin-bottom:2.4rem">You'd find all of this on the call. Better it comes from me.</p>
+    <p class="lede reveal" style="margin-bottom:2.2rem">You'd find these on the call anyway.</p>
 
     <ul class="not__l">
-      <li class="reveal"><h3>I've never held a B2B enterprise SaaS marketing role.</h3><p>Never sold into a Fortune 100 buying committee, never carried a pipeline number at a software company, never owned a marketing budget in this category. That's the real gap and no framing closes it. The parts of your first ninety days I've listed are instrumentation, proof assets and lifecycle, which is deliberately the work that doesn't require the tenure I don't have.</p></li>
-      <li class="reveal"><h3>I've never sold to a compliance buyer.</h3><p>FINRA 2210, SEC 17a-4, WORM archiving, supervision queues. I can read the rules; I haven't lived them. Governance is your newest line and my thinnest ground, and the four best posts you published this year are all in that cluster. I'd want it to be an early visible deliverable rather than a thing I quietly avoid.</p></li>
-      <li class="reveal"><h3>My numbers are small.</h3><p>600 users against your 200+ programs and 50,000-seat rollouts. The mechanics are the same shape at any size, but &ldquo;my funnel work scales to fifty thousand seats&rdquo; isn't a claim I can evidence, so I won't make it. What I can evidence is that I've built and instrumented these systems end to end, which most marketing candidates haven't, at whatever size they were built.</p></li>
-      <li class="reveal"><h3>I run my own things.</h3><p>Which is the obvious flight-risk question. You left this company around 2013, went and did other people's jobs, and came back as CEO in 2015 &mdash; so you know the shape of it better than I could explain it. A function to build and run yourself is the closest thing to founding that isn't founding. That's the honest reason I want this one.</p></li>
+      <li class="reveal"><h3>No B2B enterprise SaaS role.</h3><p>Never sold to a Fortune 100 committee. Never carried a pipeline number at a software company. No framing closes that.</p></li>
+      <li class="reveal"><h3>Never sold to a compliance buyer.</h3><p>FINRA, 17a-4, supervision queues. I can read the rules. I haven't lived them. Your newest line, my thinnest ground.</p></li>
+      <li class="reveal"><h3>My numbers are small.</h3><p>600 users against your 50,000-seat rollouts. Same mechanics, but I can't evidence that they scale, so I won't claim it.</p></li>
+      <li class="reveal"><h3>I run my own things.</h3><p>The flight-risk question. You left in 2013, did other people's jobs, came back as CEO in 2015. You know the shape of it.</p></li>
     </ul>
   </div>
 </section>
