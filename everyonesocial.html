@@ -13,426 +13,365 @@
 <title>Andrew Conklin &rarr; EveryoneSocial</title>
 <meta name="description" content="Andrew Conklin's application for Head of Marketing at EveryoneSocial.">
 <meta property="og:title" content="Andrew Conklin &rarr; EveryoneSocial">
-<meta property="og:description" content="Application for Head of Marketing. Four things I found, and what I'd ship.">
+<meta property="og:description" content="Four things I found in an afternoon, and what I'd ship.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wght@100..900&family=Plus+Jakarta+Sans:wght@300..800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Plus+Jakarta+Sans:wght@300..700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 /* ============================================================
-   TOKENS
-   Ink + canvas are mine. The accent ramp and the mono are theirs,
-   lifted from everyonesocial.com/_astro/BaseLayout.css
+   TOKENS — monochrome plus one signal colour.
+   Colour appears only where a check failed. The one borrowed
+   hue is EveryoneSocial's own indigo, used once, in the white band.
    ============================================================ */
 :root{
-  --bg:#08090B;
-  --bg-2:#0E1015;
-  --card:#101319;
-  --ink:#F2F3F6;
-  --ink-2:#B9BECC;
-  --muted:#848B9C;
-  --faint:#5A6070;
-  --line:color-mix(in oklch, var(--ink), transparent 90%);
-  --line-2:color-mix(in oklch, var(--ink), transparent 82%);
+  --bg:#0B0B0C;
+  --ink:#EDEAE5;
+  --ink-2:#A9A69F;
+  --muted:#77746D;
+  --faint:#55534E;
+  --signal:#D2495E;
+  --borrowed:#3f55e5;
 
-  /* their chart ramp */
-  --cyan:#4cc1ea;
-  --royal:#4689e7;
-  --indigo:#3f55e5;
-  --violet:#3a2ebc;
-  --purple:#6606a9;
-  --magenta:#a91590;
-  --hotpink:#f22279;
-  --accent:var(--indigo);
+  --rule:rgb(237 234 229 / .09);
+  --rule-2:rgb(237 234 229 / .17);
+  --rule-3:rgb(237 234 229 / .34);
 
   --display:"Anybody",system-ui,sans-serif;
   --sans:"Plus Jakarta Sans",system-ui,-apple-system,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 
   --ease:cubic-bezier(.16,1,.3,1);
-  --pad:clamp(1.25rem,5vw,5.5rem);
-  --maxw:1180px;
+  --gutter:clamp(1.15rem,4.5vw,4rem);
+
+  /* modular scale */
+  --s--2:clamp(.6875rem,.665rem + .07vw,.75rem);
+  --s--1:clamp(.8125rem,.785rem + .14vw,.9rem);
+  --s-0:clamp(1rem,.954rem + .23vw,1.09rem);
+  --s-1:clamp(1.18rem,1.11rem + .35vw,1.42rem);
+  --s-2:clamp(1.4rem,1.28rem + .55vw,1.78rem);
+  --s-3:clamp(1.68rem,1.5rem + .85vw,2.35rem);
+  --s-hero:clamp(2.4rem,1rem + 6.6vw,5.4rem);
+  --s-mega:clamp(3.6rem,1rem + 13vw,11rem);
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
 body{
-  margin:0;background:var(--bg);color:var(--ink);overflow-wrap:break-word;
-  font-family:var(--sans);font-size:clamp(1rem,.97rem+.16vw,1.0625rem);
-  line-height:1.62;font-weight:350;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:var(--s-0);line-height:1.6;font-weight:350;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;overflow-wrap:break-word;
 }
 img,svg{max-width:100%;display:block}
 a{color:inherit}
-::selection{background:var(--indigo);color:#fff}
-
-/* grain */
-body::after{
-  content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
-  opacity:.038;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+::selection{background:var(--ink);color:var(--bg)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ============================================================
-   TYPE
+   WIDTH SYSTEM — three widths, not one. Children opt in.
    ============================================================ */
-.kicker{
-  font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--faint);font-weight:500;
-  display:flex;align-items:center;gap:.7em;margin:0 0 1.1rem;
+.bed{
+  display:grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter),1fr)
+    [wide-start] minmax(0,9rem)
+    [main-start] min(62rem, 100% - (var(--gutter) * 2))
+    [main-end] minmax(0,9rem)
+    [wide-end] minmax(var(--gutter),1fr)
+    [full-end];
 }
-.kicker::before{content:"";width:1.6rem;height:1px;background:var(--accent);flex:none}
+.bed > *{grid-column:main;min-width:0}
+.u-wide{grid-column:wide}
+.u-full{grid-column:full}
+.u-bleed-l{grid-column:full-start / main-end}
+.u-bleed-r{grid-column:main-start / full-end}
+.u-measure{grid-column:main;max-width:34rem}
 
-h2{
-  font-family:var(--display);
-  font-size:clamp(1.8rem,1.1rem+2.9vw,3.2rem);
-  line-height:1.02;letter-spacing:-.03em;font-weight:600;
-  margin:0 0 1.1rem;text-wrap:balance;
-  font-variation-settings:"wdth" 100;
+/* ============================================================
+   RHYTHM — deliberate, not uniform. This is the whole fix.
+   ============================================================ */
+[data-rhythm="tight"]{padding-block:clamp(1.2rem,2.4vw,2rem)}
+[data-rhythm="normal"]{padding-block:clamp(3rem,5.5vw,4.75rem)}
+[data-rhythm="loose"]{padding-block:clamp(4.75rem,9vw,8.5rem)}
+[data-rhythm="turn"]{padding-block:clamp(3.5rem,7vw,6rem)}
+
+/* density: dense == evidence, airy == the thing said slowly */
+[data-density="dense"]{--measure:56rem;--lh:1.45;--body:var(--s--1)}
+[data-density="normal"]{--measure:42rem;--lh:1.6;--body:var(--s-0)}
+[data-density="airy"]{--measure:31rem;--lh:1.72;--body:var(--s-1)}
+[data-density] p{font-size:var(--body);line-height:var(--lh);max-width:var(--measure)}
+
+/* ============================================================
+   TYPE — the width axis is the signature
+   ============================================================ */
+h1,h2,h3,.mega{margin:0;font-family:var(--display);font-weight:600;text-wrap:balance}
+h1{font-size:var(--s-hero);font-stretch:66%;line-height:.9;letter-spacing:-.035em}
+h2{font-size:var(--s-3);font-stretch:78%;line-height:1.04;letter-spacing:-.022em}
+h3{font-size:var(--s-1);font-stretch:88%;line-height:1.18;letter-spacing:-.015em}
+.mega{
+  font-size:var(--s-mega);font-stretch:58%;line-height:.78;letter-spacing:-.045em;
+  font-variant-numeric:tabular-nums lining-nums;
 }
-h3{
-  font-family:var(--display);font-weight:600;
-  font-size:clamp(1.15rem,1rem+.7vw,1.65rem);
-  line-height:1.12;letter-spacing:-.02em;margin:0 0 .7rem;text-wrap:balance;
-}
-p{margin:0 0 1.15rem;color:var(--ink-2);text-wrap:pretty}
-p strong,strong{color:var(--ink);font-weight:600}
-.lede{font-size:clamp(1.0625rem,1rem+.4vw,1.3rem);line-height:1.5;color:var(--ink-2);max-width:56ch}
-.small{font-size:.9375rem;line-height:1.55}
+p{margin:0;color:var(--ink-2)}
+.flow > * + *{margin-top:1rem}
+strong,b{color:var(--ink);font-weight:600}
 .dim{color:var(--muted)}
 .mono{font-family:var(--mono);overflow-wrap:anywhere}
 
-section{padding-block:clamp(3.25rem,6vw,5.5rem);position:relative}
+/* lowercase micro-labels go the OTHER way on the width axis */
+.lbl{
+  font-family:var(--display);font-stretch:128%;font-weight:500;
+  font-size:var(--s--2);letter-spacing:.2em;text-transform:lowercase;
+  color:var(--faint);margin:0;
+}
+.lbl--ink{color:var(--ink-2)}
+.mlbl{
+  font-family:var(--mono);font-size:var(--s--2);letter-spacing:.14em;
+  text-transform:lowercase;color:var(--faint);margin:0;
+}
 
 /* ============================================================
-   REVEAL — content is visible by default; only JS hides it.
+   THE LEDGER — the page's spine. Every value on every section
+   lands on one shared vertical axis.
    ============================================================ */
-.reveal{opacity:1}
-.js .reveal{
-  opacity:0;transform:translateY(.7rem);
-  transition:opacity 1.15s var(--ease),transform 1.15s var(--ease);
-  transition-delay:calc(var(--i,0) * 70ms);
+.ledger{
+  display:grid;grid-template-columns:minmax(0,1fr) 15ch;max-width:100%;
+  column-gap:clamp(.75rem,1.6vw,1.25rem);margin:0;
+  border-top:1px solid var(--rule-2);max-width:min(100%,44rem);
+  font-family:var(--mono);font-size:var(--s--1);
+  font-variant-numeric:tabular-nums lining-nums slashed-zero;
 }
-.js .reveal.is-in{opacity:1;transform:none}
+.ledger > *{padding-block:.62rem;border-bottom:1px solid var(--rule);align-self:baseline}
+.ledger > dt{color:var(--ink-2);margin:0;overflow-wrap:anywhere}
+.ledger > dd{margin:0;text-align:right;font-weight:500;white-space:nowrap;color:var(--ink)}
+.ledger > dd[data-s="no"]{color:var(--signal)}
+.ledger > dd[data-s="off"]{color:var(--faint);font-weight:400}
+@media (max-width:46rem){
+  .ledger{grid-template-columns:minmax(0,1fr) 11ch;font-size:var(--s--2)}
+  .ledger > dd{white-space:normal}   /* fixed-width column would clip long values */
+}
+
+/* the command hangs off the ledger, not in a box */
+.cmd{
+  margin:.7rem 0 0;font-family:var(--mono);font-size:var(--s--2);
+  color:var(--faint);white-space:pre;overflow-x:auto;max-width:100%;
+}
+.cmd::before{content:"$ ";color:var(--rule-3)}
+
+/* the fix line: a mark, not a container */
+.fix{
+  margin:.85rem 0 0;font-family:var(--mono);font-size:var(--s--1);
+  color:var(--ink-2);text-transform:lowercase;
+}
+.fix::before{content:"\21B3\00a0\00a0";color:var(--faint)}
 
 /* ============================================================
-   CHROME
+   MOTION — two systems. Rules that draw, and one masked line.
    ============================================================ */
-.progress{
-  position:fixed;inset:0 0 auto 0;height:2px;z-index:100;
-  background:linear-gradient(90deg,var(--cyan),var(--indigo),var(--purple),var(--hotpink));
-  transform:scaleX(0);transform-origin:0 50%;
-}
+.line{display:block;overflow:hidden}
+.line > span{display:block}
 @media (prefers-reduced-motion:no-preference){
-  @supports (animation-timeline:scroll()){
-    .progress{animation:grow-x linear;animation-timeline:scroll(root block)}
-    @keyframes grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-  }
+  .js .line > span{transform:translateY(104%);transition:transform 1s var(--ease) var(--d,0s)}
+  .js .line.in > span{transform:none}
+  .js [data-draw]{transform:scaleX(0);transform-origin:0 50%;transition:transform 1.05s var(--ease) var(--d,0s)}
+  .js [data-draw].in{transform:scaleX(1)}
+  .js .fade{opacity:0;transition:opacity 1.1s var(--ease) var(--d,0s)}
+  .js .fade.in{opacity:1}
 }
-
-.topbar{
-  position:fixed;top:0;left:0;right:0;z-index:80;
-  display:flex;justify-content:space-between;align-items:center;gap:1rem;
-  padding:1.15rem var(--pad);
-  font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);pointer-events:none;
-}
-.topbar b{color:var(--ink);font-weight:500}
-.topbar .r{color:var(--faint);text-align:right}
-@media (max-width:640px){.topbar .r{display:none}}
+html:not(.js) .line > span,html:not(.js) [data-draw],html:not(.js) .fade{transform:none;opacity:1}
 
 /* ============================================================
    HERO
    ============================================================ */
-.hero{min-height:auto;padding-block:7rem 3.5rem;display:flex;flex-direction:column;justify-content:center;padding-block:8rem 4rem}
-.hero .wrap{width:100%}
-.hero__grid{display:grid;gap:clamp(2rem,4vw,4rem);grid-template-columns:1fr;align-items:start}
-.hero__grid>*{min-width:0}
-@media (min-width:1040px){.hero__grid{grid-template-columns:1.1fr .9fr;align-items:center}}
-.hero__ev{padding:0}
-
-.hero__ev .ev-cap{margin-bottom:.7rem}
-.hero__ev p{font-size:.8125rem;line-height:1.6;color:var(--muted);margin:0}
-
-/* the morph — my homepage effect, reused once */
-.morph-line{display:flex;align-items:center;gap:.9rem;overflow:hidden;margin-bottom:clamp(1.5rem,3vw,2.2rem)}
-.morph-lbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);flex:none;padding-top:.15em}
-.morph-wrap{position:relative;height:clamp(2.6rem,6vw,4rem);flex:1;min-width:0}
-#morph{
-  position:absolute;inset:0;
-  filter:url(#threshold) blur(.25px);
-  display:flex;align-items:center;
-}
+.hero{min-height:86svh;align-content:end;padding-bottom:clamp(2rem,4vw,3.5rem);padding-top:clamp(4.5rem,9vw,7rem)}
+.hero__top{display:flex;align-items:center;gap:1rem;margin-bottom:clamp(1.6rem,3.5vw,2.8rem)}
+.morph-wrap{position:relative;height:clamp(2.1rem,4.4vw,3rem);flex:1;min-width:0}
+#morph{position:absolute;inset:0;filter:url(#threshold) blur(.25px);display:flex;align-items:center}
 #morph span{
-  position:absolute;left:0;width:100%;
-  font-family:var(--display);font-weight:700;
-  font-size:clamp(2.1rem,5.4vw,3.6rem);
-  line-height:1;letter-spacing:-.035em;
-  color:var(--ink);white-space:nowrap;user-select:none;
-  font-variation-settings:"wdth" 118;
+  position:absolute;left:0;width:100%;font-family:var(--display);
+  font-stretch:118%;font-weight:600;font-size:clamp(1.5rem,3.5vw,2.4rem);
+  line-height:1;letter-spacing:-.03em;color:var(--ink-2);white-space:nowrap;user-select:none;
 }
 #filters{position:absolute;width:0;height:0;overflow:hidden}
 
-.hero h1{
-  font-family:var(--display);font-weight:700;
-  font-size:clamp(2rem,1rem+5.5vw,5.9rem);
-  line-height:.99;letter-spacing:-.04em;
-  margin:0 0 1.7rem;max-width:21ch;text-wrap:balance;
-  font-variation-settings:"wdth" var(--wdth,100);
-}
-.hero h1 .hl{color:#8f9dff}
-.hero .lede{max-width:60ch;margin-bottom:2.4rem}
-.hero .sig{
-  font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--faint);display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;
-}
-.hero .sig b{color:var(--ink-2);font-weight:500}
-
-/* word-split reveal */
-.w{display:inline-block;overflow:hidden;vertical-align:bottom;max-width:100%}
-.w__in{display:inline-block;transform:translateY(108%);transition:transform 1.05s var(--ease);transition-delay:calc(var(--i) * 38ms)}
-.is-in .w__in{transform:none}
-html:not(.js) .w__in{transform:none}
+.hero h1{grid-column:full-start / main-end;padding-left:var(--gutter);max-width:22ch}
+.hero__body{display:grid;gap:clamp(1.8rem,4vw,3.5rem);grid-template-columns:1fr;margin-top:clamp(1.6rem,3vw,2.4rem)}
+@media (min-width:60rem){.hero__body{grid-template-columns:1.15fr .85fr;align-items:end}}
+.hero__body > *{min-width:0}
+.wk > *,.case > *,.bridge__claim > *{min-width:0}
+.hero__sig{display:flex;flex-wrap:wrap;gap:.35rem 1.5rem;margin-top:1.4rem;
+  font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;color:var(--faint)}
+.hero__sig b{color:var(--ink-2);font-weight:500}
+.hl{color:var(--ink)}
 
 /* ============================================================
-   VIDEO
+   VIDEO — full bleed, no furniture
    ============================================================ */
-.video-sec{padding-top:0}
-.yt{
-  position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;
-  background:var(--bg-2);border:1px solid var(--line);
-  box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
-}
-.yt[data-has-poster="1"]{background:var(--poster) center/cover no-repeat,var(--bg-2)}
-.yt::before{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:radial-gradient(70% 70% at 50% 40%,transparent,rgba(0,0,0,.42)),
-             linear-gradient(180deg,transparent 45%,rgba(0,0,0,.6));
-}
-.yt__btn{
-  position:absolute;inset:0;z-index:2;width:100%;
-  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
-  gap:.9rem;padding:clamp(1.1rem,3vw,2.2rem);
-  border:0;background:none;color:#fff;font:inherit;cursor:pointer;text-align:left;
-}
-.yt__play{
-  width:62px;height:62px;border-radius:50%;flex:none;
-  display:grid;place-items:center;
-  background:var(--indigo);
-  box-shadow:0 10px 40px -8px color-mix(in oklch,var(--indigo),transparent 30%);
-  transition:transform .5s var(--ease),background .3s;
-}
-.yt__play svg{width:22px;height:22px;fill:#fff;margin-left:3px}
-.yt__btn:hover .yt__play,.yt__btn:focus-visible .yt__play{transform:scale(1.09);background:var(--hotpink)}
-.yt__btn:focus-visible{outline:2px solid var(--indigo);outline-offset:-6px}
-.yt__meta{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72)}
-.yt__ttl{font-family:var(--display);font-weight:600;font-size:clamp(1.05rem,.9rem+.9vw,1.7rem);letter-spacing:-.02em;line-height:1.1}
-.yt__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity .6s var(--ease)}
+.yt{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.yt__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity .7s var(--ease)}
 .yt__poster.on{opacity:1}
+.yt__btn{position:absolute;inset:0;z-index:2;width:100%;display:grid;place-items:center;gap:1rem;
+  border:0;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.yt__play{width:72px;height:72px;border-radius:50%;border:1px solid var(--rule-3);display:grid;place-items:center;
+  transition:background .45s var(--ease),border-color .45s var(--ease)}
+.yt__play svg{width:20px;height:20px;fill:var(--ink);margin-left:3px;transition:fill .45s var(--ease)}
+.yt__btn:hover .yt__play,.yt__btn:focus-visible .yt__play{background:var(--ink);border-color:var(--ink)}
+.yt__btn:hover .yt__play svg,.yt__btn:focus-visible .yt__play svg{fill:var(--bg)}
+.yt__btn:focus-visible{outline:1px solid var(--ink);outline-offset:-8px}
 .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
-.yt--live::before,.yt--live .yt__btn{display:none}
-
-/* placeholder state when no video id is set yet */
-.yt--empty{border-color:var(--line)}
-.yt--empty .yt__btn{cursor:default;justify-content:center;align-items:center;text-align:center}
-.yt--empty .yt__play{background:transparent;border:1px solid var(--line-2);box-shadow:none}
-.yt--empty .yt__play svg{fill:var(--faint)}
-.yt--empty .yt__ttl{color:var(--ink-2)}
+.yt--live .yt__btn{display:none}
+.yt-cap{display:flex;justify-content:space-between;gap:1rem;padding-top:.7rem;flex-wrap:wrap}
 
 /* ============================================================
-   FINDINGS — sticky stack
+   FINDINGS — four different shapes
    ============================================================ */
-.stack{display:flex;flex-direction:column}
-.finding{
-  border-top:1px solid var(--line);
-  padding:clamp(1.7rem,3.2vw,2.6rem) 0 clamp(1.4rem,2.6vw,2rem);
-}
-.finding__n{
-  font-family:var(--mono);font-size:.6875rem;letter-spacing:.18em;color:var(--faint);
-  display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;
-}
-.finding__n i{font-style:normal;color:var(--accent)}
-.finding__n::after{content:"";flex:1;height:1px;background:var(--line)}
-.finding__grid{display:grid;gap:clamp(1rem,2.2vw,1.8rem);grid-template-columns:1fr}
-.finding__grid>*{min-width:0}
-@media (min-width:900px){
-  .finding__grid{grid-template-columns:1fr 1fr;align-items:stretch}
-  .finding__grid>div:first-child{display:flex;flex-direction:column}
-  .finding__grid>div:first-child .ship{margin-top:1rem}
-}
-.finding p{font-size:.9375rem;line-height:1.5}
-.finding p:last-child{margin-bottom:0}
+.index{margin:clamp(1.4rem,3vw,2.2rem) 0 0;padding:0;list-style:none;border-top:1px solid var(--rule-2)}
+.index li{display:flex;align-items:baseline;gap:clamp(1rem,3vw,2.4rem);padding:.75rem 0;border-bottom:1px solid var(--rule)}
+.index .n{font-family:var(--display);font-stretch:70%;font-weight:600;font-size:var(--s-2);color:var(--faint);line-height:1;flex:none;min-width:2.2ch}
+.index .t{font-family:var(--mono);font-size:var(--s--1);letter-spacing:.1em;text-transform:lowercase;color:var(--ink-2)}
 
-/* code / evidence block */
-.ev{
-  font-family:var(--mono);font-size:.7188rem;line-height:1.7;
-  border-left:1px solid var(--line-2);
-  padding:.1rem 0 .1rem .9rem;overflow-x:auto;color:var(--muted);max-width:100%;
-  margin:0;white-space:pre;
-}
-.ev .c{color:var(--faint)}
-.ev .bad{color:var(--hotpink)}
-.ev .ok{color:#4eb89b}
-.ev .k{color:var(--cyan)}
-.ev-cap{
-  font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--faint);margin:0 0 .55rem;
-}
+.find{padding-block:clamp(2.2rem,4.5vw,3.6rem);border-top:1px solid var(--rule);min-width:0}
+.find > *,.find div{min-width:0}
+.find__n{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.18em;text-transform:lowercase;color:var(--faint);margin:0 0 .9rem}
+/* 01 — proof-first, headline hangs in the left margin */
+.f01{display:grid;gap:clamp(1rem,3vw,2.4rem);grid-template-columns:1fr}
+.f01 > *{min-width:0}
+@media (min-width:64rem){.f01{grid-template-columns:15rem 1fr;align-items:start}}
+/* 02 — tightest block: headline across, ledger under */
+.f02{max-width:44rem}
+/* 03 — chart bleeds, ledger is the caption */
+.f03{display:grid;gap:clamp(1.2rem,3vw,2.6rem);grid-template-columns:1fr;align-items:end}
+@media (min-width:64rem){.f03{grid-template-columns:1.25fr .75fr}}
+.f03 > *{min-width:0}
+/* 04 — narrow, deliberate empty right half */
+.f04{max-width:34rem}
 
-/* tight fact bullets */
-.facts{list-style:none;margin:0 0 1.15rem;padding:0;display:flex;flex-direction:column;gap:.5rem}
-.facts li{position:relative;padding-left:1.05rem;font-size:.9375rem;line-height:1.45;color:var(--ink-2)}
-.facts li::before{content:"";position:absolute;left:0;top:.6em;width:4px;height:4px;border-radius:50%;background:var(--accent)}
-.facts b{color:var(--ink);font-weight:600}
-.facts .mono{font-size:.875em}
-
-/* key -> value proof rows: the evidence, scannable in one pass */
-.proof{margin:0 0 1rem;border-top:1px solid var(--line)}
-.proof__r{border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:1.25rem;padding:.62rem 0;font-family:var(--mono);font-size:.75rem;line-height:1.45}
-.proof__k{color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
-.proof__v{font-weight:700;white-space:nowrap;flex:none}
-.proof__v.no{color:#e8608f}
-.proof__v.yes{color:#63b9a3}
-.proof__v.dimv{color:var(--faint);font-weight:400}
-
-
-/* ship box */
-.ship{
-  border-left:2px solid var(--accent);padding-left:.9rem;margin-top:1rem;
-}
-.ship .ev-cap{color:var(--accent);margin-bottom:.4rem}
-.ship p{color:var(--ink-2);margin-bottom:0;font-size:.9375rem;line-height:1.45}
-
-/* competitor table */
-.cmp{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.75rem;margin:0 0 1rem}
-.cmp td{padding:.42rem 0;border-bottom:1px solid var(--line);color:var(--ink-2)}
-.cmp td:last-child{text-align:right;white-space:nowrap}
-.cmp tr:last-child td{border-bottom:0}
-.cmp .no{color:var(--hotpink)}
-.cmp .yes{color:#4eb89b}
-.cmp .me{color:var(--ink)}
-
-/* bar chart */
 .chart{width:100%;height:auto;overflow:visible}
-.bar{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);
-  transition:transform 1.35s var(--ease);transition-delay:calc(var(--i) * 65ms)}
-.is-in .bar{transform:scaleY(var(--v))}
-html:not(.js) .bar{transform:scaleY(var(--v))}
+.bar{transform-box:fill-box;transform-origin:50% 100%}
+@media (prefers-reduced-motion:no-preference){
+  .js .bar{transform:scaleY(0);transition:transform 1.2s var(--ease);transition-delay:calc(var(--i) * 60ms)}
+  .js .in .bar{transform:scaleY(var(--v))}
+}
+html:not(.js) .bar,.js .bar{transform:scaleY(var(--v))}
+.js .chart:not(.in) .bar{transform:scaleY(0)}
 .axl{font-family:var(--mono);font-size:8px;fill:var(--faint);letter-spacing:.05em}
 
 /* ============================================================
-   STATS
+   BRIDGE — opens on the number, not on a kicker
    ============================================================ */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
-  margin:2rem 0 0;border-top:1px solid var(--line)}
-.stat{padding:1.15rem 1.4rem 1.15rem 0;min-width:0;border-bottom:1px solid var(--line)}
-.stat__n{
-  font-family:var(--display);font-weight:600;letter-spacing:-.03em;
-  font-size:clamp(1.5rem,1.2rem+1.3vw,2.3rem);line-height:1;color:var(--ink);
-  font-variant-numeric:tabular-nums;display:block;margin-bottom:.45rem;
+.bridge__num{grid-column:full-start / main-end;padding-left:var(--gutter);display:grid;gap:.4rem}
+.bridge__claim{margin-top:clamp(1.6rem,3.5vw,2.6rem);display:grid;gap:clamp(1.2rem,3vw,2.4rem);grid-template-columns:1fr}
+@media (min-width:64rem){.bridge__claim{grid-template-columns:1.1fr .9fr;align-items:start}}
+.bridge__claim > *{min-width:0}
+.note{font-size:var(--s--1);color:var(--muted);line-height:1.55}
+@media (min-width:64rem){.note{text-align:right}}
+
+/* ============================================================
+   CHANNELS — a table, not cards. Tone encodes depth.
+   ============================================================ */
+.chan{width:100%;border-collapse:collapse;font-size:var(--s--1)}
+.chan th{
+  font-family:var(--mono);font-size:var(--s--2);letter-spacing:.14em;text-transform:lowercase;
+  color:var(--faint);font-weight:400;text-align:left;padding:0 1rem .55rem 0;border-bottom:1px solid var(--rule-2);
 }
-.stat__l{font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);line-height:1.45;display:block}
+.chan th:last-child{text-align:right;padding-right:0}
+.chan td{padding:.68rem 1rem .68rem 0;border-bottom:1px solid var(--rule);vertical-align:baseline}
+.chan td:last-child{padding-right:0;text-align:right;color:var(--muted);font-family:var(--mono);font-size:var(--s--2)}
+.chan .ch{font-family:var(--display);font-stretch:124%;font-weight:500;font-size:var(--s-0);
+  text-transform:lowercase;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
+.chan .meter{width:clamp(3rem,14vw,9rem)}
+.chan .meter i{display:block;height:1px;background:var(--ink);transform:scaleX(var(--w,1));transform-origin:0 50%}
+.chan tr.thin .ch,.chan tr.thin td{color:var(--muted)}
+.chan tr.thin .meter i{background:var(--muted)}
+@media (max-width:46rem){.chan .meter{display:none}.chan th:nth-child(2){display:none}}
 
 /* ============================================================
-   CHANNELS
+   WHITE BAND — the turn. The one borrowed colour lives here.
    ============================================================ */
-.chan{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));border-top:1px solid var(--line)}
-.chan__i{padding:1.2rem 1.6rem 1.2rem 0;min-width:0;border-bottom:1px solid var(--line)}
-.chan__h{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;margin-bottom:.6rem}
-.chan__t{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-.015em}
-.chan__tag{font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;flex:none}
-.tag-deep{color:#63b9a3}
-.tag-thin{color:#e8608f}
-.chan__i p{font-size:.875rem;margin:0;line-height:1.6;color:var(--muted)}
-.chan__i p b{color:var(--ink-2)}
-
-/* ============================================================
-   90 DAYS — the hard cut to white
-   ============================================================ */
-.white{background:#fff;color:#1b1d1e;--ink:#1b1d1e;--ink-2:#3d4150;--muted:#666d80;--faint:#8a90a0;
-  --line:rgba(27,29,30,.12);--line-2:rgba(27,29,30,.16);--card:#f7f8fb;--bg-2:#fff}
-.white h2,.white h3{color:#1b1d1e}
-.white .kicker{color:#666d80}
-.white p{color:#3d4150}
-.white .ev{background:#f4f5f9;border-color:rgba(27,29,30,.1);color:#3d4150}
-
-.board{border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);padding:clamp(1.1rem,2.2vw,1.5rem) 0;
-  margin:0 0 clamp(1.8rem,3.4vw,2.6rem)}
-.board .ev-cap{color:var(--indigo)}
-.board .big{font-family:var(--display);font-weight:600;letter-spacing:-.025em;
-  font-size:clamp(1.15rem,1rem+.9vw,1.7rem);line-height:1.2;margin:0 0 .8rem;color:#1b1d1e}
-.board p:last-child{margin-bottom:0}
-
-.tl{display:grid;gap:clamp(1.4rem,3vw,2.4rem);grid-template-columns:1fr}
-.tl>*{min-width:0}
-@media (min-width:880px){.tl{grid-template-columns:repeat(3,1fr)}}
-.tl__c{border-top:2px solid var(--indigo);padding-top:1.1rem}
-.tl__w{font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--indigo);margin:0 0 1rem;font-weight:500}
-.tl__l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.75rem}
-.tl__l li{font-size:.9375rem;line-height:1.55;color:#3d4150;padding-left:1.15rem;position:relative}
-.tl__l li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--indigo)}
-.tl__l b{color:#1b1d1e;font-weight:600}
-
-/* ============================================================
-   WHAT I'M NOT — restraint is the design
-   ============================================================ */
-.not__l{list-style:none;margin:0;padding:0;max-width:64ch;display:flex;flex-direction:column}
-.not__l li{border-top:1px solid var(--line);padding:1.05rem 0}
-.not__l li:last-child{border-bottom:1px solid var(--line)}
-.not__l h3{font-size:1.0625rem;margin-bottom:.45rem;color:var(--ink-2);font-weight:600}
-.not__l p{font-size:.9375rem;margin:0;color:var(--muted)}
-
-/* ============================================================
-   CLOSE + TICKER
-   ============================================================ */
-.close h2{max-width:16ch}
-.links{display:flex;flex-wrap:wrap;gap:.65rem;margin:2rem 0 0}
-.lnk{
-  font-family:var(--mono);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;
-  text-decoration:none;color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;
-  padding:.72em 1.25em;transition:border-color .3s,color .3s,background .3s;
+.white{
+  background:#F4F2ED;color:#16171A;
+  --ink:#16171A;--ink-2:#3E4048;--muted:#6B6D75;--faint:#8E9099;
+  --rule:rgb(22 23 26 / .13);--rule-2:rgb(22 23 26 / .2);--rule-3:rgb(22 23 26 / .34);
 }
-.lnk:hover,.lnk:focus-visible{color:var(--ink);border-color:var(--indigo);background:color-mix(in oklch,var(--indigo),transparent 90%)}
-.lnk--pri{background:var(--indigo);border-color:var(--indigo);color:#fff}
-.lnk--pri:hover,.lnk--pri:focus-visible{background:var(--hotpink);border-color:var(--hotpink);color:#fff}
-a:focus-visible,button:focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:3px}
+.white .lbl,.white .mlbl{color:var(--borrowed)}
+.wk{display:grid;gap:clamp(1.8rem,4vw,3rem);grid-template-columns:1fr;margin-top:clamp(1.4rem,3vw,2.2rem)}
+@media (min-width:64rem){
+  .wk{grid-template-columns:5fr 6fr;column-gap:clamp(2rem,6vw,5rem)}
+  .wk__q{margin-top:clamp(1.5rem,4vw,3rem)}
+}
+.wk > *{min-width:0}
+.wk__l{list-style:none;margin:.9rem 0 0;padding:0;display:flex;flex-direction:column;gap:.6rem}
+.wk__l li{position:relative;padding-left:1.5rem;line-height:1.5;color:var(--ink-2)}
+.wk__l li::before{content:"\21B3";position:absolute;left:0;color:var(--borrowed)}
+.wk__q .wk__l li{font-size:var(--s-1);line-height:1.45;padding-left:1.6rem;color:var(--ink-2)}
+.wk__q .wk__l li::before{content:"?";font-family:var(--mono);font-weight:700}
+.wk__q .wk__l li b{color:var(--ink)}
+.board{margin-top:clamp(2rem,4.5vw,3.2rem);padding-top:1rem;border-top:1px solid var(--rule-2);
+  display:grid;gap:.5rem 2rem;grid-template-columns:1fr}
+@media (min-width:64rem){.board{grid-template-columns:auto 1fr;align-items:baseline}}
+.board b{font-family:var(--display);font-stretch:82%;font-weight:600;font-size:var(--s-1);color:var(--ink);white-space:nowrap}
 
-.colophon{margin-top:clamp(3rem,7vw,5rem);padding-top:1.5rem;border-top:1px solid var(--line);
-  font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;color:var(--faint);line-height:1.8;max-width:70ch}
+/* ============================================================
+   THE CASE AGAINST ME — the only section off the spine, the only airy one
+   ============================================================ */
+.case{display:grid;gap:clamp(1.2rem,3vw,2.4rem);grid-template-columns:1fr}
+@media (min-width:64rem){.case{grid-template-columns:16rem 1fr;column-gap:clamp(2rem,6vw,5rem);align-items:start}}
+.case > *{min-width:0}
+.case__body > * + *{margin-top:clamp(1.3rem,2.6vw,1.9rem)}
+.case__body h3{margin-bottom:.3rem;color:var(--ink)}
+.case__press{margin-top:clamp(1.8rem,4vw,2.8rem);font-family:var(--mono);font-size:var(--s--1);
+  color:var(--ink);text-transform:lowercase;letter-spacing:.02em;line-height:1.6}
 
-.ticker{overflow:hidden;border-top:1px solid var(--line);padding:1.1rem 0;
-  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.ticker__t{display:flex;width:max-content;animation:marq 66s linear infinite}
-.ticker__s{display:flex;flex:none}
-.ticker__s span{font-family:var(--mono);font-size:.75rem;letter-spacing:.2em;text-transform:lowercase;
-  color:var(--faint);padding:0 1.6rem;white-space:nowrap}
-.ticker__s span::after{content:"\00B7";margin-left:1.6rem;color:var(--indigo)}
-@keyframes marq{to{transform:translateX(-50%)}}
+/* ============================================================
+   CLOSE — the email is the headline
+   ============================================================ */
+.close__mail{
+  grid-column:full-start / main-end;padding-left:var(--gutter);
+  display:inline-block;font-family:var(--display);font-stretch:60%;font-weight:600;
+  font-size:clamp(1.6rem,1rem + 4.6vw,4.2rem);line-height:1;letter-spacing:-.035em;
+  color:var(--ink);text-decoration:none;padding-bottom:.12em;
+  background-image:linear-gradient(var(--ink),var(--ink));
+  background-repeat:no-repeat;background-position:0 100%;background-size:0% 1px;
+  transition:background-size .7s var(--ease);
+}
+.close__mail:hover,.close__mail:focus-visible{background-size:100% 1px}
+.close__links{display:flex;gap:1.6rem;flex-wrap:wrap;margin-top:clamp(1.4rem,3vw,2rem)}
+.close__links a{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;
+  color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:color .35s,border-color .35s}
+.close__links a:hover,.close__links a:focus-visible{color:var(--ink);border-color:var(--rule-3)}
+.colophon{margin-top:clamp(2.2rem,5vw,3.6rem);padding-top:1rem;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:var(--s--2);line-height:1.85;color:var(--faint);max-width:56rem}
+a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+
+/* ============================================================
+   TICKER — two lines, opposite directions, carrying evidence
+   ============================================================ */
+.tick{overflow:hidden;padding:.55rem 0;border-top:1px solid var(--rule)}
+.tick:last-of-type{border-bottom:1px solid var(--rule)}
+.tick__t{display:flex;width:max-content}
+.tick--a .tick__t{animation:mq 78s linear infinite}
+.tick--b .tick__t{animation:mq 104s linear infinite reverse}
+.tick__s{display:flex;flex:none}
+.tick__s span{font-family:var(--display);font-stretch:126%;font-weight:400;font-size:var(--s--2);
+  letter-spacing:.16em;text-transform:lowercase;color:var(--faint);padding:0 1.5rem;white-space:nowrap}
+.tick__s span::after{content:"\00B7";margin-left:1.5rem;color:var(--rule-3)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* placed last: .hero is defined further up, so this must win on order */
+@media (max-width:48rem){
+  .hero{min-height:auto;align-content:start;padding-top:clamp(2.5rem,10vw,4rem)}
+  .hero h1{max-width:none}
+}
 
 @media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .ticker__t{animation:none}
-  .js .reveal{opacity:1;transform:none;transition:none}
-  .w__in{transform:none;transition:none}
-  .bar{transition:none;transform:scaleY(var(--v))}
+  .tick__t{animation:none}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 </style>
 </head>
 <body>
-<div class="progress" aria-hidden="true"></div>
-
-<header class="topbar">
-  <span><b>Andrew Conklin</b></span>
-  <span class="r">Head of Marketing &middot; Application</span>
-</header>
 
 <svg id="filters" aria-hidden="true"><defs><filter id="threshold">
   <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/>
@@ -440,313 +379,292 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--indigo);outline-off
 
 <main>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="wrap">
-    <p class="kicker">Head of Marketing &middot; Remote, US</p>
+<!-- 1 · HERO ─────────────────────────────────────────────── -->
+<section class="bed hero" data-rhythm="tight">
+  <div class="hero__top" aria-hidden="true">
+    <span class="mlbl">the&nbsp;job</span>
+    <div class="morph-wrap"><div id="morph"><span id="m1"></span><span id="m2"></span></div></div>
+  </div>
+  <p class="sr-only">Website, outbound, content, lifecycle, events, partner marketing, paid, launches.</p>
 
-    <div class="morph-line" aria-hidden="true">
-      <span class="morph-lbl">The&nbsp;job</span>
-      <div class="morph-wrap"><div id="morph"><span id="m1"></span><span id="m2"></span></div></div>
-    </div>
-    <p class="sr-only">Website, outbound, content, lifecycle, events, partner marketing, paid, launches &mdash; all of it.</p>
+  <h1>
+    <span class="line"><span>You sell a Claude integration.</span></span>
+    <span class="line" style="--d:.09s"><span class="hl">Your robots.txt blocks ClaudeBot.</span></span>
+  </h1>
 
-    <div class="hero__grid">
+  <div class="hero__body">
     <div>
-    <h1 data-split>You sell a Claude integration. Your <span class="hl">robots.txt blocks ClaudeBot.</span></h1>
-
-    <p class="lede reveal">Found in an afternoon. Three more below. This page too.</p>
-
-    <p class="sig reveal" style="--i:1">
-      <span><b>Andrew Conklin</b></span>
-      <span>andrew@andrewconklin.com</span>
-    </p>
+      <p class="fade" style="--d:.35s">Found in an afternoon. Three more below. This page too.</p>
+      <p class="hero__sig fade" style="--d:.45s"><span><b>andrew conklin</b></span><span>andrew@andrewconklin.com</span></p>
     </div>
-
-    <aside class="hero__ev reveal" style="--i:1">
-      <p class="ev-cap">The afternoon</p>
-      <div class="proof">
-        <div class="proof__r"><span class="proof__k">Your site, audited</span><span class="proof__v yes">4 findings</span></div>
-        <div class="proof__r"><span class="proof__k">Every claim re-checked live</span><span class="proof__v yes">40 checks</span></div>
-        <div class="proof__r"><span class="proof__k">This page</span><span class="proof__v yes">built in Claude&nbsp;Code</span></div>
-        <div class="proof__r"><span class="proof__k">Framework &middot; build step</span><span class="proof__v dimv">none</span></div>
-      </div>
-      <p>That's the pitch. Below is the proof.</p>
-    </aside>
+    <div class="fade" style="--d:.5s">
+      <p class="mlbl" style="margin-bottom:.7rem">the afternoon</p>
+      <dl class="ledger">
+        <dt>your site, audited</dt><dd>4 findings</dd>
+        <dt>every claim re-checked live</dt><dd>40 checks</dd>
+        <dt>this page</dt><dd>built in claude code</dd>
+        <dt>framework, build step</dt><dd data-s="off">none</dd>
+      </dl>
     </div>
   </div>
 </section>
 
-<!-- ============ VIDEO ============ -->
-<section class="video-sec">
-  <div class="wrap">
-    <div class="yt reveal" id="yt" data-has-poster="0">
+<!-- 2 · VIDEO ────────────────────────────────────────────── -->
+<section class="bed" data-rhythm="tight">
+  <div class="u-full">
+    <div class="yt" id="yt">
       <button class="yt__btn" type="button" id="ytBtn">
         <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-        <span>
-          <span class="yt__meta" id="ytMeta">Two minutes</span><br>
-          <span class="yt__ttl" id="ytTtl">Why me, out loud</span>
-        </span>
       </button>
     </div>
   </div>
-</section>
-
-<!-- ============ FINDINGS ============ -->
-<section id="found">
-  <div class="wrap">
-    <p class="kicker reveal">What I found</p>
-    <h2 class="reveal">Four things. Each takes a minute to check.</h2>
-
-    <div class="stack" style="margin-top:1.8rem">
-
-      <article class="finding">
-        <p class="finding__n"><i>01</i> The crawlers</p>
-        <div class="finding__grid">
-          <div>
-            <h3>Six AI integrations. Eight AI crawlers blocked.</h3>
-            <div class="ship">
-              <p class="ev-cap">Fix</p>
-              <p>One toggle.</p>
-            </div>
-          </div>
-          <div>
-            <div class="proof">
-              <div class="proof__r"><span class="proof__k">ClaudeBot</span><span class="proof__v no">Disallow: /</span></div>
-              <div class="proof__r"><span class="proof__k">GPTBot</span><span class="proof__v no">Disallow: /</span></div>
-              <div class="proof__r"><span class="proof__k">+ Google, Apple, Meta, Amazon &hellip;</span><span class="proof__v no">Disallow: /</span></div>
-              <div class="proof__r"><span class="proof__k">hootsuite.com</span><span class="proof__v yes">ai-input=yes</span></div>
-              <div class="proof__r"><span class="proof__k">sprout &middot; sociabble &middot; dsmn8 &middot; gaggleamp</span><span class="proof__v yes">allows</span></div>
-            </div>
-<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/robots.txt | grep -A1 ClaudeBot</pre>
-          </div>
-        </div>
-      </article>
-
-      <article class="finding">
-        <p class="finding__n"><i>02</i> The tour</p>
-        <div class="finding__grid">
-          <div>
-            <h3>The tour video exists. The tour page doesn't play it.</h3>
-            <div class="ship">
-              <p class="ev-cap">Fix</p>
-              <p>Embed what you own.</p>
-            </div>
-          </div>
-          <div>
-            <div class="proof">
-              <div class="proof__r"><span class="proof__k">4 chapters, all of them</span><span class="proof__v no">Placeholder &middot; 0:00</span></div>
-              <div class="proof__r"><span class="proof__k">&lt;video&gt; &middot; &lt;iframe&gt; on page</span><span class="proof__v no">0 &middot; 0</span></div>
-              <div class="proof__r"><span class="proof__k">Wistia autmy6oxc7</span><span class="proof__v yes">6:18 &middot; works</span></div>
-              <div class="proof__r"><span class="proof__k">3 chapter anchors in your schema</span><span class="proof__v no">not on page</span></div>
-            </div>
-<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/advocacy-tour/ | grep -c "&lt;video"
-<span class="bad">0</span></pre>
-          </div>
-        </div>
-      </article>
-
-      <article class="finding">
-        <p class="finding__n"><i>03</i> The cadence</p>
-        <div class="finding__grid">
-          <div>
-            <h3>493 posts. Eight in the last year.</h3>
-            <p class="small">Newest post models drop-off on a made-up program. You hold data on 4,000 real ones.</p>
-            <div class="ship">
-              <p class="ev-cap">Fix</p>
-              <p>Publish the real dataset.</p>
-            </div>
-          </div>
-          <div>
-            <svg class="chart" viewBox="0 0 340 118" role="img" aria-label="Posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 to date 8.">
-              <g class="bars">
-                <rect class="bar" style="--i:0"  x="4"   y="8" width="22" height="88" rx="2" data-v=".49" fill="#3f55e5"/>
-                <rect class="bar" style="--i:1"  x="34"  y="8" width="22" height="88" rx="2" data-v=".40" fill="#3f55e5"/>
-                <rect class="bar" style="--i:2"  x="64"  y="8" width="22" height="88" rx="2" data-v=".60" fill="#3f55e5"/>
-                <rect class="bar" style="--i:3"  x="94"  y="8" width="22" height="88" rx="2" data-v="1"   fill="#3f55e5"/>
-                <rect class="bar" style="--i:4"  x="124" y="8" width="22" height="88" rx="2" data-v=".90" fill="#3f55e5"/>
-                <rect class="bar" style="--i:5"  x="154" y="8" width="22" height="88" rx="2" data-v=".80" fill="#3f55e5"/>
-                <rect class="bar" style="--i:6"  x="184" y="8" width="22" height="88" rx="2" data-v=".82" fill="#3f55e5"/>
-                <rect class="bar" style="--i:7"  x="214" y="8" width="22" height="88" rx="2" data-v=".40" fill="#e8608f"/>
-                <rect class="bar" style="--i:8"  x="244" y="8" width="22" height="88" rx="2" data-v=".16" fill="#e8608f"/>
-                <rect class="bar" style="--i:9"  x="274" y="8" width="22" height="88" rx="2" data-v=".085" fill="#e8608f"/>
-                <rect class="bar" style="--i:10" x="304" y="8" width="22" height="88" rx="2" data-v=".10" fill="#e8608f"/>
-              </g>
-              <line x1="0" y1="96.5" x2="340" y2="96.5" stroke="rgba(242,243,246,.10)" stroke-width="1"/>
-              <text class="axl" x="4" y="109">'16</text><text class="axl" x="94" y="109">'19</text>
-              <text class="axl" x="184" y="109">'22</text><text class="axl" x="296" y="109">'26</text>
-            </svg>
-            <div class="proof">
-              <div class="proof__r"><span class="proof__k">2019 &rarr; last 12 months</span><span class="proof__v no">82 &rarr; 8</span></div>
-              <div class="proof__r"><span class="proof__k">Jun 2025 &rarr; Mar 2026</span><span class="proof__v no">257 days, nothing</span></div>
-              <div class="proof__r"><span class="proof__k">sitemap &lt;lastmod&gt;</span><span class="proof__v no">0 of 629</span></div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="finding">
-        <p class="finding__n"><i>04</i> The catch</p>
-        <div class="finding__grid">
-          <div>
-            <h3>Nothing catches an email. Nothing tracks an ad.</h3>
-            <div class="ship">
-              <p class="ev-cap">Fix</p>
-              <p>Insight Tag, day one.</p>
-            </div>
-          </div>
-          <div>
-            <div class="proof">
-              <div class="proof__r"><span class="proof__k">GA4 &middot; HubSpot</span><span class="proof__v yes">present</span></div>
-              <div class="proof__r"><span class="proof__k">LinkedIn Insight Tag</span><span class="proof__v no">absent</span></div>
-              <div class="proof__r"><span class="proof__k">Meta Pixel &middot; Google Ads</span><span class="proof__v no">absent</span></div>
-              <div class="proof__r"><span class="proof__k">ROI calculator &lt;form&gt;</span><span class="proof__v no">0</span></div>
-              <div class="proof__r"><span class="proof__k">/newsletter/ /vs/ /compare/ /events/</span><span class="proof__v no">404</span></div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-    </div>
+  <div class="yt-cap">
+    <p class="mlbl" id="ytTtl">why me, out loud</p>
+    <p class="mlbl" id="ytMeta">two minutes</p>
   </div>
 </section>
 
-<!-- ============ THE BRIDGE ============ -->
-<section id="bridge">
-  <div class="wrap">
-    <p class="kicker reveal">Why me</p>
-    <h2 class="reveal">I built the machine you sell. Mine pointed at creators.</h2>
-    <p class="lede reveal">Recruit. Connect their account. Verify it. Nudge them into posting. Measure the post. Built solo, in Claude Code.</p>
+<!-- 3 · FINDINGS ─────────────────────────────────────────── -->
+<section class="bed" data-rhythm="loose" data-density="dense">
+  <p class="lbl fade">what i found</p>
+  <h2 class="fade" style="--d:.06s">Four things. Each takes a minute to check.</h2>
 
-    <div class="stats reveal" data-stagger>
-      <div class="stat"><span class="stat__n" data-to="600" data-suffix="+">0</span><span class="stat__l">Creators recruited</span></div>
-      <div class="stat"><span class="stat__n" data-to="17">0</span><span class="stat__l">Countries</span></div>
-      <div class="stat"><span class="stat__n">$0</span><span class="stat__l">Ad spend</span></div>
-      <div class="stat"><span class="stat__n" data-to="68.6" data-dec="1" data-suffix="%">0</span><span class="stat__l">View &rarr; join</span></div>
-      <div class="stat"><span class="stat__n" data-to="4.95" data-dec="2" data-suffix="M">0</span><span class="stat__l">Post views tracked</span></div>
-      <div class="stat"><span class="stat__n" data-to="956" data-suffix="K">0</span><span class="stat__l">Paid views at ~$0.008</span></div>
-    </div>
+  <ol class="index u-wide fade" style="--d:.12s">
+    <li><span class="n">01</span><span class="t">the crawlers</span></li>
+    <li><span class="n">02</span><span class="t">the tour</span></li>
+    <li><span class="n">03</span><span class="t">the cadence</span></li>
+    <li><span class="n">04</span><span class="t">the catch</span></li>
+  </ol>
 
-    <p class="reveal small dim" style="max-width:60ch;margin-top:1.4rem">Mine got paid; employees don't. The incentive doesn't transfer. The funnel does. Pre-revenue.</p>
-  </div>
-</section>
-
-<!-- ============ CHANNELS ============ -->
-<section id="channels">
-  <div class="wrap">
-    <p class="kicker reveal">The stack you listed</p>
-    <h2 class="reveal">Eight channels. Five deep, three thin.</h2>
-
-    <div class="chan reveal" data-stagger style="margin-top:1.5rem">
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Website</span><span class="chan__tag tag-deep">Deep</span></div><p>Two front-ends solo. This is one.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Content</span><span class="chan__tag tag-deep">Deep</span></div><p>1M+ organic views, self-shot.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Lifecycle</span><span class="chan__tag tag-deep">Deep</span></div><p>Two engines, always testing.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Paid</span><span class="chan__tag tag-deep">Deep</span></div><p>956K views, ~$7.7K spend.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Launches</span><span class="chan__tag tag-deep">Deep</span></div><p>20K &rarr; 250K in six months.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Outbound</span><span class="chan__tag tag-thin">Thin</span></div><p>Data layer, not sequences.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Partner</span><span class="chan__tag tag-thin">Thin</span></div><p>No software partner program.</p></div>
-      <div class="chan__i"><div class="chan__h"><span class="chan__t">Events</span><span class="chan__tag tag-thin">Thin</span></div><p>Thinnest. No field program.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 90 DAYS ============ -->
-<section id="ninety" class="white">
-  <div class="wrap">
-    <p class="kicker reveal">If I had the seat</p>
-    <h2 class="reveal">First ninety days.</h2>
-
-    <div class="board reveal" style="margin-top:1.4rem">
-      <p class="ev-cap">The number I'd put on the board in week one</p>
-      <p class="big">Demo requests with a resolved first-touch source.</p>
-      <p>Today it can't be produced.</p>
-    </div>
-
-    <div class="tl">
-      <div class="tl__c reveal">
-        <p class="tl__w">Days 1&ndash;7</p>
-        <ul class="tl__l">
-          <li><b>Insight Tag.</b> The 90-day clock starts.</li>
-          <li><b>First-touch capture</b> on demo.</li>
-          <li><b>Unblock the crawlers.</b></li>
-        </ul>
+  <!-- 01 · proof-first, headline hanging in the margin -->
+  <article class="find u-wide" style="margin-top:clamp(2rem,4vw,3rem)">
+    <div class="f01">
+      <div>
+        <p class="find__n">01 &middot; the crawlers</p>
+        <h3>Six AI integrations. Eight AI crawlers blocked.</h3>
+        <p class="fix">one toggle.</p>
       </div>
-      <div class="tl__c reveal" style="--i:1">
-        <p class="tl__w">Days 8&ndash;30</p>
-        <ul class="tl__l">
-          <li><b>Embed the tour</b> you already own.</li>
-          <li><b>Announce the relaunch.</b> You told nobody.</li>
-          <li><b>Email capture</b> in the blog.</li>
-        </ul>
-      </div>
-      <div class="tl__c reveal" style="--i:2">
-        <p class="tl__w">Days 31&ndash;90</p>
-        <ul class="tl__l">
-          <li><b>Publish the 4,000-program benchmark.</b></li>
-          <li><b>Take back the comparison pages.</b></li>
-          <li><b>Run your program on your product.</b></li>
-        </ul>
+      <div>
+        <dl class="ledger">
+          <dt>ClaudeBot</dt><dd data-s="no">Disallow: /</dd>
+          <dt>GPTBot</dt><dd data-s="no">Disallow: /</dd>
+          <dt>+ Google, Apple, Meta, Amazon &hellip;</dt><dd data-s="no">Disallow: /</dd>
+          <dt>hootsuite.com</dt><dd>ai-input=yes</dd>
+          <dt>sprout &middot; sociabble &middot; dsmn8 &middot; gaggleamp</dt><dd>allows</dd>
+        </dl>
+        <p class="cmd">curl -s everyonesocial.com/robots.txt | grep -A1 ClaudeBot</p>
       </div>
     </div>
-  </div>
-</section>
+  </article>
 
-<!-- ============ WHAT I'M NOT ============ -->
-<section id="not">
-  <div class="wrap">
-    <p class="kicker reveal">Before you ask</p>
-    <h2 class="reveal">What I'm not.</h2>
-    <ul class="not__l" style="margin-top:1.4rem">
-      <li class="reveal"><h3>No B2B enterprise SaaS role.</h3><p>Never sold to a Fortune 100 committee.</p></li>
-      <li class="reveal"><h3>Never sold to a compliance buyer.</h3><p>Your newest line, my thinnest ground.</p></li>
-      <li class="reveal"><h3>My numbers are small.</h3><p>600 users against your 50,000-seat rollouts.</p></li>
-      <li class="reveal"><h3>I run my own things.</h3><p>You left in 2013, came back CEO in 2015.</p></li>
-    </ul>
-  </div>
-</section>
-
-<!-- ============ CLOSE ============ -->
-<section class="close">
-  <div class="wrap">
-    <h2 class="reveal">Twenty minutes.</h2>
-    <p class="lede reveal">If these are already on someone's list, say so.</p>
-    <div class="links reveal" data-stagger>
-      <a class="lnk lnk--pri" href="mailto:andrew@andrewconklin.com?subject=Head%20of%20Marketing%20%E2%80%94%20Andrew%20Conklin">andrew@andrewconklin.com</a>
-      <a class="lnk" href="https://www.linkedin.com/in/andrew-conklin" rel="noopener">LinkedIn</a>
-      <a class="lnk" href="https://andrewconklin.com">andrewconklin.com</a>
+  <!-- 02 · tightest block on the page -->
+  <article class="find">
+    <div class="f02">
+      <p class="find__n">02 &middot; the tour</p>
+      <h3>The tour video exists. The tour page doesn't play it.</h3>
+      <p class="fix">embed what you own.</p>
+      <dl class="ledger" style="margin-top:1.1rem">
+        <dt>4 chapters, all of them</dt><dd data-s="no">Placeholder &middot; 0:00</dd>
+        <dt>&lt;video&gt; &middot; &lt;iframe&gt; on page</dt><dd data-s="no">0 &middot; 0</dd>
+        <dt>Wistia autmy6oxc7</dt><dd>6:18 &middot; works</dd>
+        <dt>3 chapter anchors in your schema</dt><dd data-s="no">not on page</dd>
+      </dl>
+      <p class="cmd">curl -s everyonesocial.com/advocacy-tour/ | grep -c "&lt;video"   &rarr; 0</p>
     </div>
-    <p class="colophon reveal">I built this with Claude Code &mdash; the audit, the verification and the page. One file, no framework. Every claim checked against your live site on 28 August 2026.</p>
+  </article>
+
+  <!-- 03 · the chart bleeds past the gutter, ledger is its caption -->
+  <article class="find u-bleed-l" style="padding-left:var(--gutter)">
+    <p class="find__n">03 &middot; the cadence</p>
+    <div class="f03">
+      <div>
+        <h3 style="max-width:20ch">493 posts. Eight in the last year.</h3>
+        <svg class="chart" viewBox="0 0 340 112" role="img" style="margin-top:1.2rem" aria-label="Posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 to date 8.">
+          <g>
+            <rect class="bar" style="--i:0"  x="4"   y="6" width="22" height="84" rx="1" data-v=".49" fill="#EDEAE5"/>
+            <rect class="bar" style="--i:1"  x="34"  y="6" width="22" height="84" rx="1" data-v=".40" fill="#EDEAE5"/>
+            <rect class="bar" style="--i:2"  x="64"  y="6" width="22" height="84" rx="1" data-v=".60" fill="#EDEAE5"/>
+            <rect class="bar" style="--i:3"  x="94"  y="6" width="22" height="84" rx="1" data-v="1"   fill="#EDEAE5"/>
+            <rect class="bar" style="--i:4"  x="124" y="6" width="22" height="84" rx="1" data-v=".90" fill="#EDEAE5"/>
+            <rect class="bar" style="--i:5"  x="154" y="6" width="22" height="84" rx="1" data-v=".80" fill="#EDEAE5"/>
+            <rect class="bar" style="--i:6"  x="184" y="6" width="22" height="84" rx="1" data-v=".82" fill="#EDEAE5"/>
+            <rect class="bar" style="--i:7"  x="214" y="6" width="22" height="84" rx="1" data-v=".40" fill="#D2495E"/>
+            <rect class="bar" style="--i:8"  x="244" y="6" width="22" height="84" rx="1" data-v=".16" fill="#D2495E"/>
+            <rect class="bar" style="--i:9"  x="274" y="6" width="22" height="84" rx="1" data-v=".085" fill="#D2495E"/>
+            <rect class="bar" style="--i:10" x="304" y="6" width="22" height="84" rx="1" data-v=".10" fill="#D2495E"/>
+          </g>
+          <line x1="0" y1="90.5" x2="340" y2="90.5" stroke="rgb(237 234 229 / .18)" stroke-width="1"/>
+          <text class="axl" x="4" y="103">'16</text><text class="axl" x="94" y="103">'19</text>
+          <text class="axl" x="184" y="103">'22</text><text class="axl" x="296" y="103">'26</text>
+        </svg>
+      </div>
+      <div>
+        <dl class="ledger">
+          <dt>2019 &rarr; last 12 months</dt><dd data-s="no">82 &rarr; 8</dd>
+          <dt>Jun 2025 &rarr; Mar 2026</dt><dd data-s="no">257 days, nothing</dd>
+          <dt>sitemap &lt;lastmod&gt;</dt><dd data-s="no">0 of 629</dd>
+        </dl>
+        <p class="fix">publish the real dataset.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- 04 · narrowest. the empty right half is deliberate. -->
+  <article class="find">
+    <div class="f04">
+      <p class="find__n">04 &middot; the catch</p>
+      <h3>Nothing catches an email. Nothing tracks an ad.</h3>
+      <dl class="ledger" style="margin-top:1rem">
+        <dt>GA4 &middot; HubSpot</dt><dd>present</dd>
+        <dt>LinkedIn Insight Tag</dt><dd data-s="no">absent</dd>
+        <dt>Meta Pixel &middot; Google Ads</dt><dd data-s="no">absent</dd>
+        <dt>ROI calculator &lt;form&gt;</dt><dd data-s="no">0</dd>
+        <dt>/newsletter/ /vs/ /compare/ /events/</dt><dd data-s="no">404</dd>
+      </dl>
+      <p class="fix">insight tag, day one.</p>
+    </div>
+  </article>
+</section>
+
+<!-- 4 · BRIDGE — opens on the number ─────────────────────── -->
+<section class="bed" data-rhythm="normal">
+  <div class="bridge__num fade">
+    <span class="mega">4.95M</span>
+    <p class="mlbl" style="max-width:44ch">creator post views tracked &middot; one operator &middot; zero ad spend</p>
   </div>
+
+  <div class="bridge__claim">
+    <div>
+      <h2 style="max-width:18ch">I built the machine you sell. Mine pointed at creators.</h2>
+      <p style="margin-top:1rem;max-width:40ch">Recruit. Connect their account. Verify it. Nudge them into posting. Measure the post. Built solo, in Claude Code.</p>
+    </div>
+    <p class="note">Mine got paid; employees don't. The incentive doesn't transfer. The funnel does. Both products pre-revenue.</p>
+  </div>
+
+  <dl class="ledger" style="margin-top:clamp(1.6rem,3.5vw,2.4rem)">
+    <dt>creators recruited, 17 countries</dt><dd>600+</dd>
+    <dt>ad spend to get there</dt><dd data-s="off">$0</dd>
+    <dt>campaign view &rarr; join</dt><dd>68.6%</dd>
+    <dt>signup &rarr; account connected</dt><dd>64%</dd>
+    <dt>paid creator views, ~$7.7K spend</dt><dd>956K @ ~$0.008</dd>
+  </dl>
+</section>
+
+<!-- 5 · CHANNELS — a table, tone encodes depth ────────────── -->
+<section class="bed" data-rhythm="loose">
+  <div class="u-wide">
+    <table class="chan">
+      <thead><tr><th>eight channels, five deep</th><th class="meter"></th><th>the receipt</th></tr></thead>
+      <tbody>
+        <tr><td class="ch">website</td><td class="meter"><i style="--w:1"></i></td><td>two front-ends solo. this is one.</td></tr>
+        <tr><td class="ch">content</td><td class="meter"><i style="--w:1"></i></td><td>1M+ organic views, self-shot</td></tr>
+        <tr><td class="ch">lifecycle</td><td class="meter"><i style="--w:.92"></i></td><td>two engines, always testing</td></tr>
+        <tr><td class="ch">paid</td><td class="meter"><i style="--w:.88"></i></td><td>956K views, ~$7.7K spend</td></tr>
+        <tr><td class="ch">launches</td><td class="meter"><i style="--w:.84"></i></td><td>20K &rarr; 250K in six months</td></tr>
+        <tr class="thin"><td class="ch">outbound</td><td class="meter"><i style="--w:.28"></i></td><td>data layer, not sequences</td></tr>
+        <tr class="thin"><td class="ch">partner</td><td class="meter"><i style="--w:.22"></i></td><td>no software partner program</td></tr>
+        <tr class="thin"><td class="ch">events</td><td class="meter"><i style="--w:.16"></i></td><td>thinnest. no field program.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 6 · WEEK ONE — the turn ───────────────────────────────── -->
+<section class="bed white" data-rhythm="turn" data-density="normal">
+  <p class="lbl fade">week one</p>
+  <h2 class="fade" style="--d:.06s;max-width:16ch">Three fixes and four questions.</h2>
+
+  <div class="wk">
+    <div>
+      <p class="mlbl">i'd ship these without asking</p>
+      <ul class="wk__l">
+        <li>Insight Tag, first-touch source on the demo form.</li>
+        <li>Eight AI crawlers unblocked. One file.</li>
+        <li>The tour video, embedded on the tour page.</li>
+      </ul>
+    </div>
+    <div class="wk__q">
+      <p class="mlbl">i'd ask these before touching anything</p>
+      <ul class="wk__l">
+        <li>You hold data on 4,000 real programs. The newest post models drop-off on an invented one. <b>Legal, or bandwidth?</b></li>
+        <li><span class="mono">/vs/</span> and <span class="mono">/compare/</span> both 404. <b>Decision or drift?</b></li>
+        <li>257 days without a post, 629 URLs with no lastmod. <b>Is there a content owner, or is that this seat?</b></li>
+        <li>Compliance is the newest line. <b>Who has sold it, and what did they learn?</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="board">
+    <b>The number I'd put on the board:</b>
+    <p>Demo requests with a resolved first-touch source. Today it can't be produced. I'd rather commit to that than to a ninety-day plan written by someone who hasn't talked to one of your customers.</p>
+  </div>
+</section>
+
+<!-- 7 · THE CASE AGAINST ME — off the spine, airy ─────────── -->
+<section class="bed" data-rhythm="loose" data-density="airy">
+  <div class="case">
+    <div>
+      <p class="mlbl" style="margin-bottom:.6rem">before you ask</p>
+      <h2>The case against me.</h2>
+    </div>
+    <div class="case__body">
+      <div>
+        <h3>No enterprise SaaS role, and none of it against a compliance buyer.</h3>
+        <p>I've never run a Fortune 100 procurement cycle. I'd be learning your buyer while I'm building your funnel.</p>
+      </div>
+      <div>
+        <h3>Small numbers, no revenue.</h3>
+        <p>600 users against your 50,000-seat rollouts, and both my products are pre-revenue. I built the machine. I've never had to make a number for someone else.</p>
+      </div>
+      <div>
+        <h3>I'm a founder.</h3>
+        <p>You're right to read that as a flight risk.</p>
+      </div>
+      <p class="case__press">press on the third one first. it's the one i'd press on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · CLOSE ─────────────────────────────────────────────── -->
+<section class="bed" data-rhythm="normal">
+  <p class="mlbl fade" style="margin-bottom:.9rem">twenty minutes</p>
+  <a class="close__mail" href="mailto:andrew@andrewconklin.com?subject=Head%20of%20Marketing%20%E2%80%94%20Andrew%20Conklin">andrew@andrewconklin.com</a>
+  <p class="close__links">
+    <a href="https://www.linkedin.com/in/andrew-conklin" rel="noopener">linkedin</a>
+    <a href="https://andrewconklin.com">andrewconklin.com</a>
+  </p>
+  <p class="colophon">I built this with Claude Code &mdash; the audit, the verification and the page. One file, no framework, no build step. Every claim checked against your live site on 28 August 2026. The one blue on the page is lifted from your own stylesheet.</p>
 </section>
 
 </main>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__t">
-    <div class="ticker__s"><span>andrew conklin</span><span>head of marketing</span><span>everyonesocial</span><span>website</span><span>outbound</span><span>content</span><span>lifecycle</span><span>events</span><span>partners</span><span>paid</span><span>launches</span></div>
-    <div class="ticker__s"><span>andrew conklin</span><span>head of marketing</span><span>everyonesocial</span><span>website</span><span>outbound</span><span>content</span><span>lifecycle</span><span>events</span><span>partners</span><span>paid</span><span>launches</span></div>
-  </div>
-</div>
+<div class="tick tick--a" aria-hidden="true"><div class="tick__t">
+  <div class="tick__s"><span>257 days, nothing</span><span>0 of 629 lastmod</span><span>8 crawlers blocked</span><span>4.95m views tracked</span><span>one file, no framework</span></div>
+  <div class="tick__s"><span>257 days, nothing</span><span>0 of 629 lastmod</span><span>8 crawlers blocked</span><span>4.95m views tracked</span><span>one file, no framework</span></div>
+</div></div>
+<div class="tick tick--b" aria-hidden="true"><div class="tick__t">
+  <div class="tick__s"><span>website</span><span>outbound</span><span>content</span><span>lifecycle</span><span>events</span><span>partners</span><span>paid</span><span>launches</span></div>
+  <div class="tick__s"><span>website</span><span>outbound</span><span>content</span><span>lifecycle</span><span>events</span><span>partners</span><span>paid</span><span>launches</span></div>
+</div></div>
 
 <script>
 (function(){
 'use strict';
 
 /* ============================================================
-   CONFIG — paste the YouTube link here and nothing else changes.
-   Accepts a full URL, a share URL, or a bare 11-character ID.
-   Leave it empty and the page renders a designed placeholder.
+   CONFIG — paste the YouTube link here. Nothing else changes.
+   Accepts a full URL, a share link, a Short, or a bare ID.
    ============================================================ */
 var CONFIG = {
   youtube : "",
-  title   : "Why me, out loud",
-  meta    : "Two minutes",
-  poster  : ""            // optional: "poster.jpg" next to this file
+  title   : "why me, out loud",
+  meta    : "two minutes",
+  poster  : ""
 };
 
 var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- YouTube facade ---------- */
+/* ---------- video ---------- */
 function ytId(s){
   if(!s) return '';
   s = String(s).trim();
@@ -755,210 +673,99 @@ function ytId(s){
   return m ? m[1] : '';
 }
 (function(){
-  var box = document.getElementById('yt');
-  if(!box) return;
-  var btn  = document.getElementById('ytBtn'),
-      id   = ytId(CONFIG.youtube);
+  var box = document.getElementById('yt'); if(!box) return;
+  var btn = document.getElementById('ytBtn'),
+      sec = box.closest('section'),
+      id  = ytId(CONFIG.youtube);
 
   document.getElementById('ytTtl').textContent  = CONFIG.title;
   document.getElementById('ytMeta').textContent = CONFIG.meta;
 
-  if(CONFIG.poster){
-    box.style.setProperty('--poster','url("'+CONFIG.poster+'")');
-    box.setAttribute('data-has-poster','1');
-  }
+  /* A designed placeholder in the largest block on the page is worse
+     than an absence. No video, no section. */
+  if(!id){ if(sec) sec.remove(); return; }
 
-  if(!id){
-    box.classList.add('yt--empty');
-    document.getElementById('ytTtl').textContent  = 'Video goes here';
-    document.getElementById('ytMeta').textContent = 'Not recorded yet';
-    btn.setAttribute('aria-disabled','true');
-    btn.setAttribute('tabindex','-1');
-    return;
-  }
-
-  btn.setAttribute('aria-label','Play: '+CONFIG.title);
+  btn.setAttribute('aria-label','Play: ' + CONFIG.title);
 
   var warmed = false;
   function warm(){
     if(warmed) return; warmed = true;
     ['https://www.youtube-nocookie.com','https://i.ytimg.com'].forEach(function(h){
       var l = document.createElement('link');
-      l.rel = 'preconnect'; l.href = h; l.crossOrigin = '';
-      document.head.appendChild(l);
+      l.rel='preconnect'; l.href=h; l.crossOrigin=''; document.head.appendChild(l);
     });
   }
   box.addEventListener('pointerover', warm, {once:true});
   btn.addEventListener('focus', warm, {once:true});
 
-  if(!CONFIG.poster){
-    // maxresdefault 404s on uploads YouTube never made an HD master for.
-    // sddefault can also miss. hqdefault always exists.
-    var qs = ['maxresdefault','sddefault','hqdefault'], qi = 0;
-    var img = document.createElement('img');
-    img.className = 'yt__poster';
-    img.alt = '';
-    img.setAttribute('aria-hidden','true');
-    img.decoding = 'async';
-    img.onerror = function(){
-      qi++;
-      if(qi < qs.length) img.src = 'https://i.ytimg.com/vi/'+id+'/'+qs[qi]+'.jpg';
-    };
-    img.onload = function(){
-      // YouTube serves a 120x90 grey placeholder instead of a 404 in some cases
-      if(img.naturalWidth <= 120 && qi < qs.length - 1){ img.onerror(); return; }
+  var img = document.createElement('img');
+  img.className='yt__poster'; img.alt=''; img.setAttribute('aria-hidden','true'); img.decoding='async';
+  if(CONFIG.poster){
+    img.onload = function(){ img.classList.add('on'); };
+    img.src = CONFIG.poster;
+  } else {
+    /* maxresdefault 404s on uploads YouTube never made an HD master for.
+       sddefault can miss too. hqdefault always exists. */
+    var qs=['maxresdefault','sddefault','hqdefault'], qi=0;
+    img.onerror = function(){ if(++qi < qs.length) img.src='https://i.ytimg.com/vi/'+id+'/'+qs[qi]+'.jpg'; };
+    img.onload  = function(){
+      if(img.naturalWidth <= 120 && qi < qs.length-1){ img.onerror(); return; }
       img.classList.add('on');
     };
     img.src = 'https://i.ytimg.com/vi/'+id+'/'+qs[0]+'.jpg';
-    box.insertBefore(img, box.firstChild);
   }
+  box.insertBefore(img, box.firstChild);
 
   btn.addEventListener('click', function(){
     var f = document.createElement('iframe');
     f.src = 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0&modestbranding=1';
     f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; web-share';
-    f.allowFullscreen = true;
-    f.title = CONFIG.title;
-    box.appendChild(f);
-    box.classList.add('yt--live');
-    f.focus();
+    f.allowFullscreen = true; f.title = CONFIG.title;
+    box.appendChild(f); box.classList.add('yt--live'); f.focus();
   });
 })();
 
-/* ---------- Morphing type — the effect from my homepage ---------- */
+/* ---------- the morph, from my homepage ---------- */
 (function(){
-  var a = document.getElementById('m1'), b = document.getElementById('m2');
-  if(!a || !b) return;
-
-  var words = ['website','outbound','content','lifecycle','events','partners','paid','launches','all of it'];
-
-  if(reduce){ a.textContent = 'all of it'; b.textContent = ''; return; }
-
-  var MORPH = 1.5, COOL = 0.55, i = words.length - 1, morph = 0, cool = COOL, t = performance.now();
-  a.textContent = words[i % words.length];
-  b.textContent = words[(i+1) % words.length];
-
+  var a=document.getElementById('m1'), b=document.getElementById('m2'); if(!a||!b) return;
+  var words=['website','outbound','content','lifecycle','events','partners','paid','launches','all of it'];
+  if(reduce){ a.textContent='all of it'; b.textContent=''; return; }
+  var MORPH=1.5, COOL=.55, i=words.length-1, morph=0, cool=COOL, t=performance.now();
+  a.textContent=words[i%words.length]; b.textContent=words[(i+1)%words.length];
   function set(f){
-    b.style.filter  = 'blur('+Math.min(2.6/f - 2.6, 100)+'px)';
-    b.style.opacity = Math.pow(f, .4) * 100 + '%';
-    var g = 1 - f;
-    a.style.filter  = 'blur('+Math.min(2.6/g - 2.6, 100)+'px)';
-    a.style.opacity = Math.pow(g, .4) * 100 + '%';
-    a.textContent = words[i % words.length];
-    b.textContent = words[(i+1) % words.length];
+    b.style.filter='blur('+Math.min(2.6/f-2.6,100)+'px)'; b.style.opacity=Math.pow(f,.4)*100+'%';
+    var g=1-f;
+    a.style.filter='blur('+Math.min(2.6/g-2.6,100)+'px)'; a.style.opacity=Math.pow(g,.4)*100+'%';
+    a.textContent=words[i%words.length]; b.textContent=words[(i+1)%words.length];
   }
   function frame(now){
     requestAnimationFrame(frame);
-    var inc = cool > 0, dt = (now - t)/1000; t = now; cool -= dt;
-    if(cool <= 0){
+    var inc=cool>0, dt=(now-t)/1000; t=now; cool-=dt;
+    if(cool<=0){
       if(inc) i++;
-      morph -= cool; cool = 0;
-      var f = morph / MORPH;
-      if(f > 1){ cool = COOL; f = 1; }
+      morph-=cool; cool=0;
+      var f=morph/MORPH; if(f>1){ cool=COOL; f=1; }
       set(f);
     } else {
-      morph = 0;
-      b.style.filter = ''; b.style.opacity = '100%';
-      a.style.filter = ''; a.style.opacity = '0%';
+      morph=0; b.style.filter=''; b.style.opacity='100%'; a.style.filter=''; a.style.opacity='0%';
     }
   }
   requestAnimationFrame(frame);
 })();
 
-/* ---------- Split the headline into words ---------- */
-document.querySelectorAll('[data-split]').forEach(function(el){
-  var html = el.innerHTML, tmp = document.createElement('div');
-  tmp.innerHTML = html;
-  el.setAttribute('aria-label', tmp.textContent.trim());
-  var out = '', n = 0;
-  // walk top-level nodes so the gradient <span> survives
-  Array.prototype.forEach.call(tmp.childNodes, function(node){
-    if(node.nodeType === 3){
-      node.textContent.split(/(\s+)/).forEach(function(tok){
-        if(!tok.trim()){ out += tok; return; }
-        out += '<span class="w" aria-hidden="true" style="--i:'+(n++)+'"><span class="w__in">'+tok+'</span></span>';
-      });
-    } else {
-      var cls = node.getAttribute('class') || '';
-      node.textContent.split(/(\s+)/).forEach(function(tok){
-        if(!tok.trim()){ out += tok; return; }
-        out += '<span class="w" aria-hidden="true" style="--i:'+(n++)+'"><span class="w__in '+cls+'">'+tok+'</span></span>';
-      });
-    }
-  });
-  el.innerHTML = out;
-});
-
-/* ---------- Counters ---------- */
-function countUp(el){
-  var to  = parseFloat(el.dataset.to),
-      dec = parseInt(el.dataset.dec || '0', 10),
-      suf = el.dataset.suffix || '';
-  var fmt = function(v){
-    return v.toLocaleString('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec});
-  };
-  el.style.minWidth = el.offsetWidth + 'px';
-  if(reduce){ el.textContent = fmt(to) + suf; return; }
-  var DUR = 1900, t0 = performance.now();
-  (function tick(now){
-    var t = Math.min((now - t0)/DUR, 1),
-        e = 1 - Math.pow(1 - t, 4);
-    el.textContent = fmt(to * e) + suf;
-    if(t < 1) requestAnimationFrame(tick);
-  })(t0);
-}
-
-/* ---------- Bars ---------- */
-document.querySelectorAll('.bar').forEach(function(b){ b.style.setProperty('--v', b.dataset.v); });
-
-/* ---------- Reveal ---------- */
+/* ---------- reveal: two systems only ---------- */
 (function(){
-  document.querySelectorAll('[data-stagger]').forEach(function(g){
-    g.querySelectorAll('.reveal, .stat, .chan__i, .lnk').forEach(function(el,i){ el.style.setProperty('--i', i); });
-  });
-
-  var targets = document.querySelectorAll('.reveal, [data-split], .chart, .stats');
-
-  function fire(el){
-    el.classList.add('is-in');
-    el.querySelectorAll('[data-to]').forEach(countUp);
-    if(el.matches('[data-to]')) countUp(el);
-  }
-
+  var t = document.querySelectorAll('.line, .fade, .chart');
   if(reduce || !('IntersectionObserver' in window)){
-    targets.forEach(fire); return;
+    t.forEach(function(el){ el.classList.add('in'); }); return;
   }
-
-  var io = new IntersectionObserver(function(entries, obs){
-    entries.forEach(function(e){
+  var io = new IntersectionObserver(function(en, ob){
+    en.forEach(function(e){
       if(!e.isIntersecting) return;
-      fire(e.target);
-      obs.unobserve(e.target);
+      e.target.classList.add('in'); ob.unobserve(e.target);
     });
-  }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
-
-  targets.forEach(function(el){ io.observe(el); });
-})();
-
-/* ---------- Anybody's width axis, driven by scroll ----------
-   My homepage typeface is variable (wdth 50-150). Narrowing it
-   as the hero leaves feels like the page exhaling. Hero only.  */
-(function(){
-  var h1 = document.querySelector('.hero h1');
-  if(!h1 || reduce) return;
-  var ticking = false;
-  function update(){
-    ticking = false;
-    var vh = window.innerHeight,
-        p  = Math.min(Math.max(window.scrollY / vh, 0), 1);
-    h1.style.setProperty('--wdth', (100 - p * 16).toFixed(1));
-  }
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
-  }, {passive:true});
-  update();
+  }, {rootMargin:'0px 0px -6% 0px', threshold:.15});
+  t.forEach(function(el){ io.observe(el); });
 })();
 
 })();
