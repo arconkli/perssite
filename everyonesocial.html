@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot-news" content="noindex">
+<meta name="bingbot" content="noindex, nofollow, noarchive">
+<meta name="slurp" content="noindex, nofollow">
+<meta name="duckduckbot" content="noindex, nofollow">
+<meta name="AdsBot-Google" content="noindex, nofollow">
+<title>Andrew Conklin &rarr; EveryoneSocial</title>
+<meta name="description" content="Andrew Conklin's application for Head of Marketing at EveryoneSocial.">
+<meta property="og:title" content="Andrew Conklin &rarr; EveryoneSocial">
+<meta property="og:description" content="Application for Head of Marketing. Four things I found, and what I'd ship.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wght@100..900&family=Plus+Jakarta+Sans:wght@300..800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   TOKENS
+   Ink + canvas are mine. The accent ramp and the mono are theirs,
+   lifted from everyonesocial.com/_astro/BaseLayout.css
+   ============================================================ */
+:root{
+  --bg:#08090B;
+  --bg-2:#0E1015;
+  --card:#101319;
+  --ink:#F2F3F6;
+  --ink-2:#B9BECC;
+  --muted:#848B9C;
+  --faint:#5A6070;
+  --line:color-mix(in oklch, var(--ink), transparent 90%);
+  --line-2:color-mix(in oklch, var(--ink), transparent 82%);
+
+  /* their chart ramp */
+  --cyan:#4cc1ea;
+  --royal:#4689e7;
+  --indigo:#3f55e5;
+  --violet:#3a2ebc;
+  --purple:#6606a9;
+  --magenta:#a91590;
+  --hotpink:#f22279;
+  --accent:var(--indigo);
+
+  --display:"Anybody",system-ui,sans-serif;
+  --sans:"Plus Jakarta Sans",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(1.25rem,5vw,5.5rem);
+  --maxw:1180px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);overflow-wrap:break-word;
+  font-family:var(--sans);font-size:clamp(1rem,.97rem+.16vw,1.0625rem);
+  line-height:1.62;font-weight:350;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{max-width:100%;display:block}
+a{color:inherit}
+::selection{background:var(--indigo);color:#fff}
+
+/* grain */
+body::after{
+  content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
+  opacity:.038;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ============================================================
+   TYPE
+   ============================================================ */
+.kicker{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint);font-weight:500;
+  display:flex;align-items:center;gap:.7em;margin:0 0 1.6rem;
+}
+.kicker::before{content:"";width:1.6rem;height:1px;background:var(--accent);flex:none}
+
+h2{
+  font-family:var(--display);
+  font-size:clamp(2rem,1.1rem+3.6vw,3.9rem);
+  line-height:1.02;letter-spacing:-.03em;font-weight:600;
+  margin:0 0 1.4rem;text-wrap:balance;
+  font-variation-settings:"wdth" 100;
+}
+h3{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(1.15rem,1rem+.7vw,1.65rem);
+  line-height:1.12;letter-spacing:-.02em;margin:0 0 .7rem;text-wrap:balance;
+}
+p{margin:0 0 1.15rem;color:var(--ink-2);text-wrap:pretty}
+p strong,strong{color:var(--ink);font-weight:600}
+.lede{font-size:clamp(1.0625rem,1rem+.4vw,1.3rem);line-height:1.5;color:var(--ink-2);max-width:56ch}
+.small{font-size:.9375rem;line-height:1.55}
+.dim{color:var(--muted)}
+.mono{font-family:var(--mono);overflow-wrap:anywhere}
+
+section{padding-block:clamp(5rem,11vw,10rem);position:relative}
+
+/* ============================================================
+   REVEAL — content is visible by default; only JS hides it.
+   ============================================================ */
+.reveal{opacity:1}
+.js .reveal{
+  opacity:0;transform:translateY(1.6rem);
+  transition:opacity .85s var(--ease),transform .85s var(--ease);
+  transition-delay:calc(var(--i,0) * 55ms);
+}
+.js .reveal.is-in{opacity:1;transform:none}
+
+/* ============================================================
+   CHROME
+   ============================================================ */
+.progress{
+  position:fixed;inset:0 0 auto 0;height:2px;z-index:100;
+  background:linear-gradient(90deg,var(--cyan),var(--indigo),var(--purple),var(--hotpink));
+  transform:scaleX(0);transform-origin:0 50%;
+}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:scroll()){
+    .progress{animation:grow-x linear;animation-timeline:scroll(root block)}
+    @keyframes grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  }
+}
+
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;
+  padding:1.15rem var(--pad);
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);pointer-events:none;
+}
+.topbar b{color:var(--ink);font-weight:500}
+.topbar .r{color:var(--faint);text-align:right}
+@media (max-width:640px){.topbar .r{display:none}}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:8rem 4rem}
+.hero .wrap{width:100%}
+.hero__grid{display:grid;gap:clamp(2rem,4vw,4rem);grid-template-columns:1fr;align-items:start}
+.hero__grid>*{min-width:0}
+@media (min-width:1040px){.hero__grid{grid-template-columns:1.1fr .9fr;align-items:center}}
+.hero__ev{border:1px solid var(--line-2);border-radius:14px;background:linear-gradient(180deg,var(--card),var(--bg-2));padding:1.2rem 1.3rem}
+.hero__ev .ev{margin-bottom:.85rem;background:transparent;border:0;padding:0;font-size:.7188rem}
+.hero__ev .ev-cap{margin-bottom:.7rem}
+.hero__ev p{font-size:.8125rem;line-height:1.6;color:var(--muted);margin:0}
+
+/* the morph — my homepage effect, reused once */
+.morph-line{display:flex;align-items:center;gap:.9rem;overflow:hidden;margin-bottom:clamp(1.5rem,3vw,2.2rem)}
+.morph-lbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);flex:none;padding-top:.15em}
+.morph-wrap{position:relative;height:clamp(2.6rem,6vw,4rem);flex:1;min-width:0}
+#morph{
+  position:absolute;inset:0;
+  filter:url(#threshold) blur(.35px);
+  display:flex;align-items:center;
+}
+#morph span{
+  position:absolute;left:0;width:100%;
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(2.1rem,5.4vw,3.6rem);
+  line-height:1;letter-spacing:-.035em;
+  color:var(--ink);white-space:nowrap;user-select:none;
+  font-variation-settings:"wdth" 118;
+}
+#filters{position:absolute;width:0;height:0;overflow:hidden}
+
+.hero h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(2rem,1rem+5.5vw,5.9rem);
+  line-height:.99;letter-spacing:-.04em;
+  margin:0 0 1.7rem;max-width:21ch;text-wrap:balance;
+  font-variation-settings:"wdth" var(--wdth,100);
+}
+.hero h1 .hl{color:#8f9dff}
+.hero .lede{max-width:60ch;margin-bottom:2.4rem}
+.hero .sig{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;
+}
+.hero .sig b{color:var(--ink-2);font-weight:500}
+
+/* word-split reveal */
+.w{display:inline-block;overflow:hidden;vertical-align:bottom;max-width:100%}
+.w__in{display:inline-block;transform:translateY(112%);transition:transform .9s var(--ease);transition-delay:calc(var(--i) * 42ms)}
+.is-in .w__in{transform:none}
+html:not(.js) .w__in{transform:none}
+
+/* ============================================================
+   VIDEO
+   ============================================================ */
+.video-sec{padding-top:0}
+.yt{
+  position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
+  background:var(--bg-2);border:1px solid var(--line-2);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
+}
+.yt[data-has-poster="1"]{background:var(--poster) center/cover no-repeat,var(--bg-2)}
+.yt::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(70% 70% at 50% 40%,transparent,rgba(0,0,0,.42)),
+             linear-gradient(180deg,transparent 45%,rgba(0,0,0,.6));
+}
+.yt__btn{
+  position:absolute;inset:0;z-index:2;width:100%;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  gap:.9rem;padding:clamp(1.1rem,3vw,2.2rem);
+  border:0;background:none;color:#fff;font:inherit;cursor:pointer;text-align:left;
+}
+.yt__play{
+  width:62px;height:62px;border-radius:50%;flex:none;
+  display:grid;place-items:center;
+  background:var(--indigo);
+  box-shadow:0 10px 40px -8px color-mix(in oklch,var(--indigo),transparent 30%);
+  transition:transform .5s var(--ease),background .3s;
+}
+.yt__play svg{width:22px;height:22px;fill:#fff;margin-left:3px}
+.yt__btn:hover .yt__play,.yt__btn:focus-visible .yt__play{transform:scale(1.09);background:var(--hotpink)}
+.yt__btn:focus-visible{outline:2px solid var(--indigo);outline-offset:-6px}
+.yt__meta{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.yt__ttl{font-family:var(--display);font-weight:600;font-size:clamp(1.05rem,.9rem+.9vw,1.7rem);letter-spacing:-.02em;line-height:1.1}
+.yt__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity .6s var(--ease)}
+.yt__poster.on{opacity:1}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
+.yt--live::before,.yt--live .yt__btn{display:none}
+
+/* placeholder state when no video id is set yet */
+.yt--empty{border-style:dashed;border-color:var(--line-2)}
+.yt--empty .yt__btn{cursor:default;justify-content:center;align-items:center;text-align:center}
+.yt--empty .yt__play{background:transparent;border:1px solid var(--line-2);box-shadow:none}
+.yt--empty .yt__play svg{fill:var(--faint)}
+.yt--empty .yt__ttl{color:var(--ink-2)}
+
+/* ============================================================
+   FINDINGS — sticky stack
+   ============================================================ */
+.stack{display:flex;flex-direction:column;gap:clamp(1rem,2vw,1.6rem)}
+.finding{
+  position:sticky;top:9vh;
+  background:linear-gradient(180deg,var(--card),var(--bg-2));
+  border:1px solid var(--line-2);border-radius:16px;
+  padding:clamp(1.35rem,3.4vw,2.75rem);
+  transform-origin:50% 0%;
+}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    .finding{
+      view-timeline-name:--f;view-timeline-axis:block;
+      animation:recede linear both;animation-timeline:--f;
+      animation-range:exit-crossing 0% exit-crossing 100%;
+    }
+    @keyframes recede{to{transform:scale(.955);opacity:.55}}
+  }
+}
+.finding__n{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.18em;color:var(--faint);
+  display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem;
+}
+.finding__n i{font-style:normal;color:var(--accent)}
+.finding__n::after{content:"";flex:1;height:1px;background:var(--line)}
+.finding__grid{display:grid;gap:clamp(1.2rem,3vw,2.4rem);grid-template-columns:1fr}
+.finding__grid>*{min-width:0}
+@media (min-width:900px){.finding__grid{grid-template-columns:1.05fr .95fr;align-items:start}}
+.finding p{font-size:.9688rem}
+.finding p:last-child{margin-bottom:0}
+
+/* code / evidence block */
+.ev{
+  font-family:var(--mono);font-size:.75rem;line-height:1.75;
+  background:#06070A;border:1px solid var(--line);border-radius:10px;
+  padding:1rem 1.1rem;overflow-x:auto;color:var(--ink-2);max-width:100%;
+  margin:0 0 1rem;white-space:pre;
+}
+.ev .c{color:var(--faint)}
+.ev .bad{color:var(--hotpink)}
+.ev .ok{color:#4eb89b}
+.ev .k{color:var(--cyan)}
+.ev-cap{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 .55rem;
+}
+
+/* ship box */
+.ship{
+  border-left:2px solid var(--accent);padding-left:1.1rem;margin-top:1.4rem;
+}
+.ship .ev-cap{color:var(--accent);margin-bottom:.4rem}
+.ship p{color:var(--ink-2);margin-bottom:0;font-size:.9375rem}
+
+/* competitor table */
+.cmp{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.75rem;margin:0 0 1rem}
+.cmp td{padding:.42rem 0;border-bottom:1px solid var(--line);color:var(--ink-2)}
+.cmp td:last-child{text-align:right;white-space:nowrap}
+.cmp tr:last-child td{border-bottom:0}
+.cmp .no{color:var(--hotpink)}
+.cmp .yes{color:#4eb89b}
+.cmp .me{color:var(--ink)}
+
+/* bar chart */
+.chart{width:100%;height:auto;overflow:visible}
+.bar{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);
+  transition:transform 1.05s var(--ease);transition-delay:calc(var(--i) * 55ms)}
+.is-in .bar{transform:scaleY(var(--v))}
+html:not(.js) .bar{transform:scaleY(var(--v))}
+.axl{font-family:var(--mono);font-size:8px;fill:var(--faint);letter-spacing:.05em}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+.stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:2.2rem 0 0}
+.stat{background:var(--bg-2);padding:1.35rem 1.25rem;min-width:0}
+.stat__n{
+  font-family:var(--display);font-weight:600;letter-spacing:-.03em;
+  font-size:clamp(1.5rem,1.2rem+1.3vw,2.3rem);line-height:1;color:var(--ink);
+  font-variant-numeric:tabular-nums;display:block;margin-bottom:.45rem;
+}
+.stat__l{font-family:var(--mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);line-height:1.45;display:block}
+
+/* ============================================================
+   CHANNELS
+   ============================================================ */
+.chan{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  grid-template-columns:repeat(auto-fit,minmax(238px,1fr))}
+.chan__i{background:var(--bg-2);padding:1.5rem 1.4rem;min-width:0;transition:background .35s var(--ease)}
+.chan__i:hover{background:var(--card)}
+.chan__h{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;margin-bottom:.6rem}
+.chan__t{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-.015em}
+.chan__tag{font-family:var(--mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.22em .55em;border-radius:3px;flex:none}
+.tag-deep{color:var(--cyan);background:color-mix(in oklch,var(--cyan),transparent 88%)}
+.tag-thin{color:var(--hotpink);background:color-mix(in oklch,var(--hotpink),transparent 88%)}
+.chan__i p{font-size:.875rem;margin:0;line-height:1.6;color:var(--muted)}
+.chan__i p b{color:var(--ink-2)}
+
+/* ============================================================
+   90 DAYS — the hard cut to white
+   ============================================================ */
+.white{background:#fff;color:#1b1d1e;--ink:#1b1d1e;--ink-2:#3d4150;--muted:#666d80;--faint:#8a90a0;
+  --line:rgba(27,29,30,.12);--line-2:rgba(27,29,30,.16);--card:#f7f8fb;--bg-2:#fff}
+.white h2,.white h3{color:#1b1d1e}
+.white .kicker{color:#666d80}
+.white p{color:#3d4150}
+.white .ev{background:#f4f5f9;border-color:rgba(27,29,30,.1);color:#3d4150}
+
+.board{border:1px solid var(--line-2);border-radius:14px;padding:clamp(1.2rem,3vw,2rem);
+  background:var(--card);margin:0 0 clamp(2rem,4vw,3rem)}
+.board .ev-cap{color:var(--indigo)}
+.board .big{font-family:var(--display);font-weight:600;letter-spacing:-.025em;
+  font-size:clamp(1.15rem,1rem+.9vw,1.7rem);line-height:1.2;margin:0 0 .8rem;color:#1b1d1e}
+.board p:last-child{margin-bottom:0}
+
+.tl{display:grid;gap:clamp(1.4rem,3vw,2.4rem);grid-template-columns:1fr}
+.tl>*{min-width:0}
+@media (min-width:880px){.tl{grid-template-columns:repeat(3,1fr)}}
+.tl__c{border-top:2px solid var(--indigo);padding-top:1.1rem}
+.tl__w{font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--indigo);margin:0 0 1rem;font-weight:500}
+.tl__l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.1rem}
+.tl__l li{font-size:.9375rem;line-height:1.55;color:#3d4150;padding-left:1.15rem;position:relative}
+.tl__l li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--indigo)}
+.tl__l b{color:#1b1d1e;font-weight:600}
+
+/* ============================================================
+   WHAT I'M NOT — restraint is the design
+   ============================================================ */
+.not__l{list-style:none;margin:0;padding:0;max-width:64ch;display:flex;flex-direction:column}
+.not__l li{border-top:1px solid var(--line);padding:1.5rem 0}
+.not__l li:last-child{border-bottom:1px solid var(--line)}
+.not__l h3{font-size:1.0625rem;margin-bottom:.45rem;color:var(--ink-2);font-weight:600}
+.not__l p{font-size:.9375rem;margin:0;color:var(--muted)}
+
+/* ============================================================
+   CLOSE + TICKER
+   ============================================================ */
+.close h2{max-width:16ch}
+.links{display:flex;flex-wrap:wrap;gap:.65rem;margin:2rem 0 0}
+.lnk{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink-2);border:1px solid var(--line-2);border-radius:999px;
+  padding:.72em 1.25em;transition:border-color .3s,color .3s,background .3s;
+}
+.lnk:hover,.lnk:focus-visible{color:var(--ink);border-color:var(--indigo);background:color-mix(in oklch,var(--indigo),transparent 90%)}
+.lnk--pri{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.lnk--pri:hover,.lnk--pri:focus-visible{background:var(--hotpink);border-color:var(--hotpink);color:#fff}
+a:focus-visible,button:focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:3px}
+
+.colophon{margin-top:clamp(3rem,7vw,5rem);padding-top:1.5rem;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;color:var(--faint);line-height:1.8;max-width:70ch}
+
+.ticker{overflow:hidden;border-top:1px solid var(--line);padding:1.1rem 0;
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.ticker__t{display:flex;width:max-content;animation:marq 42s linear infinite}
+.ticker__s{display:flex;flex:none}
+.ticker__s span{font-family:var(--mono);font-size:.75rem;letter-spacing:.2em;text-transform:lowercase;
+  color:var(--faint);padding:0 1.6rem;white-space:nowrap}
+.ticker__s span::after{content:"\00B7";margin-left:1.6rem;color:var(--indigo)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ticker__t{animation:none}
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .w__in{transform:none;transition:none}
+  .bar{transition:none;transform:scaleY(var(--v))}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+
+<header class="topbar">
+  <span><b>Andrew Conklin</b></span>
+  <span class="r">Head of Marketing &middot; Application</span>
+</header>
+
+<svg id="filters" aria-hidden="true"><defs><filter id="threshold">
+  <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/>
+</filter></defs></svg>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <p class="kicker">Head of Marketing &middot; Remote, US</p>
+
+    <div class="morph-line" aria-hidden="true">
+      <span class="morph-lbl">The&nbsp;job</span>
+      <div class="morph-wrap"><div id="morph"><span id="m1"></span><span id="m2"></span></div></div>
+    </div>
+    <p class="sr-only">Website, outbound, content, lifecycle, events, partner marketing, paid, launches &mdash; all of it.</p>
+
+    <div class="hero__grid">
+    <div>
+    <h1 data-split>You sell a Claude integration. Your <span class="hl">robots.txt blocks ClaudeBot.</span></h1>
+
+    <p class="lede reveal">Nobody decided that. It sits inside a <span class="mono">#&#8202;BEGIN Cloudflare Managed content</span> block &mdash; a dashboard default that landed on your marketing site and stayed. Which is about what happens when a function goes unowned for a while.</p>
+
+    <p class="lede reveal" style="--i:1">I found three more like it. They're below, with the command to check each one, and what I'd do about them.</p>
+
+    <p class="sig reveal" style="--i:2">
+      <span><b>Andrew Conklin</b></span>
+      <span>Atlanta &middot; remote</span>
+      <span>andrew@andrewconklin.com</span>
+    </p>
+    </div>
+
+    <aside class="hero__ev reveal" style="--i:1">
+      <p class="ev-cap">everyonesocial.com/robots.txt &middot; today</p>
+<pre class="ev"><span class="c"># BEGIN Cloudflare Managed content</span>
+User-agent: <span class="bad">ClaudeBot</span>
+Disallow: <span class="bad">/</span>
+
+User-agent: <span class="bad">GPTBot</span>
+Disallow: <span class="bad">/</span></pre>
+      <p>Also Google-Extended, Applebot-Extended, meta-externalagent, Amazonbot, Bytespider, CCBot. Eight in total, on the site that sells six AI integrations and an MCP server.</p>
+    </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section class="video-sec">
+  <div class="wrap">
+    <div class="yt reveal" id="yt" data-has-poster="0">
+      <button class="yt__btn" type="button" id="ytBtn">
+        <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+        <span>
+          <span class="yt__meta" id="ytMeta">Two minutes</span><br>
+          <span class="yt__ttl" id="ytTtl">Why me, out loud</span>
+        </span>
+      </button>
+    </div>
+    <p class="small dim reveal" style="margin-top:1rem">Everything in the video is written out below. Skip it if you'd rather read.</p>
+  </div>
+</section>
+
+<!-- ============ FINDINGS ============ -->
+<section id="found">
+  <div class="wrap">
+    <p class="kicker reveal">What I found</p>
+    <h2 class="reveal">Four things. All checkable in about a minute.</h2>
+    <p class="lede reveal" style="margin-bottom:3.5rem">I looked before I wrote any of this. Every claim below has the command or the URL next to it. Checked 2828&nbsp;August&nbsp;2026nbsp;August28&nbsp;August&nbsp;2026nbsp;2026 &mdash; your site changed inside the last month, so re-check anything that reads stale. If one of these has already been fixed, good; delete it and the other three still stand.</p>
+
+    <div class="stack">
+
+      <!-- 01 -->
+      <article class="finding">
+        <p class="finding__n"><i>01</i> The crawlers</p>
+        <div class="finding__grid">
+          <div>
+            <h3>Six AI integrations on the site. Eight AI crawlers blocked at the door.</h3>
+            <p>You ship <span class="mono">/integrations/</span> pages for Claude, ChatGPT, Gemini, Perplexity, Copilot and Mistral, plus an MCP server so those tools can query advocacy data directly. All live, all returning 200.</p>
+            <p>Meanwhile <span class="mono">robots.txt</span> returns <span class="mono">Disallow: /</span> for ClaudeBot, GPTBot, Google-Extended, Applebot-Extended, meta-externalagent, Amazonbot, Bytespider and CCBot. So an assistant can query your product and cannot read a single page of your marketing.</p>
+            <p>I checked five competitors the same morning. Hootsuite opts in explicitly. Sociabble, DSMN8, GaggleAMP and Sprout have no block at all. Only Haiilo does what you do &mdash; and the sites that own <em>&ldquo;best employee advocacy platform&rdquo;</em> are the ones an assistant can actually read.</p>
+            <div class="ship">
+              <p class="ev-cap">What I'd ship</p>
+              <p>Turn the managed block off. Publish <span class="mono">llms.txt</span>. Put <span class="mono">Product</span>/<span class="mono">Offer</span> schema on <span class="mono">/pricing/</span> so your quote-based model is machine-readable &mdash; right now the only pricing figure circulating is a per-seat number you don't charge.</p>
+            </div>
+          </div>
+          <div>
+            <p class="ev-cap">everyonesocial.com/robots.txt</p>
+<pre class="ev"><span class="c"># BEGIN Cloudflare Managed content</span>
+User-agent: <span class="bad">ClaudeBot</span>
+Disallow: <span class="bad">/</span>
+
+User-agent: <span class="bad">GPTBot</span>
+Disallow: <span class="bad">/</span>
+
+User-agent: <span class="bad">Google-Extended</span>
+Disallow: <span class="bad">/</span>
+<span class="c"># ...and Applebot-Extended, meta-
+# externalagent, Amazonbot,
+# Bytespider, CCBot
+# END Cloudflare Managed Content</span></pre>
+            <p class="ev-cap">Same check, everyone else</p>
+            <table class="cmp">
+              <tr><td class="me">everyonesocial.com</td><td class="no">blocks 8</td></tr>
+              <tr><td>hootsuite.com</td><td class="yes">opts in</td></tr>
+              <tr><td>sproutsocial.com</td><td class="yes">allows</td></tr>
+              <tr><td>sociabble.com</td><td class="yes">allows</td></tr>
+              <tr><td>dsmn8.com</td><td class="yes">allows</td></tr>
+              <tr><td>gaggleamp.com</td><td class="yes">allows</td></tr>
+              <tr><td>haiilo.com</td><td class="no">blocks</td></tr>
+            </table>
+<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/robots.txt \
+  | grep -A1 ClaudeBot</pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- 02 -->
+      <article class="finding">
+        <p class="finding__n"><i>02</i> The tour</p>
+        <div class="finding__grid">
+          <div>
+            <h3>You already own the tour video. The page built to show it doesn't play it.</h3>
+            <p><em>&ldquo;See the platform&nbsp;&rarr;&rdquo;</em> on the homepage goes to <span class="mono">/advocacy-tour/</span>. Four chapters are written and titled &mdash; Account setup, AI throughout, Supporting scale, Proving ROI. Each one reads <strong>&ldquo;Placeholder video&rdquo;</strong> at <strong>0:00</strong>. There is no <span class="mono">&lt;video&gt;</span>, no <span class="mono">&lt;iframe&gt;</span> and no player script on the page.</p>
+            <p>But the page's own structured data points at a real Wistia asset &mdash; <span class="mono">autmy6oxc7</span>, <em>&ldquo;ES Product Tour July2024&rdquo;</em>, six minutes eighteen. I played it. It works.</p>
+            <p>So Google is being told there's a chaptered product tour on that URL, and a human who lands there sees four grey boxes. The <span class="mono">hasPart</span> anchors point at <span class="mono">#chapter-share</span>, <span class="mono">#chapter-audience</span> and <span class="mono">#chapter-analytics</span>, none of which exist &mdash; the real IDs are <span class="mono">setup</span>, <span class="mono">ai</span>, <span class="mono">scale</span>, <span class="mono">roi</span>.</p>
+            <div class="ship">
+              <p class="ev-cap">What I'd ship</p>
+              <p>Embed the asset you already paid for, cut it against the four chapters you already wrote, and make the schema match the page. That's an afternoon, and it's the only no-ask path in a demo-gated funnel.</p>
+            </div>
+          </div>
+          <div>
+            <p class="ev-cap">What the page renders</p>
+<pre class="ev">01 &middot; Account setup      <span class="bad">0:00</span>
+   <span class="bad">Placeholder video</span>
+02 &middot; AI throughout      <span class="bad">0:00</span>
+   <span class="bad">Placeholder video</span>
+03 &middot; Supporting scale   <span class="bad">0:00</span>
+   <span class="bad">Placeholder video</span>
+04 &middot; Proving ROI        <span class="bad">0:00</span>
+   <span class="bad">Placeholder video</span></pre>
+            <p class="ev-cap">What the schema on that page claims</p>
+<pre class="ev">"@type": <span class="k">"VideoObject"</span>,
+"name": "EveryoneSocial Product Tour",
+"embedUrl": "fast.wistia.net/embed/
+             iframe/<span class="ok">autmy6oxc7</span>",
+"hasPart": [ 4 clips &rarr; <span class="bad">#chapter-share</span>
+             <span class="bad">#chapter-audience</span>
+             <span class="bad">#chapter-analytics</span> ]
+<span class="c">// none of those anchors are on the page</span>
+<span class="c">// wistia says: 378.1s, created Jul 2024</span></pre>
+<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/advocacy-tour/ \
+  | grep -c "&lt;video"
+<span class="bad">0</span></pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- 03 -->
+      <article class="finding">
+        <p class="finding__n"><i>03</i> The cadence</p>
+        <div class="finding__grid">
+          <div>
+            <h3>493 posts in the archive. Eight in the last year.</h3>
+            <p>Straight from your own RSS feed. 2019 peaked at 82 posts. 2024 was 13, 2025 was 7, and 2026 is at 8 with the year two-thirds gone. There's a silent stretch from 26&nbsp;June&nbsp;2025 to 10&nbsp;March&nbsp;2026 &mdash; eight and a half months.</p>
+            <p>The recent posts are good, by the way. Bylined, dated, properly marked up, written by people who clearly run programs. This isn't a quality problem.</p>
+            <p>Two smaller things while I was in there: the sitemap has 629 URLs and zero <span class="mono">&lt;lastmod&gt;</span> tags, so nothing signals freshness. And the nav says &ldquo;Guides&rdquo; while <span class="mono">/guides/</span> returns a 404.</p>
+            <div class="ship">
+              <p class="ev-cap">What I'd ship</p>
+              <p>Not more posts. Your newest one models month-three drop-off on <em>a hypothetical 400-seat program</em> &mdash; while you sit on benchmarks from 4,000+ real ones. Publish the real numbers, dated, with the method stated. Nobody else in the category can answer that question and you can.</p>
+            </div>
+          </div>
+          <div>
+            <p class="ev-cap">Posts per year &middot; everyonesocial.com/rss.xml</p>
+            <svg class="chart" viewBox="0 0 340 130" role="img" aria-label="Blog posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 year to date 8.">
+              <g class="bars">
+                <rect class="bar" style="--i:0"  x="4"   y="14" width="22" height="96" rx="2" data-v=".49" fill="#4cc1ea"/>
+                <rect class="bar" style="--i:1"  x="34"  y="14" width="22" height="96" rx="2" data-v=".40" fill="#4cc1ea"/>
+                <rect class="bar" style="--i:2"  x="64"  y="14" width="22" height="96" rx="2" data-v=".60" fill="#4689e7"/>
+                <rect class="bar" style="--i:3"  x="94"  y="14" width="22" height="96" rx="2" data-v="1"   fill="#3f55e5"/>
+                <rect class="bar" style="--i:4"  x="124" y="14" width="22" height="96" rx="2" data-v=".90" fill="#3a2ebc"/>
+                <rect class="bar" style="--i:5"  x="154" y="14" width="22" height="96" rx="2" data-v=".80" fill="#4c099e"/>
+                <rect class="bar" style="--i:6"  x="184" y="14" width="22" height="96" rx="2" data-v=".82" fill="#6606a9"/>
+                <rect class="bar" style="--i:7"  x="214" y="14" width="22" height="96" rx="2" data-v=".40" fill="#a91590"/>
+                <rect class="bar" style="--i:8"  x="244" y="14" width="22" height="96" rx="2" data-v=".16" fill="#f22279"/>
+                <rect class="bar" style="--i:9"  x="274" y="14" width="22" height="96" rx="2" data-v=".085" fill="#f22279"/>
+                <rect class="bar" style="--i:10" x="304" y="14" width="22" height="96" rx="2" data-v=".10" fill="#f22279"/>
+              </g>
+              <line x1="0" y1="110.5" x2="340" y2="110.5" stroke="rgba(242,243,246,.14)" stroke-width="1"/>
+              <text class="axl" x="4" y="122">'16</text>
+              <text class="axl" x="94" y="122">'19</text>
+              <text class="axl" x="184" y="122">'22</text>
+              <text class="axl" x="274" y="122">'25</text>
+              <text class="axl" x="298" y="122">'26 YTD</text>
+            </svg>
+<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/rss.xml \
+  | grep -c "&lt;item&gt;"
+<span class="ok">493</span>   <span class="c">&larr; 8 of them in the last 12 months</span></pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- 04 -->
+      <article class="finding">
+        <p class="finding__n"><i>04</i> The catch</p>
+        <div class="finding__grid">
+          <div>
+            <h3>Nothing on the site catches an email. Nothing tracks an ad.</h3>
+            <p>The ROI calculator is the clearest one. Somebody models a 50,000-seat program, gets a number, and leaves &mdash; there's no form on that page, no email field, no PDF, nothing to forward to a CFO. It's your highest-intent page and it identifies nobody.</p>
+            <p><span class="mono">/newsletter/</span>, <span class="mono">/webinars/</span>, <span class="mono">/events/</span>, <span class="mono">/vs/</span>, <span class="mono">/compare/</span> and every competitor-comparison URL I tried all 404. Meanwhile other people own the &ldquo;EveryoneSocial alternatives&rdquo; pages.</p>
+            <p>And the whole tracking stack on the homepage, the demo page and the pricing page is GA4 plus HubSpot. No LinkedIn Insight Tag. At a company whose product <em>is</em> LinkedIn.</p>
+            <div class="ship">
+              <p class="ev-cap">What I'd ship</p>
+              <p>The Insight Tag on day one, before anything else on this list &mdash; matched audiences need roughly 90 days of data before they're usable, so the calendar is the expensive part, not the work. Then an optional &ldquo;email me this business case&rdquo; on the calculator that routes into the same-day quote you already promise.</p>
+            </div>
+          </div>
+          <div>
+            <p class="ev-cap">Tracking on /, /demo/, /pricing/</p>
+<pre class="ev">GA4                     <span class="ok">present</span>
+HubSpot                 <span class="ok">present</span>
+LinkedIn Insight Tag    <span class="bad">absent</span>
+Meta Pixel              <span class="bad">absent</span>
+Google Ads conversion   <span class="bad">absent</span></pre>
+            <p class="ev-cap">Pages that 404</p>
+<pre class="ev">/guides/        /newsletter/
+/webinars/      /events/
+/vs/            /compare/
+/gaggleamp-alternative/
+/dsmn8-alternative/</pre>
+<pre class="ev"><span class="c">$</span> curl -s everyonesocial.com/employee-advocacy-calculator/ \
+  | grep -c "&lt;form"
+<span class="bad">0</span></pre>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE BRIDGE ============ -->
+<section id="bridge">
+  <div class="wrap">
+    <p class="kicker reveal">Why this problem</p>
+    <h2 class="reveal">I've built the machine you sell. Mine was pointed at creators.</h2>
+    <p class="lede reveal">An advocacy program is a funnel with a specific shape: recruit a person, get their account connected, verify they own it, nudge them into actually posting, then measure what the post was worth. I spent this year building exactly that funnel, solo, in Claude Code. The only difference is who was standing at the top of it.</p>
+
+    <div class="stats reveal" data-stagger>
+      <div class="stat"><span class="stat__n" data-to="600" data-suffix="+">0</span><span class="stat__l">Creators recruited</span></div>
+      <div class="stat"><span class="stat__n" data-to="17">0</span><span class="stat__l">Countries</span></div>
+      <div class="stat"><span class="stat__n">$0</span><span class="stat__l">Ad spend to get there</span></div>
+      <div class="stat"><span class="stat__n" data-to="68.6" data-dec="1" data-suffix="%">0</span><span class="stat__l">Campaign view &rarr; join</span></div>
+      <div class="stat"><span class="stat__n" data-to="64" data-suffix="%">0</span><span class="stat__l">Signup &rarr; account connected</span></div>
+      <div class="stat"><span class="stat__n" data-to="4.95" data-dec="2" data-suffix="M">0</span><span class="stat__l">Creator post views tracked</span></div>
+    </div>
+
+    <div style="max-width:62ch;margin-top:clamp(2.5rem,5vw,4rem)">
+      <h3 class="reveal">Where the comparison breaks</h3>
+      <p class="reveal">My posters got paid per view. Employees don't, and your own category's data says recognition beats cash anyway. So the incentive layer doesn't transfer &mdash; I'd rather say that than have you work it out on the call. What does transfer is everything wrapped around it: the connect-and-verify funnel, the nudge engine, the experiment rig, and the measurement layer. Those don't care why someone posts.</p>
+
+      <h3 class="reveal" style="margin-top:2.4rem">The one activation lever I have that didn't involve money</h3>
+      <p class="reveal">On my other product, a bandit engine tested onboarding paths. Users who started with an image activated; users who started with a note did not. Zero versus one hundred percent, and 3.92 active days against 0.74.</p>
+      <p class="reveal">Small sample &mdash; 113 users total &mdash; so I read that as directional, not settled. But the lever was a product change, not a payment, and it moved behaviour. That's the shape of the month-three problem your newest post is about, and it's a measurement problem before it's a content problem.</p>
+      <p class="reveal dim small">Both products are pre-revenue. Bounty_OS funding is paused; the other has no MRR. Every dollar figure I'd ever quote you is budget created or spend deployed, never revenue earned.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHANNELS ============ -->
+<section id="channels">
+  <div class="wrap">
+    <p class="kicker reveal">The stack you listed</p>
+    <h2 class="reveal">Eight channels. My receipt on each, including the thin ones.</h2>
+    <p class="lede reveal" style="margin-bottom:2.6rem">Three of these I'd be learning in public. I'd rather you know which three now.</p>
+
+    <div class="chan reveal" data-stagger>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Website</span><span class="chan__tag tag-deep">Deep</span></div>
+        <p>Two production front-ends shipped solo. <b>This page is one of them</b> &mdash; hand-written, no framework, no build step. Conversion work is the discipline behind the 68.6% and the 64%.</p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Content</span><span class="chan__tag tag-deep">Deep</span></div>
+        <p><b>1M+ organic short-form views.</b> I write it, shoot it and cut it myself. Also a working creative director and on-camera performer, which is why a product tour costs me time and not budget.</p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Lifecycle</span><span class="chan__tag tag-deep">Deep</span></div>
+        <p>Two lifecycle engines built with copy under continuous test rather than a hardcoded sequence. <b>85 variants across 8,384 sends</b> &mdash; about 99 per arm, so I treat the winner as directional. The engine is the transferable part.</p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Paid</span><span class="chan__tag tag-deep">Deep</span></div>
+        <p>The one with real money behind it. <b>48 creator videos to 956K views at ~$0.008 blended cost-per-view</b>, best unit $0.0016, on ~$7.7K spend. Instagram campaigns to ~$0.013 per lead.</p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Launches</span><span class="chan__tag tag-deep">Deep</span></div>
+        <p>Release strategy end to end &mdash; timelines, assets, cross-functional delivery, a 3&ndash;4 person team. <b>One artist from 20K to 250K monthly listeners in six months.</b></p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Outbound</span><span class="chan__tag tag-thin">Thin</span></div>
+        <p>I've built the data layer underneath outbound &mdash; enrichment, verification, scoring, sequencing infrastructure. <b>I have not personally run enterprise sequences into a buying committee.</b></p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Partner marketing</span><span class="chan__tag tag-thin">Thin</span></div>
+        <p>I've run both sides of a two-sided market and structured brand&ndash;creator partnerships. <b>I have never run a software partner program</b> with co-marketing and referral mechanics.</p>
+      </div>
+      <div class="chan__i">
+        <div class="chan__h"><span class="chan__t">Events</span><span class="chan__tag tag-thin">Thin</span></div>
+        <p>Promotions and events around releases, and event photography and journalism on the other side of the camera. <b>Thinnest of the eight.</b> No B2B field program, no conference calendar, no booth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 90 DAYS — hard cut to white ============ -->
+<section id="ninety" class="white">
+  <div class="wrap">
+    <p class="kicker reveal">If I had the seat</p>
+    <h2 class="reveal">First ninety days.</h2>
+    <p class="lede reveal" style="margin-bottom:2.6rem">Ordered by what expires if it waits, not by what's most fun. This is a plan I'd expect to revise after thirty customer conversations &mdash; I've had zero, and that's the honest limit on everything below.</p>
+
+    <div class="board reveal">
+      <p class="ev-cap">The number I'd put on the board in week one</p>
+      <p class="big">Demo requests with a resolved first-touch source.</p>
+      <p>Right now that number can't be produced &mdash; there's no Insight Tag and no first-touch capture, so nothing attributes. I'd stand it up in week one and report it in week four whether or not it flatters me. Everything else on this page is an input to it.</p>
+    </div>
+
+    <div class="tl">
+      <div class="tl__c reveal">
+        <p class="tl__w">Days 1&ndash;7</p>
+        <ul class="tl__l">
+          <li><b>LinkedIn Insight Tag, first.</b> Plus a Google Ads conversion tag and first-touch capture on the demo, pricing and both report pages. The 90-day audience clock starts the day it's live, so every day it isn't is a day added to the first paid test.</li>
+          <li><b>Reconcile the tags with GA4 and HubSpot</b> so one demo request produces one record instead of three.</li>
+          <li><b>Turn off the managed crawler block</b>, publish <span class="mono">llms.txt</span>, and put Product/Offer schema on pricing so the model you actually charge is machine-readable.</li>
+        </ul>
+      </div>
+      <div class="tl__c reveal" style="--i:1">
+        <p class="tl__w">Days 8&ndash;30</p>
+        <ul class="tl__l">
+          <li><b>Embed the tour you already own.</b> Cut the Wistia asset against the four chapters already written, fix the schema anchors so the markup matches the page.</li>
+          <li><b>Ship the launch that never happened.</b> You rebuilt the platform and relaunched the site inside four weeks &mdash; Wayback still shows the old homepage on 30 July &mdash; with no post, no changelog, and a fourth product line nobody outside the building has been told about.</li>
+          <li><b>Put an email capture in the blog template</b> and make the ROI calculator send a one-page business case a champion can forward.</li>
+        </ul>
+      </div>
+      <div class="tl__c reveal" style="--i:2">
+        <p class="tl__w">Days 31&ndash;90</p>
+        <ul class="tl__l">
+          <li><b>Replace the hypotheticals with your own data.</b> Turn the 4,000+ program benchmark into a dated report with the method stated, and a recurring month-three activation index. You're the only one who can publish it.</li>
+          <li><b>Take back the comparison layer.</b> Five comparison pages and a plain page stating you're independent, because other people currently own every &ldquo;alternatives&rdquo; result for your own name.</li>
+          <li><b>Run your program on your product</b> and publish the mechanics and the numbers openly. It's the only channel that costs nothing, and it's the product demo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT I'M NOT ============ -->
+<section id="not">
+  <div class="wrap">
+    <p class="kicker reveal">The other side</p>
+    <h2 class="reveal">What I'm not.</h2>
+    <p class="lede reveal" style="margin-bottom:2.4rem">You'd find all of this on the call. Better it comes from me.</p>
+
+    <ul class="not__l">
+      <li class="reveal"><h3>I've never held a B2B enterprise SaaS marketing role.</h3><p>Never sold into a Fortune 100 buying committee, never carried a pipeline number at a software company, never owned a marketing budget in this category. That's the real gap and no framing closes it. The parts of your first ninety days I've listed are instrumentation, proof assets and lifecycle, which is deliberately the work that doesn't require the tenure I don't have.</p></li>
+      <li class="reveal"><h3>I've never sold to a compliance buyer.</h3><p>FINRA 2210, SEC 17a-4, WORM archiving, supervision queues. I can read the rules; I haven't lived them. Governance is your newest line and my thinnest ground, and the four best posts you published this year are all in that cluster. I'd want it to be an early visible deliverable rather than a thing I quietly avoid.</p></li>
+      <li class="reveal"><h3>My numbers are small.</h3><p>600 users against your 200+ programs and 50,000-seat rollouts. The mechanics are the same shape at any size, but &ldquo;my funnel work scales to fifty thousand seats&rdquo; isn't a claim I can evidence, so I won't make it. What I can evidence is that I've built and instrumented these systems end to end, which most marketing candidates haven't, at whatever size they were built.</p></li>
+      <li class="reveal"><h3>I run my own things.</h3><p>Which is the obvious flight-risk question. You left this company around 2013, went and did other people's jobs, and came back as CEO in 2015 &mdash; so you know the shape of it better than I could explain it. A function to build and run yourself is the closest thing to founding that isn't founding. That's the honest reason I want this one.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CLOSE ============ -->
+<section class="close">
+  <div class="wrap">
+    <p class="kicker reveal">The ask</p>
+    <h2 class="reveal">Twenty minutes.</h2>
+    <p class="lede reveal">If the four things above are already on someone's list, tell me and I'll stop. If they're not, I've started.</p>
+
+    <div class="links reveal" data-stagger>
+      <a class="lnk lnk--pri" href="mailto:andrew@andrewconklin.com?subject=Head%20of%20Marketing%20%E2%80%94%20Andrew%20Conklin">andrew@andrewconklin.com</a>
+      <a class="lnk" href="https://www.linkedin.com/in/andrew-conklin" rel="noopener">LinkedIn</a>
+      <a class="lnk" href="https://andrewconklin.com">andrewconklin.com</a>
+    </div>
+
+    <p class="colophon reveal">
+      Built by hand in Claude Code &mdash; one HTML file, no framework, no build step, no dependencies.
+      The typeface is the one already on my homepage; the accent ramp and the mono are lifted from your stylesheet.<br>
+      Every claim here was checked against your live site on 28 August 2026, and every command to re-check one is printed next to it.
+      Two findings I'd originally written up didn't survive that check, so they aren't on this page.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__t">
+    <div class="ticker__s"><span>andrew conklin</span><span>head of marketing</span><span>everyonesocial</span><span>website</span><span>outbound</span><span>content</span><span>lifecycle</span><span>events</span><span>partners</span><span>paid</span><span>launches</span></div>
+    <div class="ticker__s"><span>andrew conklin</span><span>head of marketing</span><span>everyonesocial</span><span>website</span><span>outbound</span><span>content</span><span>lifecycle</span><span>events</span><span>partners</span><span>paid</span><span>launches</span></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   CONFIG — paste the YouTube link here and nothing else changes.
+   Accepts a full URL, a share URL, or a bare 11-character ID.
+   Leave it empty and the page renders a designed placeholder.
+   ============================================================ */
+var CONFIG = {
+  youtube : "",
+  title   : "Why me, out loud",
+  meta    : "Two minutes",
+  poster  : ""            // optional: "poster.jpg" next to this file
+};
+
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- YouTube facade ---------- */
+function ytId(s){
+  if(!s) return '';
+  s = String(s).trim();
+  if(/^[\w-]{11}$/.test(s)) return s;
+  var m = s.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([\w-]{11})/);
+  return m ? m[1] : '';
+}
+(function(){
+  var box = document.getElementById('yt');
+  if(!box) return;
+  var btn  = document.getElementById('ytBtn'),
+      id   = ytId(CONFIG.youtube);
+
+  document.getElementById('ytTtl').textContent  = CONFIG.title;
+  document.getElementById('ytMeta').textContent = CONFIG.meta;
+
+  if(CONFIG.poster){
+    box.style.setProperty('--poster','url("'+CONFIG.poster+'")');
+    box.setAttribute('data-has-poster','1');
+  }
+
+  if(!id){
+    box.classList.add('yt--empty');
+    document.getElementById('ytTtl').textContent  = 'Video goes here';
+    document.getElementById('ytMeta').textContent = 'Not recorded yet';
+    btn.setAttribute('aria-disabled','true');
+    btn.setAttribute('tabindex','-1');
+    return;
+  }
+
+  btn.setAttribute('aria-label','Play: '+CONFIG.title);
+
+  var warmed = false;
+  function warm(){
+    if(warmed) return; warmed = true;
+    ['https://www.youtube-nocookie.com','https://i.ytimg.com'].forEach(function(h){
+      var l = document.createElement('link');
+      l.rel = 'preconnect'; l.href = h; l.crossOrigin = '';
+      document.head.appendChild(l);
+    });
+  }
+  box.addEventListener('pointerover', warm, {once:true});
+  btn.addEventListener('focus', warm, {once:true});
+
+  if(!CONFIG.poster){
+    // maxresdefault 404s on uploads YouTube never made an HD master for.
+    // sddefault can also miss. hqdefault always exists.
+    var qs = ['maxresdefault','sddefault','hqdefault'], qi = 0;
+    var img = document.createElement('img');
+    img.className = 'yt__poster';
+    img.alt = '';
+    img.setAttribute('aria-hidden','true');
+    img.decoding = 'async';
+    img.onerror = function(){
+      qi++;
+      if(qi < qs.length) img.src = 'https://i.ytimg.com/vi/'+id+'/'+qs[qi]+'.jpg';
+    };
+    img.onload = function(){
+      // YouTube serves a 120x90 grey placeholder instead of a 404 in some cases
+      if(img.naturalWidth <= 120 && qi < qs.length - 1){ img.onerror(); return; }
+      img.classList.add('on');
+    };
+    img.src = 'https://i.ytimg.com/vi/'+id+'/'+qs[0]+'.jpg';
+    box.insertBefore(img, box.firstChild);
+  }
+
+  btn.addEventListener('click', function(){
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+    f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; web-share';
+    f.allowFullscreen = true;
+    f.title = CONFIG.title;
+    box.appendChild(f);
+    box.classList.add('yt--live');
+    f.focus();
+  });
+})();
+
+/* ---------- Morphing type — the effect from my homepage ---------- */
+(function(){
+  var a = document.getElementById('m1'), b = document.getElementById('m2');
+  if(!a || !b) return;
+
+  var words = ['website','outbound','content','lifecycle','events','partners','paid','launches','all of it'];
+
+  if(reduce){ a.textContent = 'all of it'; b.textContent = ''; return; }
+
+  var MORPH = 1, COOL = 0.3, i = words.length - 1, morph = 0, cool = COOL, t = performance.now();
+  a.textContent = words[i % words.length];
+  b.textContent = words[(i+1) % words.length];
+
+  function set(f){
+    b.style.filter  = 'blur('+Math.min(4.5/f - 4.5, 100)+'px)';
+    b.style.opacity = Math.pow(f, .4) * 100 + '%';
+    var g = 1 - f;
+    a.style.filter  = 'blur('+Math.min(4.5/g - 4.5, 100)+'px)';
+    a.style.opacity = Math.pow(g, .4) * 100 + '%';
+    a.textContent = words[i % words.length];
+    b.textContent = words[(i+1) % words.length];
+  }
+  function frame(now){
+    requestAnimationFrame(frame);
+    var inc = cool > 0, dt = (now - t)/1000; t = now; cool -= dt;
+    if(cool <= 0){
+      if(inc) i++;
+      morph -= cool; cool = 0;
+      var f = morph / MORPH;
+      if(f > 1){ cool = COOL; f = 1; }
+      set(f);
+    } else {
+      morph = 0;
+      b.style.filter = ''; b.style.opacity = '100%';
+      a.style.filter = ''; a.style.opacity = '0%';
+    }
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ---------- Split the headline into words ---------- */
+document.querySelectorAll('[data-split]').forEach(function(el){
+  var html = el.innerHTML, tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  el.setAttribute('aria-label', tmp.textContent.trim());
+  var out = '', n = 0;
+  // walk top-level nodes so the gradient <span> survives
+  Array.prototype.forEach.call(tmp.childNodes, function(node){
+    if(node.nodeType === 3){
+      node.textContent.split(/(\s+)/).forEach(function(tok){
+        if(!tok.trim()){ out += tok; return; }
+        out += '<span class="w" aria-hidden="true" style="--i:'+(n++)+'"><span class="w__in">'+tok+'</span></span>';
+      });
+    } else {
+      var cls = node.getAttribute('class') || '';
+      node.textContent.split(/(\s+)/).forEach(function(tok){
+        if(!tok.trim()){ out += tok; return; }
+        out += '<span class="w" aria-hidden="true" style="--i:'+(n++)+'"><span class="w__in '+cls+'">'+tok+'</span></span>';
+      });
+    }
+  });
+  el.innerHTML = out;
+});
+
+/* ---------- Counters ---------- */
+function countUp(el){
+  var to  = parseFloat(el.dataset.to),
+      dec = parseInt(el.dataset.dec || '0', 10),
+      suf = el.dataset.suffix || '';
+  var fmt = function(v){
+    return v.toLocaleString('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec});
+  };
+  el.style.minWidth = el.offsetWidth + 'px';
+  if(reduce){ el.textContent = fmt(to) + suf; return; }
+  var DUR = 1500, t0 = performance.now();
+  (function tick(now){
+    var t = Math.min((now - t0)/DUR, 1),
+        e = 1 - Math.pow(1 - t, 4);
+    el.textContent = fmt(to * e) + suf;
+    if(t < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
+/* ---------- Bars ---------- */
+document.querySelectorAll('.bar').forEach(function(b){ b.style.setProperty('--v', b.dataset.v); });
+
+/* ---------- Reveal ---------- */
+(function(){
+  document.querySelectorAll('[data-stagger]').forEach(function(g){
+    g.querySelectorAll('.reveal, .stat, .chan__i, .lnk').forEach(function(el,i){ el.style.setProperty('--i', i); });
+  });
+
+  var targets = document.querySelectorAll('.reveal, [data-split], .chart, .stats');
+
+  function fire(el){
+    el.classList.add('is-in');
+    el.querySelectorAll('[data-to]').forEach(countUp);
+    if(el.matches('[data-to]')) countUp(el);
+  }
+
+  if(reduce || !('IntersectionObserver' in window)){
+    targets.forEach(fire); return;
+  }
+
+  var io = new IntersectionObserver(function(entries, obs){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      fire(e.target);
+      obs.unobserve(e.target);
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
+
+  targets.forEach(function(el){ io.observe(el); });
+})();
+
+/* ---------- Anybody's width axis, driven by scroll ----------
+   My homepage typeface is variable (wdth 50-150). Narrowing it
+   as the hero leaves feels like the page exhaling. Hero only.  */
+(function(){
+  var h1 = document.querySelector('.hero h1');
+  if(!h1 || reduce) return;
+  var ticking = false;
+  function update(){
+    ticking = false;
+    var vh = window.innerHeight,
+        p  = Math.min(Math.max(window.scrollY / vh, 0), 1);
+    h1.style.setProperty('--wdth', (100 - p * 16).toFixed(1));
+  }
+  window.addEventListener('scroll', function(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }, {passive:true});
+  update();
+})();
+
+})();
+</script>
+</body>
+</html>

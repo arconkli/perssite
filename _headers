@@ -1,0 +1,12 @@
+# Cloudflare Pages headers.
+# The EveryoneSocial pitch page is a private, unlisted, single-recipient page.
+# It is linked from nowhere and is not in the sitemap. These headers are the
+# authoritative "never index this" signal, stronger than the meta tag alone.
+
+/everyonesocial
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
+  Referrer-Policy: no-referrer
+
+/everyonesocial.html
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
+  Referrer-Policy: no-referrer
