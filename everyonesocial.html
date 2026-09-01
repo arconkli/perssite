@@ -287,7 +287,14 @@ html:not(.js) .bar,.js .bar{transform:scaleY(var(--v))}
 .build + .build{margin-top:clamp(2.2rem,4.5vw,3.4rem)}
 .build__h{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.15rem}
 .build__n{font-family:var(--display);font-stretch:120%;font-weight:600;font-size:var(--s-2);
-  letter-spacing:.01em;text-transform:lowercase;color:var(--ink)}
+  letter-spacing:.01em;text-transform:lowercase;color:var(--ink);text-decoration:none;
+  display:inline-flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+a.build__n{background-image:linear-gradient(var(--ink),var(--ink));background-repeat:no-repeat;
+  background-position:0 100%;background-size:0% 1px;transition:background-size .6s var(--ease)}
+a.build__n:hover,a.build__n:focus-visible{background-size:100% 1px}
+.build__url{font-family:var(--mono);font-stretch:normal;font-size:var(--s--2);font-weight:400;
+  letter-spacing:.08em;color:var(--muted);transition:color .4s var(--ease)}
+a.build__n:hover .build__url,a.build__n:focus-visible .build__url{color:var(--ink-2)}
 .build__m{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;color:var(--faint)}
 .build__d{font-family:var(--mono);font-size:var(--s--1);color:var(--muted);margin:0 0 .9rem;text-transform:lowercase}
 .build__l{list-style:none;margin:0;padding:0;display:grid;gap:.32rem clamp(1rem,3vw,2.5rem);
@@ -600,7 +607,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
 
   <div class="u-wide">
     <div class="build fade">
-      <div class="build__h"><span class="build__n">bounty_os</span><span class="build__m">live &middot; solo &middot; earning</span></div>
+      <div class="build__h"><a class="build__n" href="https://bountyos.com" rel="noopener">bounty_os <span class="build__url">bountyos.com &nearr;</span></a><span class="build__m">live &middot; solo &middot; earning</span></div>
       <p class="build__d">influencer marketplace &mdash; brands pay creators per view</p>
       <ul class="build__l">
         <li><b>ML fraud &amp; bot detection</b> &mdash; naive-Bayes, running in-database</li>
@@ -615,7 +622,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     </div>
 
     <div class="build fade">
-      <div class="build__h"><span class="build__n">soleil clusters</span><span class="build__m">live &middot; solo</span></div>
+      <div class="build__h"><a class="build__n" href="https://clusters.soleilpictures.com" rel="noopener">soleil clusters <span class="build__url">clusters.soleilpictures.com &nearr;</span></a><span class="build__m">live &middot; solo</span></div>
       <p class="build__d">real-time multiplayer saas, web + ios + android</p>
       <ul class="build__l">
         <li><b>CRDT sync engine</b> on Cloudflare Durable Objects &mdash; 64,357 live edit ops</li>
