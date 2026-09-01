@@ -30,8 +30,8 @@
   --bg:#0B0B0C;
   --ink:#EDEAE5;
   --ink-2:#A9A69F;
-  --muted:#77746D;
-  --faint:#55534E;
+  --muted:#8c8984;
+  --faint:#7b7974;
   --signal:#D2495E;
   --borrowed:#3f55e5;
 
@@ -116,9 +116,7 @@ h3{font-size:var(--s-1);font-stretch:88%;line-height:1.18;letter-spacing:-.015em
   font-variant-numeric:tabular-nums lining-nums;
 }
 p{margin:0;color:var(--ink-2)}
-.flow > * + *{margin-top:1rem}
 strong,b{color:var(--ink);font-weight:600}
-.dim{color:var(--muted)}
 .mono{font-family:var(--mono);overflow-wrap:anywhere}
 
 /* lowercase micro-labels go the OTHER way on the width axis */
@@ -127,7 +125,6 @@ strong,b{color:var(--ink);font-weight:600}
   font-size:var(--s--2);letter-spacing:.2em;text-transform:lowercase;
   color:var(--faint);margin:0;
 }
-.lbl--ink{color:var(--ink-2)}
 .mlbl{
   font-family:var(--mono);font-size:var(--s--2);letter-spacing:.14em;
   text-transform:lowercase;color:var(--faint);margin:0;
@@ -287,13 +284,12 @@ html:not(.js) .bar,.js .bar{transform:scaleY(var(--v))}
    PROBLEM DISPLAY — lead with the damning number, then the cost.
    A table of facts is not an argument. This is.
    ============================================================ */
-.lead{display:flex;align-items:baseline;gap:clamp(.8rem,2vw,1.4rem);flex-wrap:wrap;margin:0 0 .55rem}
+.lead{display:flex;font-weight:inherit;letter-spacing:normal;align-items:baseline;gap:clamp(.8rem,2vw,1.4rem);flex-wrap:wrap;margin:0 0 .55rem}
 .lead__n{
   font-family:var(--display);font-stretch:56%;font-weight:600;
   font-size:clamp(3.4rem,1rem + 6.8vw,5.6rem);line-height:.78;letter-spacing:-.04em;
   color:var(--signal);font-variant-numeric:tabular-nums lining-nums;
 }
-.lead__n.ok{color:var(--ink)}
 .lead__t{font-family:var(--display);font-stretch:84%;font-weight:600;
   font-size:var(--s-1);line-height:1.15;letter-spacing:-.01em;color:var(--ink);max-width:22ch}
 .versus{font-family:var(--mono);font-size:var(--s--2);color:var(--muted);
@@ -307,10 +303,9 @@ html:not(.js) .bar,.js .bar{transform:scaleY(var(--v))}
 /* ============================================================
    BUILD LOG — the spec sheet. No kicker, no h2, unlike anything else.
    ============================================================ */
-.method{font-family:var(--mono);font-size:var(--s--1);color:var(--ink-2);
-  margin:clamp(1.8rem,3.5vw,2.6rem) 0 0;max-width:60ch;line-height:1.5}
 .build{border-top:1px solid var(--rule-2);padding-top:1.1rem;margin-top:clamp(1.4rem,2.8vw,2rem)}
 .build + .build{margin-top:clamp(2.2rem,4.5vw,3.4rem)}
+.build__ht{margin:0;font:inherit;letter-spacing:inherit}
 .build__h{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.15rem}
 .build__n{font-family:var(--display);font-stretch:120%;font-weight:600;font-size:var(--s-2);
   letter-spacing:.01em;text-transform:lowercase;color:var(--ink);text-decoration:none;
@@ -364,7 +359,7 @@ a.build__n:hover .build__url,a.build__n:focus-visible .build__url{color:var(--in
    ============================================================ */
 .white{
   background:#F4F2ED;color:#16171A;
-  --ink:#16171A;--ink-2:#3E4048;--muted:#6B6D75;--faint:#8E9099;
+  --ink:#16171A;--ink-2:#3E4048;--muted:#5f6066;--faint:#6d6e74;
   --rule:rgb(22 23 26 / .13);--rule-2:rgb(22 23 26 / .2);--rule-3:rgb(22 23 26 / .34);
 }
 .white .lbl,.white .mlbl{color:var(--borrowed)}
@@ -466,7 +461,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     <div class="hero__r">
       <div class="vid fade" style="--d:.4s">
         <div class="yt" id="yt">
-          <button class="yt__btn" type="button" id="ytBtn">
+          <button class="yt__btn" type="button" id="ytBtn" aria-label="Play the pitch video">
             <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
           </button>
         </div>
@@ -506,7 +501,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     <div class="f01">
       <div>
         <p class="find__n">01 &middot; the crawlers</p>
-        <p class="lead"><span class="lead__n">8</span><span class="lead__t">AI crawlers blocked at your door</span></p>
+        <h3 class="lead"><span class="lead__n">8</span><span class="lead__t">AI crawlers blocked at your door</span></h3>
         <p class="versus">while you sell integrations for six of them</p>
         <div class="cost">
           <p class="cost__l">what it costs</p>
@@ -531,7 +526,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
   <article class="find">
     <div class="f02">
       <p class="find__n">02 &middot; the tour</p>
-      <p class="lead"><span class="lead__n">0</span><span class="lead__t">video players on the page built to play a video</span></p>
+      <h3 class="lead"><span class="lead__n">0</span><span class="lead__t">video players on the page built to play a video</span></h3>
       <p class="versus">you already own 6:18 of finished footage</p>
       <div class="cost">
         <p class="cost__l">what it costs</p>
@@ -553,7 +548,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     <p class="find__n">03 &middot; the cadence</p>
     <div class="f03">
       <div>
-        <p class="lead"><span class="lead__n">8</span><span class="lead__t">posts in twelve months, on a 493-post blog</span></p>
+        <h3 class="lead"><span class="lead__n">8</span><span class="lead__t">posts in twelve months, on a 493-post blog</span></h3>
         <p class="versus">2019 shipped 82</p>
         <svg class="chart" viewBox="0 0 340 112" role="img" style="margin-top:1rem" aria-label="Posts per year: 2016 40, 2017 33, 2018 49, 2019 82, 2020 74, 2021 66, 2022 67, 2023 33, 2024 13, 2025 7, 2026 to date 8.">
           <g>
@@ -592,7 +587,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
   <article class="find">
     <div class="f04">
       <p class="find__n">04 &middot; the catch</p>
-      <p class="lead"><span class="lead__n">0</span><span class="lead__t">ways for a visitor to leave you their email</span></p>
+      <h3 class="lead"><span class="lead__n">0</span><span class="lead__t">ways for a visitor to leave you their email</span></h3>
       <p class="versus">and no ad tracking of any kind</p>
       <div class="cost">
         <p class="cost__l">what it costs</p>
@@ -626,7 +621,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
 
   <div class="u-wide">
     <div class="build fade">
-      <div class="build__h"><a class="build__n" href="https://bountyos.com" rel="noopener">bounty_os <span class="build__url">bountyos.com &nearr;</span></a><span class="build__m">live &middot; solo &middot; earning</span></div>
+      <div class="build__h"><h3 class="build__ht"><a class="build__n" href="https://bountyos.com" rel="noopener">bounty_os <span class="build__url">bountyos.com &nearr;</span></a></h3><span class="build__m">live &middot; solo &middot; earning</span></div>
       <p class="build__d">influencer marketplace &mdash; brands pay creators per view</p>
       <ul class="build__l">
         <li><b>ML fraud &amp; bot detection</b> &mdash; naive-Bayes, running in-database</li>
@@ -641,7 +636,7 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
     </div>
 
     <div class="build fade">
-      <div class="build__h"><a class="build__n" href="https://clusters.soleilpictures.com" rel="noopener">soleil clusters <span class="build__url">clusters.soleilpictures.com &nearr;</span></a><span class="build__m">live &middot; solo</span></div>
+      <div class="build__h"><h3 class="build__ht"><a class="build__n" href="https://clusters.soleilpictures.com" rel="noopener">soleil clusters <span class="build__url">clusters.soleilpictures.com &nearr;</span></a></h3><span class="build__m">live &middot; solo</span></div>
       <p class="build__d">real-time multiplayer saas, web + ios + android</p>
       <ul class="build__l">
         <li><b>33 MCP tools</b> and 50 API endpoints &mdash; the whole product driveable by an agent</li>
