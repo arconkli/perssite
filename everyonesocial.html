@@ -207,27 +207,32 @@ html:not(.js) .line > span,html:not(.js) [data-draw],html:not(.js) .fade{transfo
 .hl{color:var(--ink)}
 
 /* ============================================================
-   VIDEO — full bleed, no furniture
+   VIDEO — a small module. The thumbnail is incidental, not a hero.
    ============================================================ */
-.yt{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.vid{display:flex;align-items:center;gap:clamp(.9rem,2.5vw,1.6rem);flex-wrap:wrap}
+.yt{
+  position:relative;width:min(100%,17rem);aspect-ratio:16/9;flex:none;
+  overflow:hidden;background:#000;border:1px solid var(--rule-2);border-radius:3px;
+  transition:width .65s var(--ease);
+}
 .yt__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity .7s var(--ease)}
-.yt__poster.on{opacity:.88}
-.yt::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:rgb(11 11 12 / .22)}
+.yt__poster.on{opacity:.8}
+.yt::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:rgb(11 11 12 / .3)}
 .yt--live::after{display:none}
-.yt__btn{position:absolute;inset:0;z-index:2;width:100%;display:grid;place-items:center;gap:1rem;
+.yt--live{width:min(100%,44rem)}
+.yt__btn{position:absolute;inset:0;z-index:2;width:100%;display:grid;place-items:center;
   border:0;background:none;color:var(--ink);font:inherit;cursor:pointer}
-.yt__play{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
-  border:1px solid rgb(237 234 229 / .55);
-  background:rgb(11 11 12 / .38);
-  -webkit-backdrop-filter:blur(7px) saturate(120%);backdrop-filter:blur(7px) saturate(120%);
-  transition:background .45s var(--ease),border-color .45s var(--ease),transform .55s var(--ease)}
-.yt__play svg{width:20px;height:20px;fill:var(--ink);margin-left:3px;transition:fill .45s var(--ease)}
-.yt__btn:hover .yt__play,.yt__btn:focus-visible .yt__play{background:var(--ink);border-color:var(--ink);transform:scale(1.06)}
+.yt__play{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgb(237 234 229 / .6);background:rgb(11 11 12 / .42);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:background .45s var(--ease),border-color .45s var(--ease),transform .5s var(--ease)}
+.yt__play svg{width:14px;height:14px;fill:var(--ink);margin-left:2px;transition:fill .45s var(--ease)}
+.yt__btn:hover .yt__play,.yt__btn:focus-visible .yt__play{background:var(--ink);border-color:var(--ink);transform:scale(1.07)}
 .yt__btn:hover .yt__play svg,.yt__btn:focus-visible .yt__play svg{fill:var(--bg)}
-.yt__btn:focus-visible{outline:1px solid var(--ink);outline-offset:-8px}
+.yt__btn:focus-visible{outline:1px solid var(--ink);outline-offset:-5px}
 .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
-.yt--live .yt__btn{display:none}
-.yt-cap{display:flex;justify-content:space-between;gap:1rem;padding-top:.7rem;flex-wrap:wrap}
+.yt-cap{display:grid;gap:.15rem}
+.yt-cap .t{font-family:var(--display);font-stretch:86%;font-weight:600;font-size:var(--s-0);color:var(--ink)}
 
 /* ============================================================
    FINDINGS — four different shapes
@@ -456,16 +461,13 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
 
 <!-- 2 · VIDEO ────────────────────────────────────────────── -->
 <section class="bed" data-rhythm="tight">
-  <div class="u-full">
+  <div class="vid">
     <div class="yt" id="yt">
       <button class="yt__btn" type="button" id="ytBtn">
         <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
       </button>
     </div>
-  </div>
-  <div class="yt-cap">
-    <p class="mlbl" id="ytTtl">why me, out loud</p>
-    <p class="mlbl" id="ytMeta">two minutes</p>
+    <p class="yt-cap"><span class="t" id="ytTtl">why me, out loud</span><span class="mlbl" id="ytMeta">1:04</span></p>
   </div>
 </section>
 
