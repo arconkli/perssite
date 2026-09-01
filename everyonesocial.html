@@ -196,12 +196,22 @@ html:not(.js) .line > span,html:not(.js) [data-draw],html:not(.js) .fade{transfo
 }
 #filters{position:absolute;width:0;height:0;overflow:hidden}
 
-.hero h1{grid-column:full-start / main-end;padding-left:var(--gutter);max-width:22ch}
-.hero__body{display:grid;gap:clamp(1.8rem,4vw,3.5rem);grid-template-columns:1fr;margin-top:clamp(1.6rem,3vw,2.4rem)}
-@media (min-width:60rem){.hero__body{grid-template-columns:1.15fr .85fr;align-items:end}}
-.hero__body > *{min-width:0}
-.wk > *,.case > *,.bridge__claim > *{min-width:0}
-.hero__sig{display:flex;flex-wrap:wrap;gap:.35rem 1.5rem;margin-top:1.4rem;
+.hero__grid{
+  grid-column:full-start / wide-end;padding-inline:var(--gutter);
+  display:grid;grid-template-columns:1fr;gap:clamp(2rem,4vw,3rem);align-items:start;
+}
+@media (min-width:64rem){
+  .hero__grid{grid-template-columns:minmax(0,1fr) minmax(17rem,21rem);column-gap:clamp(2rem,5vw,4.5rem)}
+}
+.hero__grid > *{min-width:0}
+.hero h1{max-width:20ch}
+.hero__l > * + *{margin-top:clamp(1.3rem,2.6vw,2rem)}
+.hero__r > * + *{margin-top:clamp(1.6rem,3vw,2.4rem)}
+.hero .vid{flex-direction:column;align-items:flex-start;gap:.65rem}
+.hero .vid,.hero .yt{width:100%}
+.hero__r .ledger{grid-template-columns:minmax(0,1fr) 11ch}
+.hero__r .ledger > dd{white-space:normal}
+.hero__sig{display:flex;flex-wrap:wrap;gap:.35rem 1.5rem;
   font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;color:var(--faint)}
 .hero__sig b{color:var(--ink-2);font-weight:500}
 .hl{color:var(--ink)}
@@ -437,37 +447,36 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
   </div>
   <p class="sr-only">Website, outbound, content, lifecycle, events, partner marketing, paid, launches.</p>
 
-  <h1>
-    <span class="line"><span>You sell a Claude integration.</span></span>
-    <span class="line" style="--d:.09s"><span class="hl">Your robots.txt blocks ClaudeBot.</span></span>
-  </h1>
-
-  <div class="hero__body">
-    <div>
+  <div class="hero__grid">
+    <div class="hero__l">
+      <h1>
+        <span class="line"><span>You sell a Claude integration.</span></span>
+        <span class="line" style="--d:.09s"><span class="hl">Your robots.txt blocks ClaudeBot.</span></span>
+      </h1>
       <p class="fade" style="--d:.35s">Found in an afternoon. Three more below. This page too.</p>
       <p class="hero__sig fade" style="--d:.45s"><span><b>andrew conklin</b></span><span>andrew@andrewconklin.com</span></p>
     </div>
-    <div class="fade" style="--d:.5s">
-      <p class="mlbl" style="margin-bottom:.7rem">the afternoon</p>
-      <dl class="ledger">
-        <dt>your site, audited</dt><dd>4 findings</dd>
-        <dt>every claim re-checked live</dt><dd>40 checks</dd>
-        <dt>this page</dt><dd>built in claude code</dd>
-        <dt>framework, build step</dt><dd data-s="off">none</dd>
-      </dl>
-    </div>
-  </div>
-</section>
 
-<!-- 2 · VIDEO ────────────────────────────────────────────── -->
-<section class="bed" data-rhythm="tight">
-  <div class="vid">
-    <div class="yt" id="yt">
-      <button class="yt__btn" type="button" id="ytBtn">
-        <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-      </button>
+    <div class="hero__r">
+      <div class="vid fade" style="--d:.4s">
+        <div class="yt" id="yt">
+          <button class="yt__btn" type="button" id="ytBtn">
+            <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+          </button>
+        </div>
+        <p class="yt-cap"><span class="t" id="ytTtl">why me, out loud</span><span class="mlbl" id="ytMeta">1:04</span></p>
+      </div>
+
+      <div class="fade" style="--d:.5s">
+        <p class="mlbl" style="margin-bottom:.7rem">the afternoon</p>
+        <dl class="ledger">
+          <dt>your site, audited</dt><dd>4 findings</dd>
+          <dt>every claim re-checked live</dt><dd>40 checks</dd>
+          <dt>this page</dt><dd>built in claude code</dd>
+          <dt>framework, build step</dt><dd data-s="off">none</dd>
+        </dl>
+      </div>
     </div>
-    <p class="yt-cap"><span class="t" id="ytTtl">why me, out loud</span><span class="mlbl" id="ytMeta">1:04</span></p>
   </div>
 </section>
 
@@ -751,7 +760,7 @@ function ytId(s){
 (function(){
   var box = document.getElementById('yt'); if(!box) return;
   var btn = document.getElementById('ytBtn'),
-      sec = box.closest('section'),
+      mod = box.closest('.vid'),
       id  = ytId(CONFIG.youtube);
 
   document.getElementById('ytTtl').textContent  = CONFIG.title;
@@ -759,7 +768,7 @@ function ytId(s){
 
   /* A designed placeholder in the largest block on the page is worse
      than an absence. No video, no section. */
-  if(!id){ if(sec) sec.remove(); return; }
+  if(!id){ if(mod) mod.remove(); return; }
 
   btn.setAttribute('aria-label','Play: ' + CONFIG.title);
 
