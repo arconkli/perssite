@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
 <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="googlebot-news" content="noindex">
@@ -814,6 +815,7 @@ function ytId(s){
           + '&origin=' + encodeURIComponent(location.origin);
     f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; web-share';
     f.allowFullscreen = true; f.title = CONFIG.title;
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
     box.appendChild(f); box.classList.add('yt--live'); f.focus();
   });
 })();

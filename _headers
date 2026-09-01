@@ -1,12 +1,18 @@
 # Cloudflare Pages headers.
+#
+# Referrer-Policy note: this was no-referrer, which stripped the Referer
+# header entirely and caused YouTube embed error 153 ("video player
+# configuration error") — the player cannot verify its embedding origin
+# without it. strict-origin-when-cross-origin sends only the origin
+# cross-origin, never the path, so the unlisted URL is still not disclosed.
 # The EveryoneSocial pitch page is a private, unlisted, single-recipient page.
 # It is linked from nowhere and is not in the sitemap. These headers are the
 # authoritative "never index this" signal, stronger than the meta tag alone.
 
 /everyonesocial
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
-  Referrer-Policy: no-referrer
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /everyonesocial.html
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
-  Referrer-Policy: no-referrer
+  Referrer-Policy: strict-origin-when-cross-origin
