@@ -243,6 +243,9 @@ html:not(.js) .line > span,html:not(.js) [data-draw],html:not(.js) .fade{transfo
 .yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
 .yt-cap{display:grid;gap:.15rem}
 .yt-cap .t{font-family:var(--display);font-stretch:86%;font-weight:600;font-size:var(--s-0);color:var(--ink)}
+.yt-alt{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;
+  color:var(--faint);text-decoration:none;border-bottom:1px solid transparent;transition:color .35s,border-color .35s;justify-self:start;margin-top:.15rem}
+.yt-alt:hover,.yt-alt:focus-visible{color:var(--ink-2);border-color:var(--rule-3)}
 
 /* ============================================================
    FINDINGS — four different shapes
@@ -464,7 +467,8 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
             <span class="yt__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
           </button>
         </div>
-        <p class="yt-cap"><span class="t" id="ytTtl">why me, out loud</span><span class="mlbl" id="ytMeta">1:04</span></p>
+        <p class="yt-cap"><span class="t" id="ytTtl">why me, out loud</span><span class="mlbl" id="ytMeta">1:04</span>
+          <a class="yt-alt" id="ytAlt" href="https://youtu.be/QMYqBi7dNv8" target="_blank" rel="noopener">watch on youtube &nearr;</a></p>
       </div>
 
       <div class="fade" style="--d:.5s">
@@ -622,11 +626,11 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
       <ul class="build__l">
         <li><b>ML fraud &amp; bot detection</b> &mdash; naive-Bayes, running in-database</li>
         <li><b>Escrow payout engine</b> with double-entry reconciliation</li>
-        <li><b>Stripe Connect</b> onboarding, 81 creators</li>
-        <li><b>Automated account verification</b>, 373 accounts</li>
+        <li><b>Stripe Connect</b> &mdash; automated creator onboarding and payouts</li>
+        <li><b>Automated account verification</b> &mdash; scraped ownership proof, no manual review</li>
         <li><b>Bandit-optimised lifecycle email</b>, 85 copy variants</li>
         <li><b>Campaign analytics</b> &mdash; velocity and anomaly detection</li>
-        <li>600+ creators, 17 countries, $0 ad spend</li>
+        <li>600+ creators across 17 countries, acquired on <b>$0 ad spend</b></li>
         <li>68.6% campaign view &rarr; join &middot; 64% signup &rarr; connected</li>
       </ul>
     </div>
@@ -698,8 +702,8 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
         <p>I've never run a Fortune 100 procurement cycle. I'd be learning your buyer while I'm building your funnel.</p>
       </div>
       <div>
-        <h3>Small numbers, and never someone else's.</h3>
-        <p>600 users against your 50,000-seat rollouts. My products earn, but nobody has ever handed me a target and asked me to hit it. That's the gap, and it's bigger than the SaaS one.</p>
+        <h3>I've never carried someone else's number.</h3>
+        <p>My own, yes &mdash; and every input to it, because I built all of them. But nobody has handed me a target on a Monday and asked where it stands on Friday. You'd be the first, and you should price that in.</p>
       </div>
       <div>
         <h3>I'm a founder.</h3>
@@ -763,6 +767,8 @@ function ytId(s){
       mod = box.closest('.vid'),
       id  = ytId(CONFIG.youtube);
 
+  var alt = document.getElementById('ytAlt');
+  if(alt) alt.href = 'https://youtu.be/' + id;
   document.getElementById('ytTtl').textContent  = CONFIG.title;
   document.getElementById('ytMeta').textContent = CONFIG.meta;
 
@@ -803,7 +809,9 @@ function ytId(s){
 
   btn.addEventListener('click', function(){
     var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+    f.src = 'https://www.youtube.com/embed/'+id
+          + '?autoplay=1&playsinline=1&rel=0'
+          + '&origin=' + encodeURIComponent(location.origin);
     f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; web-share';
     f.allowFullscreen = true; f.title = CONFIG.title;
     box.appendChild(f); box.classList.add('yt--live'); f.focus();
