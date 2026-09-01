@@ -347,21 +347,15 @@ a.build__n:hover .build__url,a.build__n:focus-visible .build__url{color:var(--in
   --rule:rgb(22 23 26 / .13);--rule-2:rgb(22 23 26 / .2);--rule-3:rgb(22 23 26 / .34);
 }
 .white .lbl,.white .mlbl{color:var(--borrowed)}
-.wk{display:grid;gap:clamp(1.8rem,4vw,3rem);grid-template-columns:1fr;margin-top:clamp(1.4rem,3vw,2.2rem)}
-@media (min-width:64rem){
-  .wk{grid-template-columns:5fr 6fr;column-gap:clamp(2rem,6vw,5rem)}
-  .wk__q{margin-top:clamp(1.5rem,4vw,3rem)}
-}
-.wk > *{min-width:0}
-.wk__l{list-style:none;margin:.9rem 0 0;padding:0;display:flex;flex-direction:column;gap:.6rem}
-.wk__l li{position:relative;padding-left:1.5rem;line-height:1.5;color:var(--ink-2)}
-.wk__l li::before{content:"\21B3";position:absolute;left:0;color:var(--borrowed)}
-.wk__q .wk__l li{font-size:var(--s-1);line-height:1.45;padding-left:1.6rem;color:var(--ink-2)}
-.wk__q .wk__l li::before{content:"?";font-family:var(--mono);font-weight:700}
-.wk__q .wk__l li b{color:var(--ink)}
-.board{margin-top:clamp(2rem,4.5vw,3.2rem);padding-top:1rem;border-top:1px solid var(--rule-2);
-  display:grid;gap:.5rem 2rem;grid-template-columns:1fr}
-@media (min-width:64rem){.board{grid-template-columns:auto 1fr;align-items:baseline}}
+.qs{list-style:none;margin:clamp(1.2rem,3vw,2rem) 0 0;padding:0;border-top:1px solid var(--rule-2)}
+.qs li{display:grid;grid-template-columns:2.8rem minmax(0,1fr);column-gap:clamp(.7rem,2vw,1.4rem);
+  padding:.95rem 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.qs .qn{font-family:var(--display);font-stretch:66%;font-weight:600;font-size:var(--s-2);
+  color:var(--borrowed);line-height:1;font-variant-numeric:tabular-nums}
+.qs p{font-size:var(--s-1);line-height:1.42;color:var(--ink-2);margin:0;max-width:50ch}
+.qs b{color:var(--ink);font-weight:600}
+.board{margin-top:clamp(1.8rem,4vw,2.8rem);display:grid;gap:.5rem clamp(1.5rem,4vw,3rem);grid-template-columns:1fr}
+@media (min-width:64rem){.board{grid-template-columns:auto minmax(0,1fr);align-items:baseline}}
 .board b{font-family:var(--display);font-stretch:82%;font-weight:600;font-size:var(--s-1);color:var(--ink);white-space:nowrap}
 
 /* ============================================================
@@ -665,27 +659,14 @@ a:focus-visible,button:focus-visible{outline:1px solid var(--ink);outline-offset
 <!-- 6 · WEEK ONE — the turn ───────────────────────────────── -->
 <section class="bed white" data-rhythm="turn" data-density="normal">
   <p class="lbl fade">week one</p>
-  <h2 class="fade" style="--d:.06s;max-width:16ch">Three fixes and four questions.</h2>
+  <h2 class="fade" style="--d:.06s;max-width:15ch">Four questions, then a number.</h2>
 
-  <div class="wk">
-    <div>
-      <p class="mlbl">i'd ship these without asking</p>
-      <ul class="wk__l">
-        <li>Insight Tag, first-touch source on the demo form.</li>
-        <li>Eight AI crawlers unblocked. One file.</li>
-        <li>The tour video, embedded on the tour page.</li>
-      </ul>
-    </div>
-    <div class="wk__q">
-      <p class="mlbl">i'd ask these before touching anything</p>
-      <ul class="wk__l">
-        <li>You hold data on 4,000 real programs. The newest post models drop-off on an invented one. <b>Legal, or bandwidth?</b></li>
-        <li><span class="mono">/vs/</span> and <span class="mono">/compare/</span> both 404. <b>Decision or drift?</b></li>
-        <li>257 days without a post, 629 URLs with no lastmod. <b>Is there a content owner, or is that this seat?</b></li>
-        <li>Compliance is the newest line. <b>Who has sold it, and what did they learn?</b></li>
-      </ul>
-    </div>
-  </div>
+  <ol class="qs">
+    <li><span class="qn">01</span><p>You hold benchmark data on 4,000 real programs. The newest post models drop-off on an invented one. <b>Legal, or bandwidth?</b></p></li>
+    <li><span class="qn">02</span><p><span class="mono">/vs/</span> and <span class="mono">/compare/</span> both 404 while other people own every &ldquo;alternatives&rdquo; result for your name. <b>Decision, or drift?</b></p></li>
+    <li><span class="qn">03</span><p>257 days without a post, 629 URLs with no lastmod. <b>Is there a content owner, or is that this seat?</b></p></li>
+    <li><span class="qn">04</span><p>Governance is the newest line and the highest ACV. <b>Who has sold it, and what did they learn?</b></p></li>
+  </ol>
 
   <div class="board">
     <b>The number I'd put on the board:</b>
