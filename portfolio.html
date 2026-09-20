@@ -239,9 +239,8 @@ p{margin:0;color:var(--ink-2)}
 .scene *{box-sizing:border-box}
 .scene .lay{position:absolute;inset:0;transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
 .scene .hide{opacity:0;pointer-events:none}
-.scene .term,.scene .search{transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
+.scene .term{transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
 .scene .term:not(.hide){transform:none}
-.scene .search:not(.hide){transform:translate(-50%,0)}
 .sc-chrome{position:absolute;top:0;left:0;right:0;height:2.1rem;display:flex;align-items:center;gap:.8rem;padding:0 .9rem;
   background:rgb(20 20 23 / .9);border-bottom:1px solid rgb(255 255 255 / .06);font-size:.68rem;letter-spacing:.06em;color:#8C8984;z-index:5}
 .sc-chrome b{color:#EDEAE5;font-weight:500}
@@ -252,50 +251,26 @@ p{margin:0;color:var(--ink-2)}
 .av{display:inline-grid;place-items:center;width:1.35rem;height:1.35rem;border-radius:50%;font-size:.55rem;font-weight:700;color:#0B0B0C;border:2px solid #141416;margin-left:-.35rem}
 .av:first-child{margin-left:0}
 
-/* ---- Clusters: the living canvas ---- */
-.cv{position:absolute;inset:2.1rem 0 0 0;transform-origin:50% 50%;transition:transform 1.2s var(--ease)}
-.cd{position:absolute;left:var(--x);top:var(--y);width:var(--w);aspect-ratio:var(--r,3/2);border-radius:6px;background:#1A1A1E center/cover no-repeat;
-  border:1px solid rgb(255 255 255 / .09);box-shadow:0 14px 30px -12px rgb(0 0 0 / .7);
-  transform:translate(var(--fx,0),var(--fy,0)) rotate(var(--rot,0deg)) scale(var(--sc,1));opacity:var(--op,1);
-  transition:transform 1.3s var(--ease) var(--d,0s),opacity 1s var(--ease) var(--d,0s),box-shadow .6s var(--ease),filter .8s var(--ease)}
-.js .scene:not(.in) .cd{--fx:calc((var(--sx,0) - 50) * 1.2%);--fy:-40%;--rot:calc(var(--sr,0) * 1deg);--sc:.86;--op:0}
-.cd.new{--sc:.6;--op:0;outline:2px solid #E39A2D;outline-offset:2px;transition-delay:0s}
-.scene[data-state="2"] .cd.new{--sc:1;--op:1}
-.scene[data-state="2"] .cd.new:nth-of-type(1){transition-delay:1.6s}
-.scene[data-state="2"] .cd.new:nth-of-type(2){transition-delay:1.9s}
-.scene[data-state="2"] .cd.new:nth-of-type(3){transition-delay:2.2s}
-.cd .tag{position:absolute;left:.4rem;bottom:.4rem;padding:.12rem .45rem;border-radius:999px;background:rgb(11 11 12 / .75);border:1px solid rgb(227 154 45 / .5);color:#E39A2D;font-size:.58rem;letter-spacing:.08em;opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease) var(--td,0s),transform .6s var(--ease) var(--td,0s)}
-.scene[data-state="4"] .cd .tag{opacity:1;transform:none}
-.scene[data-state="4"] .cd:not(.hit){filter:brightness(.42) saturate(.6)}
-.scene[data-state="4"] .cd.hit{box-shadow:0 0 0 2px #E39A2D,0 18px 40px -12px rgb(227 154 45 / .35)}
-.cd.held{transition:transform 1.3s var(--ease),opacity 1s var(--ease)}
-@media (prefers-reduced-motion:no-preference){
-  .js .scene[data-state="1"] .cd.held{animation:carry 14s var(--ease) infinite}
-  .js .scene .cur{animation:var(--path) 14s ease-in-out infinite}
-}
-@keyframes carry{0%,8%{transform:translate(0,0)}30%,55%{transform:translate(-9%,14%) rotate(-1.5deg)}78%,100%{transform:translate(0,0)}}
-.cur{position:absolute;left:var(--x);top:var(--y);z-index:4;display:flex;align-items:flex-start;gap:.25rem;pointer-events:none;transition:opacity .6s var(--ease)}
-.cur svg{width:14px;height:18px;filter:drop-shadow(0 2px 4px rgb(0 0 0 / .6))}
-.cur span{margin-top:.7rem;padding:.12rem .45rem;border-radius:4px;font-size:.58rem;letter-spacing:.06em;color:#0B0B0C;font-weight:700;background:var(--c)}
-@keyframes curA{0%,8%{transform:translate(0,0)}30%,55%{transform:translate(-120px,90px)}78%,100%{transform:translate(0,0)}}
-@keyframes curB{0%{transform:translate(0,0)}25%{transform:translate(160px,-40px)}50%{transform:translate(90px,120px)}75%{transform:translate(-60px,60px)}100%{transform:translate(0,0)}}
+/* ---- Clusters: the real board, on film ---- */
+.film{position:absolute;inset:2.1rem 0 0 0;display:grid;background:#0E0E11;transition:opacity .9s var(--ease),filter .9s var(--ease)}
+.film .take{grid-area:1/1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s var(--ease)}
+.film .take.on{opacity:1}
+.scene[data-state="3"] .film{opacity:.28;filter:blur(3px) saturate(.7)}
 .term{position:absolute;left:1rem;bottom:1rem;width:min(60%,26rem);padding:.8rem .9rem;border-radius:10px;background:rgb(11 11 12 / .86);border:1px solid rgb(255 255 255 / .1);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.66rem;line-height:1.55;color:#A9A69F;white-space:pre-wrap;z-index:6;transform:translateY(12px)}
 .term b{color:#EDEAE5;font-weight:500}.term .ok{color:#4ADE80}.term .warn{color:#D2495E}.term .am{color:#E39A2D}
-.search{position:absolute;top:2.9rem;left:50%;transform:translate(-50%,-8px);width:min(60%,22rem);padding:.5rem .8rem;border-radius:8px;background:rgb(11 11 12 / .86);border:1px solid rgb(227 154 45 / .45);font-size:.7rem;color:#EDEAE5;z-index:6;display:flex;gap:.5rem;align-items:center}
-.search i{color:#E39A2D;font-style:normal}
-.search .caret{display:inline-block;width:1px;height:.9em;background:#E39A2D;animation:blink 1s steps(2) infinite;vertical-align:-.15em}
-@keyframes blink{50%{opacity:0}}
+.hud{position:absolute;left:1rem;top:2.9rem;z-index:6;padding:.4rem .65rem;border-radius:6px;background:rgb(11 11 12 / .72);border:1px solid rgb(255 255 255 / .1);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:.62rem;letter-spacing:.08em;text-transform:lowercase;color:#EDEAE5;max-width:60%;transition:opacity .5s var(--ease)}
+.hud b{color:#E39A2D;font-weight:500}
 .signals{position:absolute;right:1rem;top:2.9rem;width:min(46%,17rem);display:grid;gap:.35rem;z-index:6}
 .signals div{padding:.4rem .6rem;border-radius:6px;background:rgb(11 11 12 / .86);border:1px solid rgb(255 255 255 / .1);font-size:.62rem;color:#A9A69F;display:flex;justify-content:space-between;gap:.6rem;
   opacity:0;transform:translateX(12px);transition:opacity .6s var(--ease) var(--td),transform .7s var(--ease) var(--td)}
 .signals b{color:#EDEAE5;font-weight:500}.signals em{font-style:normal;color:#E39A2D}
 .scene[data-state="5"] .signals div{opacity:1;transform:none}
 .phone-ov{position:absolute;inset:0;display:grid;place-items:center;z-index:3;pointer-events:none}
-.phone-ov .bezel{width:min(30%,11.5rem);aspect-ratio:9/19.3;border-radius:2.2rem;border:.45rem solid #0B0B0C;box-shadow:0 0 0 1px rgb(255 255 255 / .14),0 40px 80px -20px rgb(0 0 0 / .8);background:transparent;transform:scale(.92);transition:transform 1.1s var(--ease)}
+.phone-ov .bezel{width:min(30%,11.5rem);aspect-ratio:9/19.3;border-radius:2.2rem;border:.45rem solid #0B0B0C;overflow:hidden;background:#0B0B0C;box-shadow:0 0 0 1px rgb(255 255 255 / .14),0 40px 80px -20px rgb(0 0 0 / .8);transform:scale(.92);transition:transform 1.1s var(--ease)}
+.phone-ov .bezel .take{width:100%;height:100%;object-fit:cover;display:block;opacity:1}
 .scene[data-state="3"] .phone-ov .bezel{transform:none}
-.scene[data-state="3"] .cv{transform:scale(.4) translateY(-3%)}
-.scene[data-state="3"] .cur,.scene[data-state="3"] .term{opacity:0}
+.scene[data-state="3"] .term{opacity:0}
 
 /* ---- Bounty_OS: pay per view ---- */
 .scene--ppv{background:#0B0B0C}
@@ -386,8 +361,7 @@ p{margin:0;color:var(--ink-2)}
   .term{width:78%;font-size:.5rem;line-height:1.45;padding:.55rem .65rem;max-height:62%;overflow:hidden;bottom:.6rem;left:.6rem}
   .panel{font-size:.52rem;width:62%;padding:.6rem .7rem;right:3%;top:10%}
   .views b{font-size:1.6rem}.views{top:26%}.found{font-size:.52rem;top:12%}
-  .search{font-size:.58rem;width:70%;top:2.6rem}.signals{width:56%;top:2.6rem;gap:.25rem}.signals div{font-size:.5rem;padding:.3rem .45rem}
-  .cur span{font-size:.5rem}.cd .tag{font-size:.5rem}
+  .signals{width:56%;top:2.6rem;gap:.25rem}.signals div{font-size:.5rem;padding:.3rem .45rem}.hud{font-size:.5rem;top:2.5rem;max-width:70%}
   .sc-chrome{font-size:.58rem;gap:.5rem;padding:0 .6rem}.sc-chrome > span:not(.sc-live):not(.dot){display:none}.sc-chrome .dot{margin-right:.9rem}
   .feat{min-height:auto}
 }
@@ -752,11 +726,11 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
 
   <div class="clip u-wide fade" style="--d:.18s">
     <div class="frame">
-      <video muted playsinline loop preload="none" poster="assets/portfolio/clusters-clip-poster.webp" aria-hidden="true" data-autoplay>
-        <source src="assets/portfolio/clusters-clip.mp4" type="video/mp4">
+      <video muted playsinline loop preload="none" poster="assets/portfolio/clusters/establish.webp" aria-hidden="true" data-autoplay>
+        <source src="assets/portfolio/clusters/establish.mp4" type="video/mp4">
       </video>
     </div>
-    <div class="cap"><span class="mlbl">the film noir look book, a public board &middot; recorded live, no sound</span><span class="mlbl">clusters.soleilpictures.com/c/film-noir-look-book</span></div>
+    <div class="cap"><span class="mlbl">the clusters brand guide, a shared board &middot; recorded live, no sound</span><span class="mlbl">every card, arrow and note is the real thing</span></div>
   </div>
 
   <div class="show u-wide">
@@ -793,29 +767,15 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       </article>
     </div>
     <div class="show__stick" aria-hidden="true">
-      <div class="scene scene--canvas" id="scene-clusters" data-state="1">
-        <div class="sc-chrome"><span class="dot"></span><b>film noir</b><span>look book &middot; 15 cards</span><span class="sc-live"><i></i>live &middot; <span class="av" style="background:#E39A2D">AC</span><span class="av" style="background:#7CC4FF">CP</span><span class="av" style="background:#A9A69F">+3</span></span></div>
-        <div class="cv">
-          <div class="cd" style="--x:6%;--y:8%;--w:19%;--r:3/2;--sx:10;--sr:-9;--d:0.00s;--td:0.20s;background-image:url(assets/portfolio/cards/c01.webp)"><span class="tag">low-key</span></div>
-          <div class="cd hit" style="--x:27%;--y:6%;--w:22%;--r:3/2;--sx:30;--sr:6;--d:0.07s;--td:0.32s;background-image:url(assets/portfolio/cards/c02.webp)"><span class="tag">neon</span></div>
-          <div class="cd" style="--x:51%;--y:9%;--w:13%;--r:2/3;--sx:50;--sr:-4;--d:0.14s;--td:0.44s;background-image:url(assets/portfolio/cards/c03.webp)"><span class="tag">silhouette</span></div>
-          <div class="cd hit" style="--x:66%;--y:5%;--w:20%;--r:3/2;--sx:72;--sr:8;--d:0.21s;--td:0.56s;background-image:url(assets/portfolio/cards/c06.webp)"><span class="tag">rain</span></div>
-          <div class="cd" style="--x:7%;--y:46%;--w:14%;--r:2/3;--sx:8;--sr:5;--d:0.28s;--td:0.68s;background-image:url(assets/portfolio/cards/c04.webp)"><span class="tag">hard shadow</span></div>
-          <div class="cd hit held" style="--x:23%;--y:44%;--w:20%;--r:3/2;--sx:28;--sr:-7;--d:0.35s;--td:0.80s;background-image:url(assets/portfolio/cards/c07.webp)"><span class="tag">practical light</span></div>
-          <div class="cd" style="--x:45%;--y:40%;--w:13%;--r:2/3;--sx:46;--sr:3;--d:0.42s;--td:0.92s;background-image:url(assets/portfolio/cards/c08.webp)"><span class="tag">blue hour</span></div>
-          <div class="cd" style="--x:60%;--y:44%;--w:17%;--r:3/2;--sx:64;--sr:-6;--d:0.49s;--td:1.04s;background-image:url(assets/portfolio/cards/c12.webp)"><span class="tag">set</span></div>
-          <div class="cd hit" style="--x:79%;--y:40%;--w:13%;--r:2/3;--sx:82;--sr:9;--d:0.56s;--td:1.16s;background-image:url(assets/portfolio/cards/c10.webp)"><span class="tag">neon</span></div>
-          <div class="cd" style="--x:3%;--y:80%;--w:18%;--r:3/2;--sx:4;--sr:-3;--d:0.63s;--td:1.28s;background-image:url(assets/portfolio/cards/c11.webp)"><span class="tag">coverage</span></div>
-          <div class="cd" style="--x:23%;--y:84%;--w:17%;--r:3/2;--sx:24;--sr:4;--d:0.70s;--td:1.40s;background-image:url(assets/portfolio/cards/c13.webp)"><span class="tag">slate</span></div>
-          <div class="cd" style="--x:42%;--y:80%;--w:11%;--r:1/1;--sx:44;--sr:-8;--d:0.77s;--td:1.52s;background-image:url(assets/portfolio/cards/c14.webp)"><span class="tag">lens</span></div>
-          <div class="cd new" style="--x:56%;--y:62%;--w:15%;--r:2/3;background-image:url(assets/portfolio/cards/c15.webp)"></div>
-          <div class="cd new" style="--x:73%;--y:66%;--w:18%;--r:3/2;background-image:url(assets/portfolio/cards/c16.webp)"></div>
-          <div class="cd new" style="--x:87%;--y:8%;--w:11%;--r:2/3;background-image:url(assets/portfolio/cards/c18.webp)"></div>
+      <div class="scene scene--film" id="scene-clusters" data-state="1">
+        <div class="sc-chrome"><span class="dot"></span><b>clusters logo</b><span>brand guide &middot; shared board &middot; view only</span><span class="sc-live"><i></i>live &middot; <span class="av" style="background:#E39A2D">AC</span><span class="av" style="background:#7CC4FF">CP</span><span class="av" style="background:#A9A69F">+3</span></span></div>
+        <div class="film">
+          <video class="take" data-take="1 6" muted playsinline loop preload="none" poster="assets/portfolio/clusters/establish.webp"><source src="assets/portfolio/clusters/establish.mp4" type="video/mp4"></video>
+          <video class="take" data-take="2" muted playsinline loop preload="none" poster="assets/portfolio/clusters/push.webp"><source src="assets/portfolio/clusters/push.mp4" type="video/mp4"></video>
+          <video class="take" data-take="4" muted playsinline loop preload="none" poster="assets/portfolio/clusters/lateral.webp"><source src="assets/portfolio/clusters/lateral.mp4" type="video/mp4"></video>
+          <video class="take" data-take="5" muted playsinline loop preload="none" poster="assets/portfolio/clusters/pullback.webp"><source src="assets/portfolio/clusters/pullback.mp4" type="video/mp4"></video>
         </div>
-        <div class="cur" style="--x:37%;--y:52%;--c:#7CC4FF;--path:curA"><svg viewBox="0 0 14 18"><path d="M1 1l12 7-5 1.5L11 16l-2.5 1-3-6.5L1 14z" fill="#7CC4FF" stroke="#0B0B0C" stroke-width=".8"/></svg><span>chris</span></div>
-        <div class="cur" style="--x:64%;--y:24%;--c:#E39A2D;--path:curB"><svg viewBox="0 0 14 18"><path d="M1 1l12 7-5 1.5L11 16l-2.5 1-3-6.5L1 14z" fill="#E39A2D" stroke="#0B0B0C" stroke-width=".8"/></svg><span>andrew</span></div>
-        <div class="phone-ov lay hide" data-for="3"><div class="bezel"></div></div>
-        <div class="search hide" data-for="4"><i>&#9906;</i><span data-type="neon rain at night, practical light"></span><span class="caret"></span></div>
+        <div class="phone-ov lay hide" data-for="3"><div class="bezel"><video class="take" data-take="3" muted playsinline loop preload="none" poster="assets/portfolio/clusters/phone.webp"><source src="assets/portfolio/clusters/phone.mp4" type="video/mp4"></video></div></div>
         <div class="signals" data-for="5">
           <div style="--td:.1s"><span><b>gclid</b> &middot; google ads</span><em>first touch</em></div>
           <div style="--td:.3s"><span><b>ttclid</b> &middot; tiktok</span><em>last touch</em></div>
@@ -826,6 +786,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
           <div style="--td:1.3s"><span><b>gsc sync</b> &middot; daily</span><em>1,146 &rarr; 5,793</em></div>
         </div>
         <div class="term hide" data-for="2 6"><span data-term></span></div>
+        <div class="hud"><span data-hud></span></div>
       </div>
     </div>
   </div>
@@ -1287,10 +1248,10 @@ var io = ('IntersectionObserver' in window);
 (function(){
   var TERM = {
     '2': [
-      ['› ','mcp call <b>add_cards</b>  board=film-noir'],
-      ['  ','{ "cards": [ {"kind":"image","url":"…/rain-crossing.jpg"},'],
-      ['  ','            {"kind":"image","url":"…/stairwell.jpg"},'],
-      ['  ','            {"kind":"note","body":"cyan against magenta"} ] }'],
+      ['› ','mcp call <b>add_cards</b>  board=clusters-logo'],
+      ['  ','{ "cards": [ {"kind":"image","url":"…/logo-light-mode.png"},'],
+      ['  ','            {"kind":"image","url":"…/logo-greyscale.png"},'],
+      ['  ','            {"kind":"note","body":"DO: match the wordmark to the dotted line"} ] }'],
       ['← ','<span class="ok">3 cards added</span> · 84 ms · scope write · <span class="am">audit #40,112</span>']
     ],
     '6': [
@@ -1301,6 +1262,14 @@ var io = ('IntersectionObserver' in window);
       ['› ','edit content/docs/api/export.md · npm run docs:accept'],
       ['  ','<span class="ok">✓ 1,381 passing</span> · surface re-snapshotted']
     ]
+  };
+  var HUD = {
+    '1': 'shared board · <b>view only</b> · every edit syncs live',
+    '2': 'the same board, reachable by an agent · <b>33 tools over mcp</b>',
+    '3': 'the same build on <b>ios and android</b>',
+    '4': 'the DO and DON\'T grids · <b>auto-tagged, searchable by meaning</b>',
+    '5': 'the notes · <b>attribution and lifecycle, instrumented</b>',
+    '6': 'docs that <b>cannot drift</b> from the surface they describe'
   };
   function typeInto(el, lines, done){
     el.innerHTML=''; if(reduce){ el.innerHTML=lines.map(function(l){return l[0]+l[1];}).join('\n'); return; }
@@ -1332,7 +1301,13 @@ var io = ('IntersectionObserver' in window);
       l.classList.toggle('hide', !on); l.classList.toggle('on', on);
     });
     var term = scene.querySelector('[data-term]'); if(term && TERM[st]) typeInto(term, TERM[st]);
-    var q = scene.querySelector('[data-type]'); if(q && st==='4') typeText(q, q.getAttribute('data-type'));
+    var hud = scene.querySelector('[data-hud]'); if(hud && HUD[st]) hud.innerHTML = HUD[st];
+    scene.querySelectorAll('.take').forEach(function(t){
+      var on = t.getAttribute('data-take').split(' ').indexOf(st)>=0;
+      t.classList.toggle('on', on);
+      if(on){ if(t.preload==='none'){ t.preload='auto'; t.load(); } if(!reduce) t.play().catch(function(){}); }
+      else { t.pause(); }
+    });
     var v = scene.querySelector('[data-scene-count]');
     if(v){
       clearInterval(v._tick);
@@ -1348,9 +1323,7 @@ var io = ('IntersectionObserver' in window);
     var scene = show.querySelector('.scene'); if(!scene || !feats.length) return;
     var current = null;
     function set(st){ if(st===current) return; current=st; apply(scene, st); }
-    /* cards fly in the first time the scene is seen */
-    if(!reduce && io){ var ob=new IntersectionObserver(function(en,o){ en.forEach(function(e){ if(e.isIntersecting){ scene.classList.add('in'); o.unobserve(scene); } }); },{threshold:.2}); ob.observe(scene); }
-    else scene.classList.add('in');
+    scene.classList.add('in');
     var ticking=false;
     function update(){
       ticking=false;
