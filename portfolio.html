@@ -197,6 +197,7 @@ p{margin:0;color:var(--ink-2)}
 .ledger > dd.wrap{white-space:normal;text-align:right;max-width:100%}
 @media (max-width:46rem){.ledger{grid-template-columns:minmax(0,1fr) 12ch;font-size:var(--s--2)}.ledger > dd{white-space:normal}}
 .ledgers{display:grid;gap:clamp(2rem,4vw,3rem);grid-template-columns:1fr}
+.ledgers > *{min-width:0}
 @media (min-width:64rem){.ledgers{grid-template-columns:1fr 1fr}}
 .ledgers .mlbl{margin-bottom:.7rem}
 
@@ -219,17 +220,157 @@ p{margin:0;color:var(--ink-2)}
 .show__stick{position:relative}
 @media (min-width:64rem){.show__stick{position:sticky;top:calc(var(--nav-h) + 4vh);height:calc(100svh - var(--nav-h) - 8vh);display:grid;place-items:center}}
 .show__stage{position:relative;width:100%;height:100%;display:grid;place-items:center}
-.show__stage > *{grid-area:1/1;width:100%;transition:opacity .9s var(--ease),transform 1.1s var(--ease);opacity:0;transform:translateY(12px) scale(.985)}
-.show__stage > .on{opacity:1;transform:none}
-.show__stage .phone{width:min(100%,15rem)}
-@media (max-width:63.98rem){.show__stick{display:none}}
+
 .feat{padding-block:clamp(1.6rem,4vw,3rem);border-top:1px solid var(--rule)}
 @media (min-width:64rem){.feat{min-height:62vh;display:flex;flex-direction:column;justify-content:center}}
 .feat h3{margin-bottom:.6rem;max-width:20ch}
 .feat p{max-width:38rem}
-.feat .mob{margin-top:1.2rem}
-@media (min-width:64rem){.feat .mob{display:none}}
-.feat .mob .phone{width:min(100%,13rem)}
+
+
+/* ============================================================
+   SCENES — the products, rendered live and driven by scroll.
+   One stage per product; features set data-state as they pass
+   the viewport centre. Everything is CSS + a little typing JS.
+   ============================================================ */
+.scene{position:relative;width:100%;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:#0E0E11;
+  border:1px solid rgb(255 255 255 / .08);box-shadow:0 40px 100px -30px rgb(0 0 0 / .6);
+  font-family:var(--mono);color:#EDEAE5;isolation:isolate}
+.scene::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgb(255 255 255 / .09) 1px,transparent 1px);background-size:22px 22px;opacity:.7}
+.scene *{box-sizing:border-box}
+.scene .lay{position:absolute;inset:0;transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
+.scene .hide{opacity:0;pointer-events:none}
+.scene .term,.scene .search{transition:opacity .8s var(--ease),transform 1.1s var(--ease)}
+.scene .term:not(.hide){transform:none}
+.scene .search:not(.hide){transform:translate(-50%,0)}
+.sc-chrome{position:absolute;top:0;left:0;right:0;height:2.1rem;display:flex;align-items:center;gap:.8rem;padding:0 .9rem;
+  background:rgb(20 20 23 / .9);border-bottom:1px solid rgb(255 255 255 / .06);font-size:.68rem;letter-spacing:.06em;color:#8C8984;z-index:5}
+.sc-chrome b{color:#EDEAE5;font-weight:500}
+.sc-chrome .dot{width:.45rem;height:.45rem;border-radius:50%;background:#3A3A3F;box-shadow:.8rem 0 0 #3A3A3F,1.6rem 0 0 #3A3A3F;margin-right:1.6rem}
+.sc-live{margin-left:auto;display:flex;align-items:center;gap:.4rem;color:#A9A69F}
+.sc-live i{width:.45rem;height:.45rem;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 0 rgb(74 222 128 / .6);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgb(74 222 128 / .55)}70%{box-shadow:0 0 0 .55rem rgb(74 222 128 / 0)}100%{box-shadow:0 0 0 0 rgb(74 222 128 / 0)}}
+.av{display:inline-grid;place-items:center;width:1.35rem;height:1.35rem;border-radius:50%;font-size:.55rem;font-weight:700;color:#0B0B0C;border:2px solid #141416;margin-left:-.35rem}
+.av:first-child{margin-left:0}
+
+/* ---- Clusters: the living canvas ---- */
+.cv{position:absolute;inset:2.1rem 0 0 0;transform-origin:50% 50%;transition:transform 1.2s var(--ease)}
+.cd{position:absolute;left:var(--x);top:var(--y);width:var(--w);aspect-ratio:var(--r,3/2);border-radius:6px;background:#1A1A1E center/cover no-repeat;
+  border:1px solid rgb(255 255 255 / .09);box-shadow:0 14px 30px -12px rgb(0 0 0 / .7);
+  transform:translate(var(--fx,0),var(--fy,0)) rotate(var(--rot,0deg)) scale(var(--sc,1));opacity:var(--op,1);
+  transition:transform 1.3s var(--ease) var(--d,0s),opacity 1s var(--ease) var(--d,0s),box-shadow .6s var(--ease),filter .8s var(--ease)}
+.js .scene:not(.in) .cd{--fx:calc((var(--sx,0) - 50) * 1.2%);--fy:-40%;--rot:calc(var(--sr,0) * 1deg);--sc:.86;--op:0}
+.cd.new{--sc:.6;--op:0;outline:2px solid #E39A2D;outline-offset:2px;transition-delay:0s}
+.scene[data-state="2"] .cd.new{--sc:1;--op:1}
+.scene[data-state="2"] .cd.new:nth-of-type(1){transition-delay:1.6s}
+.scene[data-state="2"] .cd.new:nth-of-type(2){transition-delay:1.9s}
+.scene[data-state="2"] .cd.new:nth-of-type(3){transition-delay:2.2s}
+.cd .tag{position:absolute;left:.4rem;bottom:.4rem;padding:.12rem .45rem;border-radius:999px;background:rgb(11 11 12 / .75);border:1px solid rgb(227 154 45 / .5);color:#E39A2D;font-size:.58rem;letter-spacing:.08em;opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease) var(--td,0s),transform .6s var(--ease) var(--td,0s)}
+.scene[data-state="4"] .cd .tag{opacity:1;transform:none}
+.scene[data-state="4"] .cd:not(.hit){filter:brightness(.42) saturate(.6)}
+.scene[data-state="4"] .cd.hit{box-shadow:0 0 0 2px #E39A2D,0 18px 40px -12px rgb(227 154 45 / .35)}
+.cd.held{transition:transform 1.3s var(--ease),opacity 1s var(--ease)}
+@media (prefers-reduced-motion:no-preference){
+  .js .scene[data-state="1"] .cd.held{animation:carry 14s var(--ease) infinite}
+  .js .scene .cur{animation:var(--path) 14s ease-in-out infinite}
+}
+@keyframes carry{0%,8%{transform:translate(0,0)}30%,55%{transform:translate(-9%,14%) rotate(-1.5deg)}78%,100%{transform:translate(0,0)}}
+.cur{position:absolute;left:var(--x);top:var(--y);z-index:4;display:flex;align-items:flex-start;gap:.25rem;pointer-events:none;transition:opacity .6s var(--ease)}
+.cur svg{width:14px;height:18px;filter:drop-shadow(0 2px 4px rgb(0 0 0 / .6))}
+.cur span{margin-top:.7rem;padding:.12rem .45rem;border-radius:4px;font-size:.58rem;letter-spacing:.06em;color:#0B0B0C;font-weight:700;background:var(--c)}
+@keyframes curA{0%,8%{transform:translate(0,0)}30%,55%{transform:translate(-120px,90px)}78%,100%{transform:translate(0,0)}}
+@keyframes curB{0%{transform:translate(0,0)}25%{transform:translate(160px,-40px)}50%{transform:translate(90px,120px)}75%{transform:translate(-60px,60px)}100%{transform:translate(0,0)}}
+.term{position:absolute;left:1rem;bottom:1rem;width:min(60%,26rem);padding:.8rem .9rem;border-radius:10px;background:rgb(11 11 12 / .86);border:1px solid rgb(255 255 255 / .1);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.66rem;line-height:1.55;color:#A9A69F;white-space:pre-wrap;z-index:6;transform:translateY(12px)}
+.term b{color:#EDEAE5;font-weight:500}.term .ok{color:#4ADE80}.term .warn{color:#D2495E}.term .am{color:#E39A2D}
+.search{position:absolute;top:2.9rem;left:50%;transform:translate(-50%,-8px);width:min(60%,22rem);padding:.5rem .8rem;border-radius:8px;background:rgb(11 11 12 / .86);border:1px solid rgb(227 154 45 / .45);font-size:.7rem;color:#EDEAE5;z-index:6;display:flex;gap:.5rem;align-items:center}
+.search i{color:#E39A2D;font-style:normal}
+.search .caret{display:inline-block;width:1px;height:.9em;background:#E39A2D;animation:blink 1s steps(2) infinite;vertical-align:-.15em}
+@keyframes blink{50%{opacity:0}}
+.signals{position:absolute;right:1rem;top:2.9rem;width:min(46%,17rem);display:grid;gap:.35rem;z-index:6}
+.signals div{padding:.4rem .6rem;border-radius:6px;background:rgb(11 11 12 / .86);border:1px solid rgb(255 255 255 / .1);font-size:.62rem;color:#A9A69F;display:flex;justify-content:space-between;gap:.6rem;
+  opacity:0;transform:translateX(12px);transition:opacity .6s var(--ease) var(--td),transform .7s var(--ease) var(--td)}
+.signals b{color:#EDEAE5;font-weight:500}.signals em{font-style:normal;color:#E39A2D}
+.scene[data-state="5"] .signals div{opacity:1;transform:none}
+.phone-ov{position:absolute;inset:0;display:grid;place-items:center;z-index:3;pointer-events:none}
+.phone-ov .bezel{width:min(30%,11.5rem);aspect-ratio:9/19.3;border-radius:2.2rem;border:.45rem solid #0B0B0C;box-shadow:0 0 0 1px rgb(255 255 255 / .14),0 40px 80px -20px rgb(0 0 0 / .8);background:transparent;transform:scale(.92);transition:transform 1.1s var(--ease)}
+.scene[data-state="3"] .phone-ov .bezel{transform:none}
+.scene[data-state="3"] .cv{transform:scale(.4) translateY(-3%)}
+.scene[data-state="3"] .cur,.scene[data-state="3"] .term{opacity:0}
+
+/* ---- Bounty_OS: pay per view ---- */
+.scene--ppv{background:#0B0B0C}
+.scene--ppv::before{background-image:linear-gradient(rgb(74 222 128 / .07) 1px,transparent 1px),linear-gradient(90deg,rgb(74 222 128 / .07) 1px,transparent 1px);background-size:34px 34px;opacity:1}
+.post{position:absolute;left:5%;top:14%;width:23%;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#141416;border:1px solid rgb(255 255 255 / .12);box-shadow:0 30px 60px -20px rgb(0 0 0 / .8);z-index:4;transition:transform 1s var(--ease),left 1s var(--ease)}
+.post .vid{position:absolute;inset:0;background:linear-gradient(160deg,#2A3A4A 0%,#0F1A24 45%,#3B2A17 100%)}
+.post .vid::after{content:"";position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to top,rgb(0 0 0 / .8),transparent)}
+.post .play{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:2.2rem;height:2.2rem;border-radius:50%;border:1px solid rgb(255 255 255 / .6);display:grid;place-items:center}
+.post .play::after{content:"";border-left:.6rem solid #fff;border-top:.38rem solid transparent;border-bottom:.38rem solid transparent;margin-left:.15rem}
+.post .cap{position:absolute;left:.6rem;right:.6rem;bottom:.7rem;font-size:.58rem;line-height:1.4;color:#EDEAE5}
+.post .cap b{display:block;font-weight:600;margin-bottom:.15rem}
+.post .hash{display:inline-block;margin-top:.3rem;padding:.1rem .4rem;border-radius:999px;border:1px solid rgb(74 222 128 / .5);color:#4ADE80;font-size:.55rem;letter-spacing:.06em}
+.scene[data-state="1"] .post .hash{animation:hashpulse 1.6s ease-in-out 3}
+@keyframes hashpulse{50%{box-shadow:0 0 0 .35rem rgb(74 222 128 / .18);background:rgb(74 222 128 / .12)}}
+.post .scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#4ADE80,transparent);top:-2px;opacity:0}
+.scene[data-state="1"] .post .scan{animation:scan 2.4s var(--ease) .3s 1 forwards}
+@keyframes scan{0%{top:-2px;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+.found{position:absolute;left:31%;top:16%;padding:.45rem .7rem;border-radius:8px;background:rgb(11 11 12 / .9);border:1px solid rgb(74 222 128 / .5);font-size:.64rem;color:#EDEAE5;z-index:5;
+  opacity:0;transform:translateY(8px);transition:opacity .6s var(--ease) 2.2s,transform .7s var(--ease) 2.2s}
+.found b{color:#4ADE80;font-weight:500}
+.scene[data-state="1"] .found{opacity:1;transform:none}
+.views{position:absolute;left:31%;top:30%;z-index:5;transition:opacity .6s var(--ease)}
+.scene--ppv:not([data-state="1"]) .views{opacity:0}
+.views b{display:block;font-family:var(--display);font-stretch:60%;font-weight:600;font-size:clamp(2.2rem,4vw,3.6rem);line-height:.9;letter-spacing:-.03em;color:#EDEAE5;font-variant-numeric:tabular-nums}
+.views span{display:block;margin-top:.3rem;font-size:.62rem;letter-spacing:.1em;color:#8C8984}
+.panel{position:absolute;right:5%;top:14%;width:58%;padding:.9rem 1rem;border-radius:12px;background:rgb(20 20 23 / .92);border:1px solid rgb(255 255 255 / .1);z-index:5;font-size:.66rem;color:#A9A69F;line-height:1.5;
+  opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .9s var(--ease)}
+.panel.on{opacity:1;transform:none}
+.panel h4{margin:0 0 .5rem;font:inherit;font-size:.6rem;letter-spacing:.14em;text-transform:lowercase;color:#4ADE80}
+.blocks{display:grid;grid-template-columns:repeat(10,1fr);gap:.3rem;margin:.4rem 0 .7rem}
+.blocks i{display:block;aspect-ratio:1;border-radius:3px;background:rgb(255 255 255 / .06);border:1px solid rgb(255 255 255 / .1);transition:background .6s var(--ease) var(--td),border-color .6s var(--ease) var(--td)}
+.scene[data-state="3"] .blocks i.full{background:#4ADE80;border-color:#4ADE80}
+.scene[data-state="3"] .blocks i.part{background:repeating-linear-gradient(45deg,rgb(74 222 128 / .55) 0 3px,transparent 3px 6px);border-color:rgb(74 222 128 / .6)}
+.ledg{display:grid;grid-template-columns:1fr auto;gap:.25rem .8rem;font-variant-numeric:tabular-nums}
+.ledg b{text-align:right;color:#EDEAE5;font-weight:500}
+.ledg .em b{color:#4ADE80}
+.payout{margin-top:.6rem;padding:.4rem .6rem;border-radius:6px;border:1px dashed rgb(74 222 128 / .5);color:#4ADE80;display:flex;justify-content:space-between;opacity:0;transform:translateX(-10px);transition:opacity .6s var(--ease) 1.8s,transform .7s var(--ease) 1.8s}
+.scene[data-state="3"] .payout{opacity:1;transform:none}
+.spark{width:100%;height:auto;display:block;margin:.3rem 0 .5rem}
+.spark path{fill:none;stroke-width:1.5}
+.spark .line{stroke:#A9A69F;stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 2.2s var(--ease) .2s}
+.scene[data-state="2"] .spark .line{stroke-dashoffset:0}
+.spark .band{fill:rgb(74 222 128 / .08);stroke:none}
+.spark .flag{fill:#D2495E;opacity:0;transition:opacity .5s var(--ease) 2s}
+.scene[data-state="2"] .spark .flag{opacity:1}
+.spark text{font-family:var(--mono);font-size:7px;fill:#8C8984}
+.rep{display:grid;gap:.3rem;margin-top:.4rem}
+.rep .bar{height:5px;border-radius:3px;background:rgb(255 255 255 / .08);overflow:hidden}
+.rep .bar i{display:block;height:100%;width:var(--w);background:#4ADE80;transform:scaleX(0);transform-origin:0 50%;transition:transform 1.4s var(--ease) 1s}
+.scene[data-state="2"] .rep .bar i{transform:none}
+.rep .bar i.bad{background:#D2495E}
+.bandit{display:grid;gap:.45rem;margin-top:.2rem}
+.bandit .row{display:grid;grid-template-columns:7.2rem 1fr 3rem;gap:.6rem;align-items:center}
+.bandit .bar{height:8px;border-radius:4px;background:rgb(255 255 255 / .08);overflow:hidden}
+.bandit .bar i{display:block;height:100%;width:var(--w);background:#8C8984;transform:scaleX(0);transform-origin:0 50%;transition:transform 1.6s var(--ease) var(--td),background .6s var(--ease) 2.4s}
+.scene[data-state="4"] .bandit .bar i{transform:none}
+.scene[data-state="4"] .bandit .win .bar i{background:#4ADE80}
+.bandit b{text-align:right;color:#EDEAE5;font-weight:500}.bandit .win b{color:#4ADE80}
+.tree{margin:0;padding:0;list-style:none;columns:2;column-gap:1.2rem}
+.tree li{padding:.12rem 0;color:#A9A69F;opacity:0;transform:translateX(-6px);transition:opacity .5s var(--ease) var(--td),transform .5s var(--ease) var(--td)}
+.tree li b{color:#EDEAE5;font-weight:500}
+.scene[data-state="5"] .tree li{opacity:1;transform:none}
+.scene[data-state="5"] .post,.scene[data-state="4"] .post,.scene[data-state="2"] .post{transform:scale(.86) translateY(4%)}
+
+@media (max-width:63.98rem){
+  .show__stick{display:block;order:-1;position:sticky;top:var(--nav-h);z-index:20;padding:.6rem 0 .9rem;background:var(--bg)}
+  .scene{aspect-ratio:16/11;border-radius:12px}
+  .term{width:78%;font-size:.5rem;line-height:1.45;padding:.55rem .65rem;max-height:62%;overflow:hidden;bottom:.6rem;left:.6rem}
+  .panel{font-size:.52rem;width:62%;padding:.6rem .7rem;right:3%;top:10%}
+  .views b{font-size:1.6rem}.views{top:26%}.found{font-size:.52rem;top:12%}
+  .search{font-size:.58rem;width:70%;top:2.6rem}.signals{width:56%;top:2.6rem;gap:.25rem}.signals div{font-size:.5rem;padding:.3rem .45rem}
+  .cur span{font-size:.5rem}.cd .tag{font-size:.5rem}
+  .sc-chrome{font-size:.58rem;gap:.5rem;padding:0 .6rem}.sc-chrome > span:not(.sc-live):not(.dot){display:none}.sc-chrome .dot{margin-right:.9rem}
+  .feat{min-height:auto}
+}
 
 /* ============================================================
    MATH STRIP — the block model, said in three tiles
@@ -271,7 +412,7 @@ p{margin:0;color:var(--ink-2)}
 .tbl td{padding:.7rem 1rem .7rem 0;border-bottom:1px solid var(--rule);vertical-align:baseline;color:var(--ink-2)}
 .tbl td:first-child{font-family:var(--display);font-stretch:84%;font-weight:600;font-size:var(--s-0);color:var(--ink);white-space:nowrap}
 .tbl .lead-role{color:var(--ink);font-weight:500}
-.tbl .fest{display:inline-block;margin-left:.5rem;padding:.1rem .45rem;border:1px solid var(--rule-3);border-radius:999px;font-family:var(--mono);font-size:.7em;letter-spacing:.08em;text-transform:lowercase;color:var(--ink-2);vertical-align:middle;white-space:nowrap}
+.tbl .fest{display:inline-block;margin-left:.5rem;padding:.1rem .45rem;border:1px solid var(--rule-3);border-radius:999px;font-family:var(--mono);font-size:.7em;letter-spacing:.08em;text-transform:lowercase;color:var(--ink-2);vertical-align:middle}
 @media (max-width:46rem){.tbl .hide-sm{display:none}}
 
 .record{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule-2)}
@@ -431,40 +572,101 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
 
   <div class="show u-wide" style="margin-top:clamp(3rem,6vw,5rem)">
     <div class="show__feats">
-      <article class="feat" data-img="b1">
+      <article class="feat" data-state="1">
         <p class="mlbl sig-green">the machine &middot; 1</p>
         <h3>It finds the post itself.</h3>
         <p>A campaign hashtag is the only handshake. Posts are discovered and scraped across TikTok and Instagram, ownership of <b>373 social accounts</b> was verified automatically, and a five-tier velocity scheduler decides how often each post is re-measured, documented at roughly <b>49% fewer API calls</b>.</p>
-        <div class="mob"><div class="frame"><img src="assets/portfolio/bounty-home.webp" width="2000" height="1250" alt="Bounty_OS homepage: Get paid for views" loading="lazy"></div></div>
       </article>
-      <article class="feat" data-img="b2">
+      <article class="feat" data-state="2">
         <p class="mlbl sig-green">the machine &middot; 2</p>
         <h3>Fraud detection inside Postgres.</h3>
         <p>A Gaussian naive-Bayes bot detector written in <b>pure PL/pgSQL</b>, with sigmoid calibration and self-retraining population statistics. Review is importance-sampled by creator reputation, and reputation itself is a trigger: <b>+0.05 per approval, &minus;0.10 per rejection</b>, so it cannot drift from outcomes.</p>
-        <div class="mob"><div class="frame"><img src="assets/portfolio/bounty-docs.webp" width="2000" height="1250" alt="Bounty_OS documentation rendered as a Windows 95 file explorer, showing the payout formula" loading="lazy"></div></div>
       </article>
-      <article class="feat" data-img="b3">
+      <article class="feat" data-state="3">
         <p class="mlbl sig-green">the machine &middot; 3</p>
         <h3>Money that reconciles.</h3>
         <p>Escrow and payouts through <b>Stripe Connect</b>, a resumable nine-step campaign-finalization saga, integer cents end to end, and a double-entry invariant checked continuously: <span class="mono">total_earned = pending + available + paid_out</span>. Optimistic locks and a circuit breaker stand between a bad batch and a double release.</p>
-        <div class="mob"><div class="phone"><img src="assets/portfolio/bounty-mobile.webp" width="800" height="1423" alt="Bounty_OS creator dashboard on a phone: total earned, pending, available" loading="lazy"></div></div>
       </article>
-      <article class="feat" data-img="b1">
+      <article class="feat" data-state="4">
         <p class="mlbl sig-green">the machine &middot; 4</p>
         <h3>Copy that optimises itself.</h3>
         <p>Lifecycle email runs on a <b>Thompson-sampling bandit</b> over 85 variants, with a hand-rolled Beta sampler in an edge function. Landing pages run epsilon-greedy. The top variants clicked at <b>2 to 2.5&times;</b> the blended rate.</p>
       </article>
-      <article class="feat" data-img="b2">
+      <article class="feat" data-state="5">
         <p class="mlbl sig-green">the machine &middot; 5</p>
         <h3>A public surface most seed startups never build.</h3>
         <p><b>41 documentation pages</b> in a Windows-95 explorer, an earnings calculator, a public campaign directory, six comparison pages, ten niche landing pages, a 5% referral program, a blog, a live investor pitch page, prerendering, JSON-LD, and an <span class="mono">llms.txt</span> so the assistants can read it too.</p>
       </article>
     </div>
     <div class="show__stick" aria-hidden="true">
-      <div class="show__stage">
-        <div class="frame" data-key="b1"><img src="assets/portfolio/bounty-home.webp" width="2000" height="1250" alt="" loading="lazy"></div>
-        <div class="frame" data-key="b2"><img src="assets/portfolio/bounty-docs.webp" width="2000" height="1250" alt="" loading="lazy"></div>
-        <div class="phone" data-key="b3"><img src="assets/portfolio/bounty-mobile.webp" width="800" height="1423" alt="" loading="lazy"></div>
+      <div class="scene scene--ppv" id="scene-bounty" data-state="1">
+        <div class="sc-chrome"><span class="dot"></span><b>bounty_os</b><span>campaign &middot; #bountyos &middot; tiktok + instagram</span><span class="sc-live"><i></i>tracking</span></div>
+        <div class="post">
+          <div class="vid"></div>
+          <div class="play"></div>
+          <div class="scan"></div>
+          <div class="cap"><b>day 3 on the ridge</b>packed light, packed the can<span class="hash">#bountyos</span></div>
+        </div>
+        <div class="found"><b>post found</b> &middot; tiktok &middot; matched by hashtag &middot; 00:04:12 after publish</div>
+        <div class="views"><b data-scene-count="250000">0</b><span>verified views &middot; refreshed every 10 min at this velocity</span></div>
+
+        <div class="panel" data-for="2">
+          <h4>velocity &middot; views per hour &middot; z-score</h4>
+          <svg class="spark" viewBox="0 0 320 90" aria-hidden="true">
+            <rect class="band" x="0" y="34" width="320" height="26"/>
+            <path class="line" d="M0 70 C20 66 30 62 45 60 S75 58 95 55 S130 50 150 48 S180 47 195 46 S215 44 225 20 S240 10 250 44 S280 46 300 44 L320 43"/>
+            <circle class="flag" cx="231" cy="14" r="4"/>
+            <text x="316" y="12" text-anchor="end">z = 3.4 &middot; held for review</text>
+            <text x="4" y="86">6h</text><text x="150" y="86">12h</text><text x="300" y="86">24h</text>
+          </svg>
+          <div class="rep">
+            <div style="display:flex;justify-content:space-between"><span>creator reputation &middot; 0.5 seed</span><b style="color:#EDEAE5">0.65</b></div>
+            <div class="bar"><i style="--w:65%"></i></div>
+            <div style="display:flex;justify-content:space-between"><span>+0.05 per approved post &middot; &minus;0.10 per rejection</span><span>trigger-maintained</span></div>
+          </div>
+        </div>
+
+        <div class="panel" data-for="3">
+          <h4>payout &middot; $1,000 per million &middot; blocks of 100,000</h4>
+          <div class="blocks">
+            <i class="full" style="--td:.3s"></i><i class="full" style="--td:.6s"></i><i class="part" style="--td:.9s"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="ledg">
+            <span>verified views</span><b>250,000</b>
+            <span>complete blocks</span><b>2</b>
+            <span>brand pays</span><b>$250.00</b>
+            <span class="em">creator earns</span><b class="em">$200.00</b>
+            <span>partial block, kept</span><b>$50.00</b>
+          </div>
+          <div class="payout"><span>stripe connect &middot; transfer</span><span>paid_out &middot; invariant holds &check;</span></div>
+        </div>
+
+        <div class="panel" data-for="4">
+          <h4>lifecycle email &middot; thompson sampling &middot; 85 variants</h4>
+          <div class="bandit">
+            <div class="row"><span>day 3 &middot; nudge a</span><div class="bar"><i style="--w:34%;--td:.2s"></i></div><b>3.1%</b></div>
+            <div class="row win"><span>day 18 &middot; drip</span><div class="bar"><i style="--w:92%;--td:.5s"></i></div><b>9.2%</b></div>
+            <div class="row"><span>verify &middot; nudge b</span><div class="bar"><i style="--w:47%;--td:.8s"></i></div><b>4.7%</b></div>
+            <div class="row"><span>welcome &middot; c</span><div class="bar"><i style="--w:38%;--td:1.1s"></i></div><b>3.8%</b></div>
+          </div>
+          <p style="margin:.6rem 0 0;color:#8C8984">beta(&alpha;,&beta;) sampled per send &middot; winner drawn 71% of the time this week &middot; blended 3.7%</p>
+        </div>
+
+        <div class="panel" data-for="5">
+          <h4>c:\bounty_os\ &middot; 41 objects</h4>
+          <ul class="tree">
+            <li style="--td:.1s"><b>platform/</b> payouts &middot; tracking &middot; campaigns &middot; stripe</li>
+            <li style="--td:.25s"><b>production/</b> safe-zones &middot; audio &middot; resolution</li>
+            <li style="--td:.4s"><b>content strategy/</b> hooks &middot; pacing &middot; subtitles</li>
+            <li style="--td:.55s"><b>discovery/</b> keywords &middot; hashtags &middot; geo</li>
+            <li style="--td:.7s"><b>algorithms/</b> tiktok &middot; instagram &middot; reputation</li>
+            <li style="--td:.85s"><b>rights/</b> licensing &middot; exclusivity &middot; spark ads</li>
+            <li style="--td:1s"><b>campaign ops/</b> brief &middot; naming &middot; delivery</li>
+            <li style="--td:1.15s"><b>performance/</b> retention &middot; benchmarks</li>
+            <li style="--td:1.3s"><b>rules/</b> standards &middot; fraud &middot; glossary</li>
+            <li style="--td:1.45s"><b>/compare</b> &middot; 6 pages &middot; <b>/for</b> &middot; 10 niches &middot; <b>/refer</b> &middot; 5%</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -530,50 +732,76 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
         <source src="assets/portfolio/clusters-clip.mp4" type="video/mp4">
       </video>
     </div>
-    <div class="cap"><span class="mlbl">the canvas, establishing shot &middot; 8 s, no sound</span><span class="mlbl">shot by the product's own capture mode</span></div>
+    <div class="cap"><span class="mlbl">the film noir look book, a public board &middot; recorded live, no sound</span><span class="mlbl">clusters.soleilpictures.com/c/film-noir-look-book</span></div>
   </div>
 
   <div class="show u-wide">
     <div class="show__feats">
-      <article class="feat" data-img="c2">
+      <article class="feat" data-state="1">
         <p class="mlbl sig-amber">engineering &middot; 1</p>
         <h3>Real time, done properly.</h3>
         <p><b>Yjs CRDTs over PartyKit</b>, one Durable Object per board at the edge. Every connection is authenticated with a Supabase JWT and checked against row-level security before it joins; viewers are read-only at the protocol level. Every update is appended to a per-board op log, compacted hourly into R2, and an in-room anomaly detector watches for mass deletes.</p>
-        <div class="mob"><div class="frame"><img src="assets/portfolio/clusters-collab.webp" width="2000" height="1250" alt="Soleil Clusters canvas with collaborators' presence shown" loading="lazy"></div></div>
       </article>
-      <article class="feat" data-img="c1">
+      <article class="feat" data-state="2">
         <p class="mlbl sig-amber">engineering &middot; 2</p>
         <h3>Built for agents, not just people.</h3>
         <p><b>50 REST endpoints</b>, 18 OAuth 2.1 endpoints, 9 webhook events, and an MCP server with <b>33 tools and 3 prompts</b>, published to the official MCP Registry as <span class="mono">com.soleilpictures/clusters</span> and to npm as <span class="mono">soleil-clusters-mcp</span>. The hosted endpoint signs you in over OAuth, so there is no token to paste.</p>
-        <div class="mob"><div class="frame"><img src="assets/portfolio/clusters-hero-sm.webp" width="1200" height="675" alt="Soleil Clusters canvas with project clusters, boards, a palette card, and character art" loading="lazy"></div></div>
       </article>
-      <article class="feat" data-img="c3">
+      <article class="feat" data-state="3">
         <p class="mlbl sig-amber">engineering &middot; 3</p>
         <h3>Native, without a second codebase.</h3>
         <p>Capacitor shells for <b>iOS and Android</b> wrap the same Vite build. And Scout: text photos, clips, voice notes, PDFs, or links to a number and they land, arranged, on a canvas; voice notes are transcribed and photos keep their capture time. It runs on Fly.io because iMessage needs gRPC, which a Worker cannot speak.</p>
-        <div class="mob"><div class="phone"><img src="assets/portfolio/clusters-phone.webp" width="816" height="1364" alt="Soleil Clusters on a phone" loading="lazy"></div></div>
       </article>
-      <article class="feat" data-img="c1">
+      <article class="feat" data-state="4">
         <p class="mlbl sig-amber">engineering &middot; 4</p>
         <h3>AI where it earns its keep.</h3>
         <p>OpenAI embeddings into <b>pgvector</b> with an HNSW index power semantic search and auto-tagging. Cloudflare Workers AI writes grounded SEO copy and image alt text on the free tier. A weekly probe asks an assistant the questions a buyer would ask and records whether Clusters gets cited.</p>
       </article>
-      <article class="feat" data-img="c2">
+      <article class="feat" data-state="5">
         <p class="mlbl sig-amber">engineering &middot; 5</p>
         <h3>A growth stack most startups buy.</h3>
         <p>A deterministic A/B harness stamped on every event. A lifecycle-email bandit with <b>per-user send-time optimisation</b>. A referral loop with k-factor tracking. Attribution across <b>11 click-IDs on 8 ad networks</b>, Meta Pixel with server-side Conversions API, a daily Search Console sync, a six-hourly production prober, and IndexNow.</p>
       </article>
-      <article class="feat" data-img="c1">
+      <article class="feat" data-state="6">
         <p class="mlbl sig-amber">engineering &middot; 6</p>
         <h3>Docs that cannot drift.</h3>
         <p>A CI test extracts the public surface straight from source, endpoints, MCP tools, card kinds, settings tabs, hashes it, and <b>fails the build</b> if the docs were not updated. Every number in the docs is injected from the code that enforces it. The crawler-facing HTML and the React page render from the same parse.</p>
       </article>
     </div>
     <div class="show__stick" aria-hidden="true">
-      <div class="show__stage">
-        <div class="frame" data-key="c1"><img src="assets/portfolio/clusters-hero.webp" width="2400" height="1350" alt="" loading="lazy"></div>
-        <div class="frame" data-key="c2"><img src="assets/portfolio/clusters-collab.webp" width="2000" height="1250" alt="" loading="lazy"></div>
-        <div class="phone" data-key="c3"><img src="assets/portfolio/clusters-phone.webp" width="816" height="1364" alt="" loading="lazy"></div>
+      <div class="scene scene--canvas" id="scene-clusters" data-state="1">
+        <div class="sc-chrome"><span class="dot"></span><b>film noir</b><span>look book &middot; 15 cards</span><span class="sc-live"><i></i>live &middot; <span class="av" style="background:#E39A2D">AC</span><span class="av" style="background:#7CC4FF">CP</span><span class="av" style="background:#A9A69F">+3</span></span></div>
+        <div class="cv">
+          <div class="cd" style="--x:6%;--y:8%;--w:19%;--r:3/2;--sx:10;--sr:-9;--d:0.00s;--td:0.20s;background-image:url(assets/portfolio/cards/c01.webp)"><span class="tag">low-key</span></div>
+          <div class="cd hit" style="--x:27%;--y:6%;--w:22%;--r:3/2;--sx:30;--sr:6;--d:0.07s;--td:0.32s;background-image:url(assets/portfolio/cards/c02.webp)"><span class="tag">neon</span></div>
+          <div class="cd" style="--x:51%;--y:9%;--w:13%;--r:2/3;--sx:50;--sr:-4;--d:0.14s;--td:0.44s;background-image:url(assets/portfolio/cards/c03.webp)"><span class="tag">silhouette</span></div>
+          <div class="cd hit" style="--x:66%;--y:5%;--w:20%;--r:3/2;--sx:72;--sr:8;--d:0.21s;--td:0.56s;background-image:url(assets/portfolio/cards/c06.webp)"><span class="tag">rain</span></div>
+          <div class="cd" style="--x:7%;--y:46%;--w:14%;--r:2/3;--sx:8;--sr:5;--d:0.28s;--td:0.68s;background-image:url(assets/portfolio/cards/c04.webp)"><span class="tag">hard shadow</span></div>
+          <div class="cd hit held" style="--x:23%;--y:44%;--w:20%;--r:3/2;--sx:28;--sr:-7;--d:0.35s;--td:0.80s;background-image:url(assets/portfolio/cards/c07.webp)"><span class="tag">practical light</span></div>
+          <div class="cd" style="--x:45%;--y:40%;--w:13%;--r:2/3;--sx:46;--sr:3;--d:0.42s;--td:0.92s;background-image:url(assets/portfolio/cards/c08.webp)"><span class="tag">blue hour</span></div>
+          <div class="cd" style="--x:60%;--y:44%;--w:17%;--r:3/2;--sx:64;--sr:-6;--d:0.49s;--td:1.04s;background-image:url(assets/portfolio/cards/c12.webp)"><span class="tag">set</span></div>
+          <div class="cd hit" style="--x:79%;--y:40%;--w:13%;--r:2/3;--sx:82;--sr:9;--d:0.56s;--td:1.16s;background-image:url(assets/portfolio/cards/c10.webp)"><span class="tag">neon</span></div>
+          <div class="cd" style="--x:3%;--y:80%;--w:18%;--r:3/2;--sx:4;--sr:-3;--d:0.63s;--td:1.28s;background-image:url(assets/portfolio/cards/c11.webp)"><span class="tag">coverage</span></div>
+          <div class="cd" style="--x:23%;--y:84%;--w:17%;--r:3/2;--sx:24;--sr:4;--d:0.70s;--td:1.40s;background-image:url(assets/portfolio/cards/c13.webp)"><span class="tag">slate</span></div>
+          <div class="cd" style="--x:42%;--y:80%;--w:11%;--r:1/1;--sx:44;--sr:-8;--d:0.77s;--td:1.52s;background-image:url(assets/portfolio/cards/c14.webp)"><span class="tag">lens</span></div>
+          <div class="cd new" style="--x:56%;--y:62%;--w:15%;--r:2/3;background-image:url(assets/portfolio/cards/c15.webp)"></div>
+          <div class="cd new" style="--x:73%;--y:66%;--w:18%;--r:3/2;background-image:url(assets/portfolio/cards/c16.webp)"></div>
+          <div class="cd new" style="--x:87%;--y:8%;--w:11%;--r:2/3;background-image:url(assets/portfolio/cards/c18.webp)"></div>
+        </div>
+        <div class="cur" style="--x:37%;--y:52%;--c:#7CC4FF;--path:curA"><svg viewBox="0 0 14 18"><path d="M1 1l12 7-5 1.5L11 16l-2.5 1-3-6.5L1 14z" fill="#7CC4FF" stroke="#0B0B0C" stroke-width=".8"/></svg><span>chris</span></div>
+        <div class="cur" style="--x:64%;--y:24%;--c:#E39A2D;--path:curB"><svg viewBox="0 0 14 18"><path d="M1 1l12 7-5 1.5L11 16l-2.5 1-3-6.5L1 14z" fill="#E39A2D" stroke="#0B0B0C" stroke-width=".8"/></svg><span>andrew</span></div>
+        <div class="phone-ov lay hide" data-for="3"><div class="bezel"></div></div>
+        <div class="search hide" data-for="4"><i>&#9906;</i><span data-type="neon rain at night, practical light"></span><span class="caret"></span></div>
+        <div class="signals" data-for="5">
+          <div style="--td:.1s"><span><b>gclid</b> &middot; google ads</span><em>first touch</em></div>
+          <div style="--td:.3s"><span><b>ttclid</b> &middot; tiktok</span><em>last touch</em></div>
+          <div style="--td:.5s"><span><b>fbp + capi</b> &middot; meta, server-side</span><em>deduped</em></div>
+          <div style="--td:.7s"><span><b>send-time</b> &middot; user most active</span><em>19:00 local</em></div>
+          <div style="--td:.9s"><span><b>experiment</b> &middot; onboarding_v3</span><em>arm b</em></div>
+          <div style="--td:1.1s"><span><b>referral</b> &middot; k-factor</span><em>tracked</em></div>
+          <div style="--td:1.3s"><span><b>gsc sync</b> &middot; daily</span><em>1,146 &rarr; 5,793</em></div>
+        </div>
+        <div class="term hide" data-for="2 6"><span data-term></span></div>
       </div>
     </div>
   </div>
@@ -740,7 +968,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     <span class="cap">noise complaint &middot; lead &middot; ion films studios</span>
   </div>
 
-  <div class="u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+  <div class="u-wide fade" style="margin-top:clamp(2rem,4vw,3rem);overflow-x:auto">
     <table class="tbl">
       <thead><tr><th>title</th><th>role</th><th class="hide-sm">director</th><th>production</th></tr></thead>
       <tbody>
@@ -762,16 +990,16 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     <div>
       <p class="mlbl">training</p>
       <dl class="ledger">
-        <dt>Advanced Acting Techniques &middot; Intro to Chubbuck</dt><dd>Jerri Tubbs, GSU</dd>
-        <dt>Meisner Technique</dt><dd>Emerald Coast Theater</dd>
-        <dt>Acting Techniques</dt><dd>Michelle Danner Acting Studio</dd>
+        <dt>Advanced Acting Techniques &middot; Intro to Chubbuck</dt><dd class="wrap">Jerri Tubbs, GSU</dd>
+        <dt>Meisner Technique</dt><dd class="wrap">Emerald Coast Theater</dd>
+        <dt>Acting Techniques</dt><dd class="wrap">Michelle Danner Acting Studio</dd>
       </dl>
     </div>
     <div>
       <p class="mlbl">on the page</p>
       <dl class="ledger">
         <dt>credits &middot; leads</dt><dd>11 &middot; 7</dd>
-        <dt>festival selections</dt><dd>Lifeline &middot; Noise Complaint</dd>
+        <dt>festival selections</dt><dd class="wrap">Lifeline &middot; Noise Complaint</dd>
         <dt>reels</dt><dd>2</dd>
         <dt>height</dt><dd>6&prime;</dd>
         <dt>special skills</dt><dd class="wrap"><small>stunts &middot; free diving &middot; rock climbing &middot; horseback &middot; improv &middot; cold reading</small></dd>
@@ -803,7 +1031,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       <p class="mlbl">the release</p>
       <dl class="ledger">
         <dt>single</dt><dd>It All Falls</dd>
-        <dt>artist &middot; label</dt><dd>Keekoh &middot; Soleil Records</dd>
+        <dt>artist &middot; label</dt><dd class="wrap">Keekoh &middot; Soleil Records</dd>
         <dt>out</dt><dd>late 2024</dd>
         <dt>assets made</dt><dd class="wrap"><small>master video &middot; tiktok spot &middot; spotify canvas &middot; caption export</small></dd>
       </dl>
@@ -1031,31 +1259,74 @@ var io = ('IntersectionObserver' in window);
   els.forEach(function(el){ ob.observe(el); });
 })();
 
-/* ---------- sticky showcase: the feature nearest the centre picks the image ---------- */
+/* ---------- scenes: the feature nearest the centre sets the product's state ---------- */
 (function(){
-  var shows = document.querySelectorAll('.show');
-  if(!shows.length) return;
-  shows.forEach(function(show){
+  var TERM = {
+    '2': [
+      ['› ','mcp call <b>add_cards</b>  board=film-noir'],
+      ['  ','{ "cards": [ {"kind":"image","url":"…/rain-crossing.jpg"},'],
+      ['  ','            {"kind":"image","url":"…/stairwell.jpg"},'],
+      ['  ','            {"kind":"note","body":"cyan against magenta"} ] }'],
+      ['← ','<span class="ok">3 cards added</span> · 84 ms · scope write · <span class="am">audit #40,112</span>']
+    ],
+    '6': [
+      ['› ','npm test'],
+      ['  ','docsite.test.mjs'],
+      ['  ','  surface changed: endpoints +1  <b>POST /boards/:id/export</b>'],
+      ['  ','  <span class="warn">✗ docs not updated · build failed</span>'],
+      ['› ','edit content/docs/api/export.md · npm run docs:accept'],
+      ['  ','<span class="ok">✓ 1,381 passing</span> · surface re-snapshotted']
+    ]
+  };
+  function typeInto(el, lines, done){
+    el.innerHTML=''; if(reduce){ el.innerHTML=lines.map(function(l){return l[0]+l[1];}).join('\n'); return; }
+    var li=0, ci=0, cur=null, plain=[];
+    function next(){
+      if(li>=lines.length){ if(done) done(); return; }
+      if(!cur){ cur=document.createElement('div'); el.appendChild(cur); plain=lines[li][1].replace(/<[^>]+>/g,''); ci=0; }
+      ci+= (plain.length>60?3:2);
+      if(ci>=plain.length){ cur.innerHTML=lines[li][0]+lines[li][1]; cur=null; li++; el._t=setTimeout(next, 260); }
+      else { cur.textContent=lines[li][0]+plain.slice(0,ci); el._t=setTimeout(next, 18); }
+    }
+    clearTimeout(el._t); next();
+  }
+  function typeText(el, text){
+    if(reduce){ el.textContent=text; return; }
+    var i=0; el.textContent=''; clearTimeout(el._t);
+    (function step(){ i++; el.textContent=text.slice(0,i); if(i<text.length) el._t=setTimeout(step, 55); })();
+  }
+  function countTo(el, end, dur){
+    var t0=null; if(reduce){ el.textContent=end.toLocaleString('en-US'); return; }
+    function step(now){ if(t0===null) t0=now; var p=Math.min(1,(now-t0)/dur); p=1-Math.pow(1-p,4);
+      el.textContent=Math.round(end*p).toLocaleString('en-US'); if(p<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  function apply(scene, st){
+    scene.setAttribute('data-state', st);
+    scene.querySelectorAll('[data-for]').forEach(function(l){
+      var on = l.getAttribute('data-for').split(' ').indexOf(st)>=0;
+      l.classList.toggle('hide', !on); l.classList.toggle('on', on);
+    });
+    var term = scene.querySelector('[data-term]'); if(term && TERM[st]) typeInto(term, TERM[st]);
+    var q = scene.querySelector('[data-type]'); if(q && st==='4') typeText(q, q.getAttribute('data-type'));
+    var v = scene.querySelector('[data-scene-count]'); if(v){ if(st==='1') countTo(v, parseInt(v.getAttribute('data-scene-count'),10), 2600); else v.textContent = parseInt(v.getAttribute('data-scene-count'),10).toLocaleString('en-US'); }
+  }
+  document.querySelectorAll('.show').forEach(function(show){
     var feats = Array.prototype.slice.call(show.querySelectorAll('.feat'));
-    var stage = show.querySelector('.show__stage'); if(!stage) return;
-    var imgs = {}; Array.prototype.forEach.call(stage.children, function(c){ imgs[c.getAttribute('data-key')] = c; });
+    var scene = show.querySelector('.scene'); if(!scene || !feats.length) return;
     var current = null;
-    function setKey(k){
-      if(k===current || !imgs[k]) return; current = k;
-      Object.keys(imgs).forEach(function(key){ imgs[key].classList.toggle('on', key===k); });
-    }
-    setKey(feats[0] && feats[0].getAttribute('data-img'));
-    var ticking = false;
+    function set(st){ if(st===current) return; current=st; apply(scene, st); }
+    /* cards fly in the first time the scene is seen */
+    if(!reduce && io){ var ob=new IntersectionObserver(function(en,o){ en.forEach(function(e){ if(e.isIntersecting){ scene.classList.add('in'); o.unobserve(scene); } }); },{threshold:.2}); ob.observe(scene); }
+    else scene.classList.add('in');
+    var ticking=false;
     function update(){
-      ticking = false;
-      var mid = innerHeight * .5, best = null, bd = Infinity;
-      feats.forEach(function(f){
-        var r = f.getBoundingClientRect(), c = r.top + r.height/2, d = Math.abs(c - mid);
-        if(d < bd){ bd = d; best = f; }
-      });
-      if(best) setKey(best.getAttribute('data-img'));
+      ticking=false;
+      var mid=innerHeight*.5, best=null, bd=Infinity;
+      feats.forEach(function(f){ var r=f.getBoundingClientRect(), c=r.top+r.height/2, d=Math.abs(c-mid); if(d<bd){ bd=d; best=f; } });
+      if(best) set(best.getAttribute('data-state'));
     }
-    addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+    addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } }, {passive:true});
     addEventListener('resize', update); update();
   });
 })();
