@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Andrew Conklin</title>
+<meta name="description" content="What Andrew Conklin has built and done: Bounty_OS, Soleil Clusters, Soleil Pictures, a decade of growth marketing, ten film credits, and music as Keekoh. Every number traces to a source.">
+<meta name="author" content="Andrew Conklin">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="bingbot" content="noindex, nofollow, noarchive">
+<meta property="og:title" content="Portfolio — Andrew Conklin">
+<meta property="og:description" content="Two production SaaS products, a film studio, and a decade of making things people watch. Built by one person.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://andrewconklin.com/portfolio">
+<meta property="og:site_name" content="Andrew Conklin">
+<meta property="og:image" content="https://andrewconklin.com/Andrew_Full_Headshot.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Portfolio — Andrew Conklin">
+<meta name="twitter:description" content="Two production SaaS products, a film studio, and a decade of making things people watch. Built by one person.">
+<meta name="twitter:image" content="https://andrewconklin.com/Andrew_Full_Headshot.jpg">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="preload" as="image" href="assets/portfolio/headshot.webp">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   TOKENS — Andrew's monochrome system, Apple's rhythm.
+   One signal colour per product, used only where it names the product.
+   ============================================================ */
+:root{
+  --bg:#F5F4F0; --ink:#111214; --ink-2:#3E4048; --muted:#5F6066; --faint:#6D6E74;
+  --rule:rgb(17 18 20 / .12); --rule-2:rgb(17 18 20 / .2); --rule-3:rgb(17 18 20 / .36);
+  --card:#FFFFFF;
+  --green:#4ADE80; --amber:#E39A2D; --green-ink:#1F7A45; --amber-ink:#9A6212;
+
+  --display:"Anybody",system-ui,sans-serif;
+  --sans:system-ui,-apple-system,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --ease:cubic-bezier(.16,1,.3,1);
+  --gutter:clamp(1.15rem,4.5vw,4rem);
+
+  --s--2:clamp(.6875rem,.665rem + .07vw,.75rem);
+  --s--1:clamp(.8125rem,.785rem + .14vw,.9rem);
+  --s-0:clamp(1rem,.954rem + .23vw,1.09rem);
+  --s-1:clamp(1.18rem,1.11rem + .35vw,1.42rem);
+  --s-2:clamp(1.4rem,1.28rem + .55vw,1.78rem);
+  --s-3:clamp(1.9rem,1.5rem + 1.6vw,3rem);
+  --s-hero:clamp(2.7rem,1rem + 7.2vw,6.4rem);
+  --s-mega:clamp(3.4rem,1rem + 12vw,10rem);
+  --nav-h:3.25rem;
+}
+.dark{
+  --bg:#0B0B0C; --ink:#EDEAE5; --ink-2:#A9A69F; --muted:#8C8984; --faint:#7B7974;
+  --rule:rgb(237 234 229 / .1); --rule-2:rgb(237 234 229 / .18); --rule-3:rgb(237 234 229 / .34);
+  --card:#141416; --green-ink:#4ADE80; --amber-ink:#E39A2D;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 1rem)}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:var(--s-0);line-height:1.6;font-weight:400;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overflow-wrap:break-word;
+}
+img,svg,video{max-width:100%;display:block}
+a{color:inherit}
+::selection{background:var(--ink);color:var(--bg)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:1rem;top:-3rem;background:var(--ink);color:var(--bg);padding:.5rem .8rem;z-index:100;font-family:var(--mono);font-size:var(--s--1)}
+.skip:focus{top:1rem}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* ============================================================
+   WIDTH SYSTEM — three widths; children opt in.
+   ============================================================ */
+.bed{
+  display:grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter),1fr)
+    [wide-start] minmax(0,9rem)
+    [main-start] min(64rem, 100% - (var(--gutter) * 2))
+    [main-end] minmax(0,9rem)
+    [wide-end] minmax(var(--gutter),1fr)
+    [full-end];
+}
+.bed > *{grid-column:main;min-width:0}
+.u-wide{grid-column:wide}
+.u-full{grid-column:full}
+.band{background:var(--bg);color:var(--ink)}
+
+/* rhythm: Apple's one-idea-per-screen spacing */
+.chapter{padding-block:clamp(5.5rem,11vw,10rem)}
+.chapter--tight{padding-block:clamp(3.5rem,7vw,6rem)}
+
+/* ============================================================
+   TYPE — the width axis is the signature
+   ============================================================ */
+h1,h2,h3,.mega,.big{margin:0;font-family:var(--display);font-weight:600;text-wrap:balance}
+h1{font-size:var(--s-hero);font-stretch:66%;line-height:.92;letter-spacing:-.035em}
+h2{font-size:var(--s-3);font-stretch:74%;line-height:1;letter-spacing:-.025em;max-width:16ch}
+h3{font-size:var(--s-1);font-stretch:88%;line-height:1.18;letter-spacing:-.015em}
+.mega{font-size:var(--s-mega);font-stretch:58%;line-height:.8;letter-spacing:-.045em;font-variant-numeric:tabular-nums lining-nums}
+.big{font-size:var(--s-2);font-stretch:80%;line-height:1.1;letter-spacing:-.02em}
+p{margin:0;color:var(--ink-2)}
+.lead{font-size:var(--s-1);line-height:1.5;max-width:40ch;color:var(--ink-2)}
+.lead b,p b,li b{color:var(--ink);font-weight:600}
+.measure{max-width:44rem}
+.mono{font-family:var(--mono)}
+
+.lbl{
+  font-family:var(--display);font-stretch:128%;font-weight:500;
+  font-size:var(--s--2);letter-spacing:.2em;text-transform:lowercase;
+  color:var(--faint);margin:0;
+}
+.mlbl{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.14em;text-transform:lowercase;color:var(--faint);margin:0}
+.kicker{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;align-items:baseline;margin-bottom:clamp(1.2rem,2.5vw,2rem)}
+.kicker .n{font-family:var(--display);font-stretch:66%;font-weight:600;font-size:var(--s-2);color:var(--faint);line-height:1}
+.kicker a{text-decoration:none;border-bottom:1px solid transparent;transition:color .35s,border-color .35s}
+.kicker a:hover,.kicker a:focus-visible{color:var(--ink);border-color:var(--rule-3)}
+.sig-green{color:var(--green-ink)}
+.sig-amber{color:var(--amber-ink)}
+
+/* ============================================================
+   NAV — slim, sticky, scroll-spied
+   ============================================================ */
+.nav{
+  position:sticky;top:0;z-index:50;height:var(--nav-h);
+  background:rgb(245 244 240 / .78);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom:1px solid var(--rule);color:#111214;
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1rem;
+  padding-inline:var(--gutter);
+}
+.nav__home{font-family:var(--display);font-stretch:120%;font-weight:700;font-size:var(--s--1);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.nav__links{display:flex;gap:1.2rem;margin:0;padding:0;list-style:none;justify-content:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.nav__links::-webkit-scrollbar{display:none}
+.nav__links a{
+  font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:#5F6066;
+  text-decoration:none;white-space:nowrap;padding:.3rem 0;border-bottom:1px solid transparent;transition:color .35s,border-color .35s;
+}
+.nav__links a:hover,.nav__links a.on{color:#111214;border-color:#111214}
+.nav__mail{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.08em;text-decoration:none;color:#5F6066;white-space:nowrap;transition:color .35s}
+.nav__mail:hover{color:#111214}
+@media (max-width:52rem){.nav{grid-template-columns:auto minmax(0,1fr)}.nav__mail{display:none}.nav__links{justify-content:flex-start}}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{min-height:calc(100svh - var(--nav-h));align-content:center;padding-block:clamp(3rem,7vw,6rem)}
+.hero__grid{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+@media (min-width:64rem){.hero__grid{grid-template-columns:minmax(0,1.25fr) minmax(16rem,22rem)}}
+.hero__l > * + *{margin-top:clamp(1.2rem,2.4vw,1.8rem)}
+.hero h1{max-width:12ch}
+.morph-wrap{position:relative;height:clamp(2.6rem,6vw,4.6rem);margin-top:.4rem;overflow:hidden}
+#morph{position:absolute;inset:0;filter:url(#threshold) blur(.25px);display:flex;align-items:center}
+#morph span{
+  position:absolute;left:0;width:100%;font-family:var(--display);
+  font-stretch:118%;font-weight:600;font-size:clamp(1.7rem,4.4vw,3.2rem);
+  line-height:1;letter-spacing:-.03em;color:var(--ink-2);white-space:nowrap;user-select:none;
+}
+#filters{position:absolute;width:0;height:0;overflow:hidden}
+.hero__pic{position:relative;aspect-ratio:2/3;overflow:hidden;border-radius:14px;background:#DDD8CF;box-shadow:0 30px 80px -30px rgb(17 18 20 / .35)}
+.hero__pic img{width:100%;height:112%;object-fit:cover;will-change:transform}
+.hero__stats{margin-top:clamp(2rem,5vw,3.5rem);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem 2rem;border-top:1px solid var(--rule-2);padding-top:1.2rem}
+@media (min-width:52rem){.hero__stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat b{display:block;font-family:var(--display);font-stretch:62%;font-weight:600;font-size:clamp(2.2rem,1rem + 3.6vw,3.6rem);line-height:.95;letter-spacing:-.035em;color:var(--ink);font-variant-numeric:tabular-nums lining-nums}
+.stat span{display:block;margin-top:.35rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
+
+/* ============================================================
+   INDEX
+   ============================================================ */
+.index{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule-2)}
+.index li{border-bottom:1px solid var(--rule)}
+.index a{display:flex;align-items:baseline;gap:clamp(1rem,3vw,2.4rem);padding:.85rem 0;text-decoration:none;transition:padding-left .5s var(--ease)}
+.index a:hover{padding-left:.6rem}
+.index .n{font-family:var(--display);font-stretch:66%;font-weight:600;font-size:var(--s-2);color:var(--faint);line-height:1;flex:none;min-width:2.2ch}
+.index .t{font-family:var(--display);font-stretch:84%;font-weight:600;font-size:var(--s-1);color:var(--ink)}
+.index .d{margin-left:auto;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint);text-align:right}
+@media (max-width:40rem){.index .d{display:none}}
+
+/* ============================================================
+   THE LEDGER — every value lands on one shared axis
+   ============================================================ */
+.ledger{
+  display:grid;grid-template-columns:minmax(0,1fr) 17ch;column-gap:clamp(.75rem,1.6vw,1.25rem);margin:0;
+  border-top:1px solid var(--rule-2);max-width:min(100%,46rem);
+  font-family:var(--mono);font-size:var(--s--1);font-variant-numeric:tabular-nums lining-nums slashed-zero;
+}
+.ledger > *{padding-block:.62rem;border-bottom:1px solid var(--rule);align-self:baseline}
+.ledger > dt{color:var(--ink-2);margin:0;overflow-wrap:anywhere}
+.ledger > dd{margin:0;text-align:right;font-weight:500;white-space:nowrap;color:var(--ink)}
+.ledger > dd small{font-weight:400;color:var(--faint);font-size:.85em}
+.ledger > dd.wrap{white-space:normal;text-align:right;max-width:100%}
+@media (max-width:46rem){.ledger{grid-template-columns:minmax(0,1fr) 12ch;font-size:var(--s--2)}.ledger > dd{white-space:normal}}
+.ledgers{display:grid;gap:clamp(2rem,4vw,3rem);grid-template-columns:1fr}
+@media (min-width:64rem){.ledgers{grid-template-columns:1fr 1fr}}
+.ledgers .mlbl{margin-bottom:.7rem}
+
+/* ============================================================
+   FRAMES — a browser and a phone, drawn in CSS
+   ============================================================ */
+.frame{position:relative;background:#0B0B0C;border-radius:14px;overflow:hidden;box-shadow:0 40px 100px -30px rgb(0 0 0 / .55);border:1px solid rgb(255 255 255 / .08)}
+.frame::before{content:"";display:block;height:2rem;background:#1A1A1D;border-bottom:1px solid rgb(255 255 255 / .06)}
+.frame::after{content:"";position:absolute;top:.7rem;left:.9rem;width:.6rem;height:.6rem;border-radius:50%;background:#3A3A3F;box-shadow:1rem 0 0 #3A3A3F,2rem 0 0 #3A3A3F}
+.frame img,.frame video{width:100%;height:auto}
+.phone{position:relative;width:min(100%,17rem);margin-inline:auto;aspect-ratio:9/19.3;border-radius:2.6rem;background:#0B0B0C;padding:.55rem;box-shadow:0 40px 100px -30px rgb(0 0 0 / .6),inset 0 0 0 1px rgb(255 255 255 / .12)}
+.phone img{width:100%;height:100%;object-fit:cover;border-radius:2.1rem}
+.phone::after{content:"";position:absolute;top:1.1rem;left:50%;transform:translateX(-50%);width:5.5rem;height:1.3rem;border-radius:1rem;background:#0B0B0C}
+
+/* ============================================================
+   SHOWCASE — features scroll, the product stays pinned
+   ============================================================ */
+.show{display:grid;grid-template-columns:1fr;gap:clamp(2rem,4vw,3rem);align-items:start}
+@media (min-width:64rem){.show{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
+.show__stick{position:relative}
+@media (min-width:64rem){.show__stick{position:sticky;top:calc(var(--nav-h) + 4vh);height:calc(100svh - var(--nav-h) - 8vh);display:grid;place-items:center}}
+.show__stage{position:relative;width:100%;height:100%;display:grid;place-items:center}
+.show__stage > *{grid-area:1/1;width:100%;transition:opacity .9s var(--ease),transform 1.1s var(--ease);opacity:0;transform:translateY(12px) scale(.985)}
+.show__stage > .on{opacity:1;transform:none}
+.show__stage .phone{width:min(100%,15rem)}
+@media (max-width:63.98rem){.show__stick{display:none}}
+.feat{padding-block:clamp(1.6rem,4vw,3rem);border-top:1px solid var(--rule)}
+@media (min-width:64rem){.feat{min-height:62vh;display:flex;flex-direction:column;justify-content:center}}
+.feat h3{margin-bottom:.6rem;max-width:20ch}
+.feat p{max-width:38rem}
+.feat .mob{margin-top:1.2rem}
+@media (min-width:64rem){.feat .mob{display:none}}
+.feat .mob .phone{width:min(100%,13rem)}
+
+/* ============================================================
+   MATH STRIP — the block model, said in three tiles
+   ============================================================ */
+.math{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule-2);border:1px solid var(--rule-2);border-radius:12px;overflow:hidden;margin-top:clamp(1.6rem,3vw,2.4rem)}
+@media (min-width:52rem){.math{grid-template-columns:repeat(3,1fr)}}
+.math > div{background:var(--card);padding:1.2rem 1.3rem}
+.math b{display:block;font-family:var(--display);font-stretch:62%;font-weight:600;font-size:clamp(2rem,1rem + 3vw,3rem);line-height:1;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.math span{display:block;margin-top:.4rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.08em;text-transform:lowercase;color:var(--faint)}
+.math .eq{font-family:var(--mono);font-size:var(--s--1);color:var(--ink-2);margin-top:.6rem}
+.dark .math span{color:var(--muted)}
+
+/* ============================================================
+   VIDEO — full-bleed clip in a frame
+   ============================================================ */
+.clip{margin-block:clamp(2rem,5vw,4rem)}
+.clip video{aspect-ratio:16/10;object-fit:cover;background:#0B0B0C}
+.clip .cap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:.8rem}
+
+/* ============================================================
+   POSTER RAIL — scroll-snap, hover tilt
+   ============================================================ */
+.rail{display:flex;gap:clamp(1rem,2.5vw,1.8rem);overflow-x:auto;scroll-snap-type:x mandatory;padding:1rem var(--gutter) 2rem;margin:0 calc(-1 * var(--gutter));scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.poster{flex:0 0 min(78vw,22rem);scroll-snap-align:start;perspective:1200px}
+.poster__img{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#1A1A1D;box-shadow:0 40px 80px -30px rgb(0 0 0 / .7);transform-style:preserve-3d;transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
+.poster__img img{width:100%;height:100%;object-fit:cover}
+.poster:hover .poster__img{transform:rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg)) translateY(-6px);box-shadow:0 60px 100px -30px rgb(0 0 0 / .8)}
+.poster__meta{margin-top:1rem}
+.poster__meta .t{font-family:var(--display);font-stretch:70%;font-weight:600;font-size:var(--s-2);letter-spacing:-.02em;color:var(--ink);line-height:1}
+.poster__meta .s{margin:.35rem 0 .6rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
+.poster__meta p{font-size:var(--s--1);line-height:1.5;max-width:34ch}
+
+/* ============================================================
+   TABLES — credits and record, hairline
+   ============================================================ */
+.tbl{width:100%;border-collapse:collapse;font-size:var(--s--1)}
+.tbl th{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.14em;text-transform:lowercase;color:var(--faint);font-weight:400;text-align:left;padding:0 1rem .55rem 0;border-bottom:1px solid var(--rule-2)}
+.tbl td{padding:.7rem 1rem .7rem 0;border-bottom:1px solid var(--rule);vertical-align:baseline;color:var(--ink-2)}
+.tbl td:first-child{font-family:var(--display);font-stretch:84%;font-weight:600;font-size:var(--s-0);color:var(--ink);white-space:nowrap}
+.tbl .lead-role{color:var(--ink);font-weight:500}
+@media (max-width:46rem){.tbl .hide-sm{display:none}}
+
+.record{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule-2)}
+.record li{display:grid;grid-template-columns:1fr;gap:.4rem 2rem;padding:1.2rem 0;border-bottom:1px solid var(--rule)}
+@media (min-width:52rem){.record li{grid-template-columns:15rem minmax(0,1fr)}}
+.record .who{font-family:var(--display);font-stretch:84%;font-weight:600;font-size:var(--s-1);color:var(--ink);line-height:1.15}
+.record .when{display:block;margin-top:.3rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
+.record p{max-width:46rem}
+
+/* ============================================================
+   STILL — a frame from the work
+   ============================================================ */
+.still{position:relative;border-radius:14px;overflow:hidden;background:#0B0B0C;aspect-ratio:16/9}
+.still img{width:100%;height:115%;object-fit:cover;will-change:transform}
+.still .cap{position:absolute;left:1rem;bottom:1rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:#EDEAE5;background:rgb(11 11 12 / .55);padding:.4rem .7rem;border-radius:6px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* ============================================================
+   CARDS — the smaller builds
+   ============================================================ */
+.cards{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule-2);border:1px solid var(--rule-2);border-radius:14px;overflow:hidden}
+@media (min-width:52rem){.cards{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);padding:clamp(1.3rem,2.5vw,1.8rem);display:flex;flex-direction:column;gap:.6rem;transition:background .5s var(--ease)}
+.card:hover{background:var(--bg)}
+.card .mlbl{color:var(--faint)}
+.card h3{font-stretch:78%;font-size:var(--s-2);letter-spacing:-.02em}
+.card p{font-size:var(--s--1);line-height:1.55}
+.card .meta{margin-top:auto;padding-top:.6rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.08em;text-transform:lowercase;color:var(--faint)}
+.card a{text-decoration:none;border-bottom:1px solid var(--rule-3)}
+
+/* ============================================================
+   LINKS ROW, PRESS, CLOSE
+   ============================================================ */
+.links{display:flex;gap:.6rem 1.6rem;flex-wrap:wrap;margin-top:clamp(1.4rem,3vw,2rem)}
+.links a{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:color .35s,border-color .35s}
+.links a:hover,.links a:focus-visible{color:var(--ink);border-color:var(--rule-3)}
+.press{margin-top:clamp(2rem,4vw,3rem);padding-top:1.2rem;border-top:1px solid var(--rule-2);max-width:46rem}
+.press q{font-family:var(--display);font-stretch:80%;font-weight:500;font-size:var(--s-1);line-height:1.3;color:var(--ink);quotes:"“" "”"}
+.press .src{margin-top:.6rem}
+.close__mail{
+  display:inline-block;font-family:var(--display);font-stretch:60%;font-weight:600;
+  font-size:clamp(1.7rem,1rem + 4.8vw,4.4rem);line-height:1;letter-spacing:-.035em;color:var(--ink);text-decoration:none;padding-bottom:.12em;
+  background-image:linear-gradient(var(--ink),var(--ink));background-repeat:no-repeat;background-position:0 100%;background-size:0% 1px;transition:background-size .7s var(--ease);overflow-wrap:anywhere;
+}
+.close__mail:hover,.close__mail:focus-visible{background-size:100% 1px}
+.colophon{margin-top:clamp(2.2rem,5vw,3.6rem);padding-top:1rem;border-top:1px solid var(--rule);font-family:var(--mono);font-size:var(--s--2);line-height:1.85;color:var(--faint);max-width:60rem}
+
+/* ============================================================
+   TICKER
+   ============================================================ */
+.tick{overflow:hidden;padding:.7rem 0;border-top:1px solid var(--rule);background:#0B0B0C;color:#EDEAE5}
+.tick__t{display:flex;width:max-content;animation:mq 60s linear infinite}
+.tick__s{display:flex;flex:none}
+.tick__s span{font-family:var(--display);font-stretch:126%;font-weight:400;font-size:var(--s--2);letter-spacing:.16em;text-transform:lowercase;color:#A9A69F;padding:0 1.5rem;white-space:nowrap}
+.tick__s span::after{content:"\00B7";margin-left:1.5rem;color:rgb(237 234 229 / .34)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   MOTION — reveals, lines, parallax. Static under reduced motion.
+   ============================================================ */
+.line{display:block;overflow:hidden}
+.line > span{display:block}
+@media (prefers-reduced-motion:no-preference){
+  .js .line > span{transform:translateY(104%);transition:transform 1s var(--ease) var(--d,0s)}
+  .js .line.in > span{transform:none}
+  .js .fade{opacity:0;transform:translateY(18px);transition:opacity 1s var(--ease) var(--d,0s),transform 1.1s var(--ease) var(--d,0s)}
+  .js .fade.in{opacity:1;transform:none}
+  .js [data-draw]{transform:scaleX(0);transform-origin:0 50%;transition:transform 1.05s var(--ease) var(--d,0s)}
+  .js [data-draw].in{transform:scaleX(1)}
+}
+html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .tick__t{animation:none}
+  .poster:hover .poster__img{transform:none}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<svg id="filters" aria-hidden="true"><defs><filter id="threshold">
+  <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/>
+</filter></defs></svg>
+
+<nav class="nav" aria-label="Chapters">
+  <a class="nav__home" href="index.html">Andrew Conklin</a>
+  <ul class="nav__links">
+    <li><a href="#bounty">01 bounty_os</a></li>
+    <li><a href="#clusters">02 clusters</a></li>
+    <li><a href="#pictures">03 pictures</a></li>
+    <li><a href="#growth">04 growth</a></li>
+    <li><a href="#camera">05 camera</a></li>
+    <li><a href="#music">06 music</a></li>
+    <li><a href="#builds">07 builds</a></li>
+    <li><a href="#contact">08 contact</a></li>
+  </ul>
+  <a class="nav__mail" href="mailto:andrew@andrewconklin.com">andrew@andrewconklin.com</a>
+</nav>
+
+<main id="main">
+
+<!-- HERO ─────────────────────────────────────────────────── -->
+<section class="bed hero band" aria-labelledby="hero-h">
+  <div class="hero__grid">
+    <div class="hero__l">
+      <p class="mlbl fade">portfolio &middot; atlanta, ga &middot; 2026</p>
+      <h1 id="hero-h">
+        <span class="line"><span>I build</span></span>
+        <span class="line" style="--d:.08s"><span>the whole thing.</span></span>
+      </h1>
+      <div class="morph-wrap fade" style="--d:.2s" aria-hidden="true"><div id="morph"><span id="m1"></span><span id="m2"></span></div></div>
+      <p class="sr-only">Founder, builder, marketer, actor, producer, musician.</p>
+      <p class="lead fade" style="--d:.3s">Two production SaaS products, a film studio, and a decade of making things people watch. Every product here was designed, built, shipped, and grown by one person. Every number below traces to a repository, a database export, or a live page.</p>
+    </div>
+    <div class="hero__pic fade" style="--d:.25s" data-parallax="0.08">
+      <img src="assets/portfolio/headshot.webp" width="1000" height="1500" alt="Andrew Conklin seated in front of a bright window, cream sweater, looking at the camera" fetchpriority="high">
+    </div>
+  </div>
+  <div class="hero__stats fade" style="--d:.45s">
+    <div class="stat"><b data-count="2">2</b><span>products in production</span></div>
+    <div class="stat"><b data-count="2252" data-suffix="">2,252</b><span>commits shipped in 2026</span></div>
+    <div class="stat"><b data-count="4.95" data-dec="2" data-suffix="M">4.95M</b><span>creator views tracked</span></div>
+    <div class="stat"><b data-count="10">10</b><span>film credits, six as lead</span></div>
+  </div>
+</section>
+
+<!-- INDEX ────────────────────────────────────────────────── -->
+<section class="bed band chapter--tight" aria-label="Contents">
+  <ol class="index fade">
+    <li><a href="#bounty"><span class="n">01</span><span class="t">Bounty_OS</span><span class="d">pay-per-view product placement &middot; live</span></a></li>
+    <li><a href="#clusters"><span class="n">02</span><span class="t">Soleil Clusters</span><span class="d">real-time canvas &middot; api &middot; mcp &middot; live</span></a></li>
+    <li><a href="#pictures"><span class="n">03</span><span class="t">Soleil Pictures</span><span class="d">the studio and its slate</span></a></li>
+    <li><a href="#growth"><span class="n">04</span><span class="t">Growth record</span><span class="d">2018 &rarr; 2025</span></a></li>
+    <li><a href="#camera"><span class="n">05</span><span class="t">On camera</span><span class="d">ten credits</span></a></li>
+    <li><a href="#music"><span class="n">06</span><span class="t">Music</span><span class="d">keekoh &middot; soleil records</span></a></li>
+    <li><a href="#builds"><span class="n">07</span><span class="t">Other builds</span><span class="d">simulation, games, tools</span></a></li>
+    <li><a href="#contact"><span class="n">08</span><span class="t">Contact</span><span class="d">and how this page was checked</span></a></li>
+  </ol>
+</section>
+
+<!-- 01 · BOUNTY_OS ───────────────────────────────────────── -->
+<section id="bounty" class="bed band dark chapter" aria-labelledby="bounty-h">
+  <div class="kicker fade">
+    <span class="n">01</span>
+    <span class="lbl sig-green">bounty_os</span>
+    <a class="mlbl" href="https://bountyos.com" rel="noopener">bountyos.com &nearr;</a>
+    <span class="mlbl">live &middot; solo &middot; react + supabase</span>
+  </div>
+  <h2 id="bounty-h" class="fade" style="--d:.06s">Product placement for the creator economy.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Brands pay per view. Creators feature the product inside content they were already making, add a campaign hashtag, and Bounty_OS finds the post, counts the views, and pays out through Stripe. <b>No follower minimum, no scripts, no ad reads.</b></p>
+
+  <div class="math fade" style="--d:.18s" role="group" aria-label="How a payout works">
+    <div><b>100,000</b><span>views = one block</span><p class="eq">creators are paid on complete blocks</p></div>
+    <div><b>$150</b><span>brand pays, for 150,000 views</span><p class="eq">at a $1,000 per-million rate</p></div>
+    <div><b>$100</b><span>creator earns, one full block</span><p class="eq">the partial block is the margin</p></div>
+  </div>
+
+  <div class="show u-wide" style="margin-top:clamp(3rem,6vw,5rem)">
+    <div class="show__feats">
+      <article class="feat" data-img="b1">
+        <p class="mlbl sig-green">the machine &middot; 1</p>
+        <h3>It finds the post itself.</h3>
+        <p>A campaign hashtag is the only handshake. Posts are discovered and scraped across TikTok and Instagram, ownership of <b>373 social accounts</b> was verified automatically, and a five-tier velocity scheduler decides how often each post is re-measured, documented at roughly <b>49% fewer API calls</b>.</p>
+        <div class="mob"><div class="frame"><img src="assets/portfolio/bounty-home.webp" width="2000" height="1250" alt="Bounty_OS homepage: Get paid for views" loading="lazy"></div></div>
+      </article>
+      <article class="feat" data-img="b2">
+        <p class="mlbl sig-green">the machine &middot; 2</p>
+        <h3>Fraud detection inside Postgres.</h3>
+        <p>A Gaussian naive-Bayes bot detector written in <b>pure PL/pgSQL</b>, with sigmoid calibration and self-retraining population statistics. Review is importance-sampled by creator reputation, and reputation itself is a trigger: <b>+0.05 per approval, &minus;0.10 per rejection</b>, so it cannot drift from outcomes.</p>
+        <div class="mob"><div class="frame"><img src="assets/portfolio/bounty-docs.webp" width="2000" height="1250" alt="Bounty_OS documentation rendered as a Windows 95 file explorer, showing the payout formula" loading="lazy"></div></div>
+      </article>
+      <article class="feat" data-img="b3">
+        <p class="mlbl sig-green">the machine &middot; 3</p>
+        <h3>Money that reconciles.</h3>
+        <p>Escrow and payouts through <b>Stripe Connect</b>, a resumable nine-step campaign-finalization saga, integer cents end to end, and a double-entry invariant checked continuously: <span class="mono">total_earned = pending + available + paid_out</span>. Optimistic locks and a circuit breaker stand between a bad batch and a double release.</p>
+        <div class="mob"><div class="phone"><img src="assets/portfolio/bounty-mobile.webp" width="800" height="1423" alt="Bounty_OS creator dashboard on a phone: total earned, pending, available" loading="lazy"></div></div>
+      </article>
+      <article class="feat" data-img="b1">
+        <p class="mlbl sig-green">the machine &middot; 4</p>
+        <h3>Copy that optimises itself.</h3>
+        <p>Lifecycle email runs on a <b>Thompson-sampling bandit</b> over 85 variants, with a hand-rolled Beta sampler in an edge function. Landing pages run epsilon-greedy. The top variants clicked at <b>2 to 2.5&times;</b> the blended rate.</p>
+      </article>
+      <article class="feat" data-img="b2">
+        <p class="mlbl sig-green">the machine &middot; 5</p>
+        <h3>A public surface most seed startups never build.</h3>
+        <p><b>41 documentation pages</b> in a Windows-95 explorer, an earnings calculator, a public campaign directory, six comparison pages, ten niche landing pages, a 5% referral program, a blog, a live investor pitch page, prerendering, JSON-LD, and an <span class="mono">llms.txt</span> so the assistants can read it too.</p>
+      </article>
+    </div>
+    <div class="show__stick" aria-hidden="true">
+      <div class="show__stage">
+        <div class="frame" data-key="b1"><img src="assets/portfolio/bounty-home.webp" width="2000" height="1250" alt="" loading="lazy"></div>
+        <div class="frame" data-key="b2"><img src="assets/portfolio/bounty-docs.webp" width="2000" height="1250" alt="" loading="lazy"></div>
+        <div class="phone" data-key="b3"><img src="assets/portfolio/bounty-mobile.webp" width="800" height="1423" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ledgers u-wide fade" style="margin-top:clamp(3rem,6vw,5rem)">
+    <div>
+      <p class="mlbl">traction &middot; production database, 28 jun 2026</p>
+      <dl class="ledger">
+        <dt>users</dt><dd data-count="619">619 <small>&middot; 599 creators</small></dd>
+        <dt>countries</dt><dd data-count="17">17</dd>
+        <dt>creator-content views tracked</dt><dd data-count="4954250">4,954,250</dd>
+        <dt>posts collected and scored</dt><dd data-count="244">244</dd>
+        <dt>engagements tracked</dt><dd>~157K</dd>
+        <dt>campaign view &rarr; join</dt><dd>68.6%</dd>
+        <dt>signup &rarr; account connected</dt><dd>64.1%</dd>
+        <dt>creator signups, feb 2026</dt><dd data-count="394">394 <small>&middot; +282%</small></dd>
+        <dt>referral conversions</dt><dd data-count="384">384 <small>&middot; 60 referrers</small></dd>
+        <dt>waitlist, from 40 countries</dt><dd data-count="155">155</dd>
+        <dt>lifecycle emails delivered</dt><dd data-count="7489">7,489 <small>&middot; 89.3%</small></dd>
+        <dt>paid acquisition</dt><dd>$0</dd>
+        <dt>first paid campaign</dt><dd>$250, inbound</dd>
+      </dl>
+    </div>
+    <div>
+      <p class="mlbl">the build &middot; repository, 20 sep 2026</p>
+      <dl class="ledger">
+        <dt>lines of TypeScript</dt><dd data-count="134798">134,798</dd>
+        <dt>edge functions (Deno)</dt><dd data-count="39">39</dd>
+        <dt>SQL migrations</dt><dd data-count="122">122</dd>
+        <dt>tables &middot; functions &middot; policies declared</dt><dd>55 &middot; 203 &middot; 132</dd>
+        <dt>scheduled database jobs</dt><dd data-count="9">9</dd>
+        <dt>routes</dt><dd data-count="40">40</dd>
+        <dt>docs pages</dt><dd data-count="41">41</dd>
+        <dt>commits, one author</dt><dd data-count="599">599</dd>
+        <dt>live since</dt><dd>jan 2026</dd>
+        <dt>stack</dt><dd class="wrap"><small>react 18 &middot; ts &middot; vite &middot; tailwind &middot; supabase &middot; stripe connect &middot; brightdata &middot; resend &middot; discord</small></dd>
+      </dl>
+    </div>
+  </div>
+  <div class="links fade">
+    <a href="https://bountyos.com" rel="noopener">bountyos.com &nearr;</a>
+    <a href="https://bountyos.com/how-it-works" rel="noopener">how it works</a>
+    <a href="https://bountyos.com/docs" rel="noopener">documentation</a>
+    <a href="https://bountyos.com/pitch" rel="noopener">investor pitch</a>
+    <a href="https://bountyos.com/earnings-calculator" rel="noopener">earnings calculator</a>
+  </div>
+</section>
+
+<!-- 02 · SOLEIL CLUSTERS ─────────────────────────────────── -->
+<section id="clusters" class="bed band chapter" aria-labelledby="clusters-h">
+  <div class="kicker fade">
+    <span class="n">02</span>
+    <span class="lbl sig-amber">soleil clusters</span>
+    <a class="mlbl" href="https://clusters.soleilpictures.com" rel="noopener">clusters.soleilpictures.com &nearr;</a>
+    <span class="mlbl">live &middot; solo &middot; web + ios + android</span>
+  </div>
+  <h2 id="clusters-h" class="fade" style="--d:.06s">A real-time canvas for film teams. Driveable by an agent.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Moodboards, shot lists, lookbooks, scripts, and schedules on one infinite canvas, edited live by everyone on the production. Built by a film studio for its own work, then opened up: <b>a public API, its own OAuth server, and an MCP server</b> so an AI assistant can build a board for you.</p>
+
+  <div class="clip u-wide fade" style="--d:.18s">
+    <div class="frame">
+      <video muted playsinline loop preload="none" poster="assets/portfolio/clusters-clip-poster.webp" aria-hidden="true" data-autoplay>
+        <source src="assets/portfolio/clusters-clip.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="cap"><span class="mlbl">the canvas, establishing shot &middot; 8 s, no sound</span><span class="mlbl">shot by the product's own capture mode</span></div>
+  </div>
+
+  <div class="show u-wide">
+    <div class="show__feats">
+      <article class="feat" data-img="c2">
+        <p class="mlbl sig-amber">engineering &middot; 1</p>
+        <h3>Real time, done properly.</h3>
+        <p><b>Yjs CRDTs over PartyKit</b>, one Durable Object per board at the edge. Every connection is authenticated with a Supabase JWT and checked against row-level security before it joins; viewers are read-only at the protocol level. Every update is appended to a per-board op log, compacted hourly into R2, and an in-room anomaly detector watches for mass deletes.</p>
+        <div class="mob"><div class="frame"><img src="assets/portfolio/clusters-collab.webp" width="2000" height="1250" alt="Soleil Clusters canvas with collaborators' presence shown" loading="lazy"></div></div>
+      </article>
+      <article class="feat" data-img="c1">
+        <p class="mlbl sig-amber">engineering &middot; 2</p>
+        <h3>Built for agents, not just people.</h3>
+        <p><b>50 REST endpoints</b>, 18 OAuth 2.1 endpoints, 9 webhook events, and an MCP server with <b>33 tools and 3 prompts</b>, published to the official MCP Registry as <span class="mono">com.soleilpictures/clusters</span> and to npm as <span class="mono">soleil-clusters-mcp</span>. The hosted endpoint signs you in over OAuth, so there is no token to paste.</p>
+        <div class="mob"><div class="frame"><img src="assets/portfolio/clusters-hero-sm.webp" width="1200" height="675" alt="Soleil Clusters canvas with project clusters, boards, a palette card, and character art" loading="lazy"></div></div>
+      </article>
+      <article class="feat" data-img="c3">
+        <p class="mlbl sig-amber">engineering &middot; 3</p>
+        <h3>Native, without a second codebase.</h3>
+        <p>Capacitor shells for <b>iOS and Android</b> wrap the same Vite build. And Scout: text photos, clips, voice notes, PDFs, or links to a number and they land, arranged, on a canvas; voice notes are transcribed and photos keep their capture time. It runs on Fly.io because iMessage needs gRPC, which a Worker cannot speak.</p>
+        <div class="mob"><div class="phone"><img src="assets/portfolio/clusters-phone.webp" width="816" height="1364" alt="Soleil Clusters on a phone" loading="lazy"></div></div>
+      </article>
+      <article class="feat" data-img="c1">
+        <p class="mlbl sig-amber">engineering &middot; 4</p>
+        <h3>AI where it earns its keep.</h3>
+        <p>OpenAI embeddings into <b>pgvector</b> with an HNSW index power semantic search and auto-tagging. Cloudflare Workers AI writes grounded SEO copy and image alt text on the free tier. A weekly probe asks an assistant the questions a buyer would ask and records whether Clusters gets cited.</p>
+      </article>
+      <article class="feat" data-img="c2">
+        <p class="mlbl sig-amber">engineering &middot; 5</p>
+        <h3>A growth stack most startups buy.</h3>
+        <p>A deterministic A/B harness stamped on every event. A lifecycle-email bandit with <b>per-user send-time optimisation</b>. A referral loop with k-factor tracking. Attribution across <b>11 click-IDs on 8 ad networks</b>, Meta Pixel with server-side Conversions API, a daily Search Console sync, a six-hourly production prober, and IndexNow.</p>
+      </article>
+      <article class="feat" data-img="c1">
+        <p class="mlbl sig-amber">engineering &middot; 6</p>
+        <h3>Docs that cannot drift.</h3>
+        <p>A CI test extracts the public surface straight from source, endpoints, MCP tools, card kinds, settings tabs, hashes it, and <b>fails the build</b> if the docs were not updated. Every number in the docs is injected from the code that enforces it. The crawler-facing HTML and the React page render from the same parse.</p>
+      </article>
+    </div>
+    <div class="show__stick" aria-hidden="true">
+      <div class="show__stage">
+        <div class="frame" data-key="c1"><img src="assets/portfolio/clusters-hero.webp" width="2400" height="1350" alt="" loading="lazy"></div>
+        <div class="frame" data-key="c2"><img src="assets/portfolio/clusters-collab.webp" width="2000" height="1250" alt="" loading="lazy"></div>
+        <div class="phone" data-key="c3"><img src="assets/portfolio/clusters-phone.webp" width="816" height="1364" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ledgers u-wide fade" style="margin-top:clamp(3rem,6vw,5rem)">
+    <div>
+      <p class="mlbl">the build &middot; repository, 20 sep 2026</p>
+      <dl class="ledger">
+        <dt>commits, one author</dt><dd data-count="1764">1,764 <small>&middot; 1,690 since may</small></dd>
+        <dt>commits, last 90 days</dt><dd data-count="651">651</dd>
+        <dt>lines of JavaScript, non-generated</dt><dd data-count="171247">171,247</dd>
+        <dt>lines of CSS</dt><dd data-count="32713">32,713</dd>
+        <dt>worker modules</dt><dd data-count="10">10 <small>&middot; 8,719 lines</small></dd>
+        <dt>SQL migrations</dt><dd data-count="358">358</dd>
+        <dt>row-level security policies</dt><dd data-count="245">245</dd>
+        <dt>edge functions</dt><dd data-count="21">21</dd>
+        <dt>unit tests</dt><dd data-count="1381">1,381</dd>
+        <dt>end-to-end specs (Playwright)</dt><dd data-count="195">195</dd>
+        <dt>docs pages &middot; changelog editions</dt><dd>64 &middot; 8</dd>
+        <dt>landing pages &middot; listicles &middot; templates</dt><dd>14 &middot; 4 &middot; 16</dd>
+      </dl>
+    </div>
+    <div>
+      <p class="mlbl">in production</p>
+      <dl class="ledger">
+        <dt>live edit operations synced <small>(1 sep 2026)</small></dt><dd data-count="180159">180,159</dd>
+        <dt>lifecycle emails delivered</dt><dd data-count="5054">5,054</dd>
+        <dt>search impressions, six weeks</dt><dd>1,146 &rarr; 5,793</dd>
+        <dt>users &middot; monthly active <small>(28 jun 2026)</small></dt><dd>113 &middot; 86</dd>
+        <dt>public boards on explore</dt><dd data-count="8">8</dd>
+        <dt>mcp registry</dt><dd>listed</dd>
+        <dt>price</dt><dd>$25 / mo</dd>
+        <dt>free tier</dt><dd>50 cards</dd>
+        <dt>in production since</dt><dd>spring 2026</dd>
+        <dt>stack</dt><dd class="wrap"><small>react &middot; vite &middot; cloudflare workers + r2 &middot; partykit &middot; yjs &middot; supabase &middot; pgvector &middot; workers ai &middot; stripe &middot; capacitor</small></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="press fade">
+    <q>There should never be a final product on a theater screen, TV screen, or even phone screen that was created by AI.</q>
+    <p class="src mlbl">andrew, in filmplatforms&rsquo; industry spotlight &middot; 27 jul 2026 &middot; <a href="https://filmplatforms.com/threads/andrew-conklin-founder-of-soleil-clusters-on-ai-creativity-and-the-future-of-film-production.286/" rel="noopener">read it &nearr;</a></p>
+  </div>
+  <div class="links fade">
+    <a href="https://clusters.soleilpictures.com" rel="noopener">open the app &nearr;</a>
+    <a href="https://clusters.soleilpictures.com/docs" rel="noopener">documentation</a>
+    <a href="https://clusters.soleilpictures.com/docs/mcp" rel="noopener">mcp server</a>
+    <a href="https://clusters.soleilpictures.com/docs/api" rel="noopener">rest api</a>
+    <a href="https://clusters.soleilpictures.com/changelog" rel="noopener">changelog</a>
+    <a href="https://clusters.soleilpictures.com/explore" rel="noopener">public boards</a>
+    <a href="https://github.com/arconkli/soleilpictures" rel="noopener">source on github</a>
+  </div>
+</section>
+
+<!-- 03 · SOLEIL PICTURES ─────────────────────────────────── -->
+<section id="pictures" class="bed band dark chapter" aria-labelledby="pictures-h">
+  <div class="kicker fade">
+    <span class="n">03</span>
+    <span class="lbl">soleil pictures</span>
+    <a class="mlbl" href="https://soleilpictures.com" rel="noopener">soleilpictures.com &nearr;</a>
+    <span class="mlbl">atlanta &middot; film &amp; television</span>
+  </div>
+  <h2 id="pictures-h" class="fade" style="--d:.06s">A studio, co-founded with Christopher Perez.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Soleil Pictures LLC (Georgia, 2024) develops original features and television. It is also where Clusters came from: <b>the tool was built to run the studio&rsquo;s own productions</b>, then offered to everyone else&rsquo;s.</p>
+
+  <div class="rail u-wide fade" style="--d:.18s;margin-top:clamp(2rem,4vw,3rem)" role="list" aria-label="Slate">
+    <article class="poster" role="listitem" data-tilt>
+      <div class="poster__img"><img src="assets/portfolio/poster-yahweh.webp" width="900" height="1200" alt="YAHWEH poster" loading="lazy"></div>
+      <div class="poster__meta">
+        <div class="t">YAHWEH</div>
+        <div class="s">feature &middot; in development &middot; action thriller</div>
+        <p>After surviving a brutal mob execution, an ill-fated man with religious psychosis reimagines himself as a messiah, Yahweh. As he gets his revenge, he gets entangled in a world of corruption.</p>
+      </div>
+    </article>
+    <article class="poster" role="listitem" data-tilt>
+      <div class="poster__img"><img src="assets/portfolio/poster-deepdive.webp" width="900" height="1391" alt="Deep Dive poster" loading="lazy"></div>
+      <div class="poster__meta">
+        <div class="t">Deep Dive</div>
+        <div class="s">feature &middot; pre-production &middot; psychological action thriller</div>
+        <p>Salva, an office worker, senses an unusual shift at his job; he realizes his coworkers are part of a clandestine experiment by a pharmaceutical company.</p>
+      </div>
+    </article>
+    <article class="poster" role="listitem" data-tilt>
+      <div class="poster__img"><img src="assets/portfolio/poster-losttime.webp" width="900" height="1200" alt="Lost Time poster" loading="lazy"></div>
+      <div class="poster__meta">
+        <div class="t">Lost Time</div>
+        <div class="s">tv series &middot; pre-production &middot; historical dramedy, sci-fi action</div>
+        <p>After stealing a time machine, a reckless drunk juggles trying to live with his past self while going on adventures throughout time.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="ledgers u-wide fade" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+    <div>
+      <p class="mlbl">the paper trail</p>
+      <dl class="ledger">
+        <dt>business plan &middot; marketing plan, Deep Dive</dt><dd>mar 2024</dd>
+        <dt>shot-direction frames, Deep Dive office scene</dt><dd data-count="24">24</dd>
+        <dt>Deep Dive proof-of-concept short, co-written with Christopher Perez</dt><dd>jul 2025</dd>
+        <dt>show bible, Lost Time</dt><dd>written</dd>
+        <dt>posters, designed in-house</dt><dd>2026</dd>
+        <dt>Georgia LLC organized</dt><dd>aug 2024</dd>
+      </dl>
+    </div>
+    <div>
+      <p class="mlbl">future studio &middot; a model you can argue with</p>
+      <p style="max-width:40ch;font-size:var(--s--1);line-height:1.6">A gated page at <a href="https://soleilpictures.com/future-studio" rel="noopener">soleilpictures.com/future-studio</a> models a film studio and a theme park sharing one island as one business: an interactive map, a pro forma, and a situation room built from a <b>90-entry idea ledger</b>, with <b>147 test assertions</b> guarding the economics. It records where the plan fails as carefully as where it works.</p>
+      <img src="assets/portfolio/soleil-logo.webp" width="900" height="592" alt="Soleil Pictures" loading="lazy" style="width:min(100%,16rem);margin-top:1.6rem;opacity:.9">
+    </div>
+  </div>
+  <div class="links fade">
+    <a href="https://soleilpictures.com/projects" rel="noopener">the slate &nearr;</a>
+    <a href="https://soleilpictures.com/about-us" rel="noopener">about the studio</a>
+  </div>
+</section>
+
+<!-- 04 · GROWTH RECORD ───────────────────────────────────── -->
+<section id="growth" class="bed band chapter" aria-labelledby="growth-h">
+  <div class="kicker fade">
+    <span class="n">04</span>
+    <span class="lbl">growth record</span>
+    <span class="mlbl">2018 &rarr; 2025</span>
+  </div>
+  <h2 id="growth-h" class="fade" style="--d:.06s">Before the products, the campaigns.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Both products exist because the funnel was already familiar: recruit creators, verify them, nudge them into posting, measure the post. That was the job first.</p>
+
+  <ul class="record u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+    <li>
+      <div><div class="who">WorldStar HipHop</div><span class="when">marketing director &middot; jun 2021 &ndash; aug 2022 &middot; age 17</span></div>
+      <p>Directed influencer and social campaigns for artist releases with a three-to-four-person team. One fully documented TikTok creator campaign: <b>48 creator videos, 956,650 views, $7,750 spend, $0.0081 per view</b>, best creator at $0.0016. Seeded releases through a <b>14.6-million-follower</b> Instagram meme-page pool with per-post view, engagement, and ROI tracking. Took an artist from <b>20K to 250K Spotify monthly listeners in six months</b>.</p>
+    </li>
+    <li>
+      <div><div class="who">Freelance</div><span class="when">social growth &amp; management &middot; 2018 &ndash; 2023</span></div>
+      <p>Grew an Instagram page from <b>0 to 35K followers</b> organically. Produced music-production content that earned <b>1M+ organic TikTok views</b>. Managed pages totalling 550K+ followers.</p>
+    </li>
+    <li>
+      <div><div class="who">Rise Studios &middot; Just Peachy Locations</div><span class="when">social media marketing consultant &middot; aug 2024 &ndash; jul 2025</span></div>
+      <p>Organic-growth and content strategy for two Atlanta production businesses, and trained their teams on content workflows and performance optimisation.</p>
+    </li>
+    <li>
+      <div><div class="who">Georgia Entertainment</div><span class="when">event photographer &amp; journalist &middot; oct 2024 &ndash; sep 2025</span></div>
+      <p>Documented Atlanta&rsquo;s entertainment scene on assignment.</p>
+    </li>
+    <li>
+      <div><div class="who">Swoon Esports</div><span class="when">founder &middot; sep 2019 &ndash; nov 2020 &middot; age 15</span></div>
+      <p>Built a <b>5K+ community</b>, ran online tournaments for hundreds of participants, and managed branding and operations for semi-professional teams in Rocket League, Rainbow Six Siege, and CS:GO.</p>
+    </li>
+  </ul>
+</section>
+
+<!-- 05 · ON CAMERA ───────────────────────────────────────── -->
+<section id="camera" class="bed band dark chapter" aria-labelledby="camera-h">
+  <div class="kicker fade">
+    <span class="n">05</span>
+    <span class="lbl">on camera</span>
+    <a class="mlbl" href="https://imdb.me/andrewconklin" rel="noopener">imdb &nearr;</a>
+    <span class="mlbl">actor &middot; producer &middot; atlanta</span>
+  </div>
+  <h2 id="camera-h" class="fade" style="--d:.06s">Ten credits. Six of them leads.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Acting is where the products came from: the studio needed tools, and the person on set built them. Working actor since 2023, training in Chubbuck, Meisner, and at Michelle Danner&rsquo;s studio.</p>
+
+  <div class="still u-wide fade" style="--d:.18s;margin-top:clamp(2rem,4vw,3rem)" data-parallax="0.06">
+    <img src="assets/portfolio/still-noise-complaint.webp" width="1800" height="1013" alt="A frame from Noise Complaint: Andrew in a blue security uniform, lit low and blue, wide-eyed" loading="lazy">
+    <span class="cap">noise complaint &middot; lead &middot; ion films studios</span>
+  </div>
+
+  <div class="u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+    <table class="tbl">
+      <thead><tr><th>title</th><th>role</th><th class="hide-sm">director</th><th>production</th></tr></thead>
+      <tbody>
+        <tr><td>Where It Hurts</td><td class="lead-role">Lead</td><td class="hide-sm">Diego Moreno</td><td>SCAD</td></tr>
+        <tr><td>Papercut Boi</td><td class="lead-role">Lead</td><td class="hide-sm">KJ Seok</td><td>SCAD</td></tr>
+        <tr><td>No Love Lost</td><td class="lead-role">Lead</td><td class="hide-sm">Chase Walsh</td><td>Capped Films</td></tr>
+        <tr><td>Noise Complaint</td><td class="lead-role">Lead</td><td class="hide-sm">Jacob Burgess</td><td>Ion Films Studios</td></tr>
+        <tr><td>Pumpkin</td><td class="lead-role">Lead</td><td class="hide-sm">Molefe Sijiye</td><td>Georgia State University</td></tr>
+        <tr><td>De-Escalation</td><td class="lead-role">Lead</td><td class="hide-sm">Marley Gompel</td><td>SCAD</td></tr>
+        <tr><td>TGWTGH</td><td>Supporting</td><td class="hide-sm">Kentronn Malmadh</td><td>Ram In A Bush Productions</td></tr>
+        <tr><td>Model UN</td><td>Supporting</td><td class="hide-sm">Ellison Winterstein</td><td>Evil Twin Digital</td></tr>
+        <tr><td>Still Here</td><td>Supporting</td><td class="hide-sm">Dayanara De La Hoz</td><td>Georgia State University</td></tr>
+        <tr><td>Devour</td><td>Day player</td><td class="hide-sm">Scott Hansen</td><td>Digital Thunderdome Studios</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ledgers u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+    <div>
+      <p class="mlbl">training</p>
+      <dl class="ledger">
+        <dt>Advanced Acting Techniques &middot; Intro to Chubbuck</dt><dd>Jerri Tubbs, GSU</dd>
+        <dt>Meisner Technique</dt><dd>Emerald Coast Theater</dd>
+        <dt>Acting Techniques</dt><dd>Michelle Danner Acting Studio</dd>
+      </dl>
+    </div>
+    <div>
+      <p class="mlbl">on the page</p>
+      <dl class="ledger">
+        <dt>credits &middot; leads</dt><dd>10 &middot; 6</dd>
+        <dt>reels</dt><dd>2</dd>
+        <dt>height</dt><dd>6&prime;</dd>
+        <dt>special skills</dt><dd class="wrap"><small>stunts &middot; free diving &middot; rock climbing &middot; horseback &middot; improv &middot; cold reading</small></dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · MUSIC ───────────────────────────────────────────── -->
+<section id="music" class="bed band chapter" aria-labelledby="music-h">
+  <div class="kicker fade">
+    <span class="n">06</span>
+    <span class="lbl">music</span>
+    <span class="mlbl">produces as keekoh &middot; soleil records</span>
+  </div>
+  <h2 id="music-h" class="fade" style="--d:.06s">Seventy tracks in twenty-one months.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Making beats since 2020. In late 2024 the single <b>&ldquo;It All Falls&rdquo;</b> went out under his own label, Soleil Records, with the whole release kit self-made: vertical video, TikTok spot, Spotify canvas. The music-production content around it is where the <b>1M+ organic TikTok views</b> came from.</p>
+  <div class="ledgers u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+    <div>
+      <p class="mlbl">output &middot; on disk, 20 sep 2026</p>
+      <dl class="ledger">
+        <dt>tracks started, jan 2025 &rarr; sep 2026</dt><dd data-count="70">70</dd>
+        <dt>FL Studio project files</dt><dd data-count="2018">2,018</dd>
+        <dt>bounces (wav)</dt><dd data-count="1015">1,015</dd>
+        <dt>busiest month</dt><dd>jun 2025 &middot; 12</dd>
+      </dl>
+    </div>
+    <div>
+      <p class="mlbl">the release</p>
+      <dl class="ledger">
+        <dt>single</dt><dd>It All Falls</dd>
+        <dt>artist &middot; label</dt><dd>Keekoh &middot; Soleil Records</dd>
+        <dt>out</dt><dd>late 2024</dd>
+        <dt>assets made</dt><dd class="wrap"><small>master video &middot; tiktok spot &middot; spotify canvas &middot; caption export</small></dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · OTHER BUILDS ────────────────────────────────────── -->
+<section id="builds" class="bed band chapter" aria-labelledby="builds-h" style="padding-top:0">
+  <div class="kicker fade">
+    <span class="n">07</span>
+    <span class="lbl">other builds</span>
+    <span class="mlbl">simulation &middot; games &middot; tools &middot; 2023 &rarr; 2026</span>
+  </div>
+  <h2 id="builds-h" class="fade" style="--d:.06s">The rest of the shelf.</h2>
+  <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Not products. Practice, curiosity, and the occasional two-day sprint that turned into eighteen thousand lines.</p>
+
+  <div class="cards u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+    <article class="card">
+      <p class="mlbl">simulation &middot; rust, python, c++</p>
+      <h3>Project Genesis</h3>
+      <p>An emergent-behaviour civilisation simulator where every citizen is an autonomous agent with memory and interests, and the player is the president. Fourteen Rust crates (24,912 lines, 275 tests, 90 systems), a PyTorch pipeline that trains tiny agent brains, and an Unreal Engine 5 client. Then re-implemented as a 78-commit Cataclysm: DDA fork that runs the city in spectator mode with policy dials.</p>
+      <p class="meta">apr &ndash; aug 2026 &middot; 139 + 78 commits</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">game &middot; luau, roblox</p>
+      <h3>Rocklords</h3>
+      <p>A PvP rock-collection game: mining, refinement with a wager feel, fusion trade-ups, theft, auto-miners for offline progression, procedurally generated mythical rocks players get to name. 18,107 lines of Luau across 39 server modules, 126 tests, a 20-section design spec, and a Rojo, Wally, StyLua, Selene toolchain.</p>
+      <p class="meta">written in two days, apr 2026 &middot; unpublished</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">model &middot; next.js on the edge</p>
+      <h3>Future Studio</h3>
+      <p>A studio-plus-theme-park island as one business, rendered as a map, a pro forma, and a situation room from a 90-entry idea ledger. Gated at the edge, with 147 test assertions on the economics. <a href="https://soleilpictures.com/future-studio" rel="noopener">soleilpictures.com/future-studio</a></p>
+      <p class="meta">aug 2026 &middot; live</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">automation &middot; python + claude</p>
+      <h3>Investor research pipeline</h3>
+      <p>Researches investor candidates, de-duplicates them, scores and ranks them by configurable weights, writes them to a sheet, builds a digest, and verifies employment, on a launchd schedule. 53 tests.</p>
+      <p class="meta">mar &ndash; apr 2026</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">prototype &middot; next.js</p>
+      <h3>Create OS</h3>
+      <p>The February 2025 prototype of what became Bounty_OS: brands fund a budget for views, creators onboard and choose how to get paid. 103 commits and a five-step campaign wizard, a year before the company existed.</p>
+      <p class="meta">feb &ndash; mar 2025</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">data &middot; cloudflare workers + d1</p>
+      <h3>Cast &amp; crew database</h3>
+      <p>A movie, credit, and person database on Cloudflare D1 with a search front end on soleilpictures.com, fed by a TMDb crew scraper. Built to answer one studio question: who worked on the films we love.</p>
+      <p class="meta">mar 2024</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">personal &middot; one html file</p>
+      <h3>Film rankings</h3>
+      <p>A 4,067-line Classic Mac OS desktop for rating films: TMDb search, IMDb, Rotten Tomatoes and Metacritic pulled into a weighted public score, a watchlist with streaming providers, a rating-distribution chart, a startup chime, and flying toasters when it idles. Lives on this site, behind a password.</p>
+      <p class="meta">feb &ndash; mar 2026 &middot; 57 commits</p>
+    </article>
+    <article class="card">
+      <p class="mlbl">this page</p>
+      <h3>andrewconklin.com/portfolio</h3>
+      <p>One HTML file, no framework, no build step, like the rest of this site. The sticky showcases, count-ups, morph, and reveals are about two hundred lines of vanilla JavaScript, and all of it switches off under <span class="mono">prefers-reduced-motion</span>.</p>
+      <p class="meta">sep 2026</p>
+    </article>
+  </div>
+</section>
+
+<!-- 08 · CONTACT ─────────────────────────────────────────── -->
+<section id="contact" class="bed band dark chapter" aria-labelledby="contact-h">
+  <div class="kicker fade">
+    <span class="n">08</span>
+    <span class="lbl">contact</span>
+    <span class="mlbl">remote &middot; atlanta, ga</span>
+  </div>
+  <h2 id="contact-h" class="sr-only">Contact</h2>
+  <a class="close__mail fade" href="mailto:andrew@andrewconklin.com">andrew@andrewconklin.com</a>
+  <div class="links fade">
+    <a href="https://www.linkedin.com/in/andrew-conklin" rel="noopener">linkedin</a>
+    <a href="https://imdb.me/andrewconklin" rel="noopener">imdb</a>
+    <a href="https://github.com/arconkli" rel="noopener">github</a>
+    <a href="https://www.instagram.com/andrewconklin/" rel="noopener">instagram</a>
+    <a href="https://www.youtube.com/@andrew.conklin" rel="noopener">youtube</a>
+    <a href="https://soleilpictures.com" rel="noopener">soleil pictures</a>
+    <a href="about.html">about</a>
+  </div>
+  <p class="colophon fade">
+    Every number on this page was checked on 20 September 2026 against the repository, the dated production-database export, or the live page it names. Bounty_OS and Soleil Clusters are early-stage products; nothing here is a revenue claim. Screen credits are from the current acting r&eacute;sum&eacute;. Product shots are the products as they run today. Built solo, with Claude Code as a daily collaborator, in one file.
+  </p>
+</section>
+
+</main>
+
+<footer class="tick" aria-hidden="true">
+  <div class="tick__t">
+    <div class="tick__s"><span>bounty_os</span><span>soleil clusters</span><span>soleil pictures</span><span>andrew conklin</span><span>atlanta</span><span>founder</span><span>builder</span><span>actor</span><span>producer</span><span>musician</span></div>
+    <div class="tick__s"><span>bounty_os</span><span>soleil clusters</span><span>soleil pictures</span><span>andrew conklin</span><span>atlanta</span><span>founder</span><span>builder</span><span>actor</span><span>producer</span><span>musician</span></div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://andrewconklin.com/portfolio",
+  "name": "Portfolio — Andrew Conklin",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "https://andrewconklin.com/#andrew-conklin",
+    "name": "Andrew Conklin",
+    "url": "https://andrewconklin.com",
+    "image": "https://andrewconklin.com/Andrew_Full_Headshot.jpg",
+    "email": "mailto:andrew@andrewconklin.com",
+    "jobTitle": ["Founder", "Product Engineer", "Growth Marketer", "Actor", "Film Producer", "Musician"],
+    "address": {"@type": "PostalAddress", "addressLocality": "Atlanta", "addressRegion": "GA", "addressCountry": "US"},
+    "sameAs": [
+      "https://imdb.me/andrewconklin",
+      "https://www.instagram.com/andrewconklin/",
+      "https://www.linkedin.com/in/andrew-conklin",
+      "https://github.com/arconkli",
+      "https://www.youtube.com/@andrew.conklin",
+      "https://www.wikidata.org/wiki/Q135687455",
+      "https://soleilpictures.com/"
+    ],
+    "knowsAbout": ["Growth Marketing", "Influencer Marketing", "Lifecycle Marketing", "Product Engineering", "React", "TypeScript", "PostgreSQL", "Cloudflare Workers", "Film Production", "Acting", "Music Production"]
+  },
+  "hasPart": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Bounty_OS",
+      "url": "https://bountyos.com",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Pay-per-view product placement marketplace connecting brands with TikTok and Instagram creators.",
+      "author": {"@id": "https://andrewconklin.com/#andrew-conklin"}
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Soleil Clusters",
+      "url": "https://clusters.soleilpictures.com",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "Real-time infinite-canvas workspace for film, photo, design and brand teams, with a public REST API and an MCP server.",
+      "author": {"@id": "https://andrewconklin.com/#andrew-conklin"},
+      "publisher": {"@type": "Organization", "name": "Soleil Pictures", "url": "https://soleilpictures.com/"}
+    },
+    {
+      "@type": "Organization",
+      "name": "Soleil Pictures",
+      "url": "https://soleilpictures.com/",
+      "foundingDate": "2024",
+      "founder": [{"@id": "https://andrewconklin.com/#andrew-conklin"}, {"@type": "Person", "name": "Christopher Perez"}]
+    }
+  ]
+}
+</script>
+
+<script>
+(function(){
+'use strict';
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- the morph, from the homepage ---------- */
+(function(){
+  var a=document.getElementById('m1'), b=document.getElementById('m2'); if(!a||!b) return;
+  var words=['founder','builder','marketer','actor','producer','musician'];
+  if(reduce){ a.textContent=words.join(' · '); b.textContent=''; return; }
+  var MORPH=1.4, COOL=.7, i=words.length-1, morph=0, cool=COOL, t=performance.now();
+  a.textContent=words[i%words.length]; b.textContent=words[(i+1)%words.length];
+  function set(f){
+    b.style.filter='blur('+Math.min(2.6/f-2.6,100)+'px)'; b.style.opacity=Math.pow(f,.4)*100+'%';
+    var g=1-f;
+    a.style.filter='blur('+Math.min(2.6/g-2.6,100)+'px)'; a.style.opacity=Math.pow(g,.4)*100+'%';
+    a.textContent=words[i%words.length]; b.textContent=words[(i+1)%words.length];
+  }
+  function frame(now){
+    requestAnimationFrame(frame);
+    var inc=cool>0, dt=(now-t)/1000; t=now; cool-=dt;
+    if(cool<=0){
+      if(inc) i++;
+      morph-=cool; cool=0;
+      var f=morph/MORPH; if(f>1){ cool=COOL; f=1; }
+      set(f);
+    } else {
+      morph=0; b.style.filter=''; b.style.opacity='100%'; a.style.filter=''; a.style.opacity='0%';
+    }
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ---------- reveal ---------- */
+var io = ('IntersectionObserver' in window);
+(function(){
+  var t = document.querySelectorAll('.line, .fade');
+  if(reduce || !io){ t.forEach(function(el){ el.classList.add('in'); }); return; }
+  var ob = new IntersectionObserver(function(en, o){
+    en.forEach(function(e){ if(!e.isIntersecting) return; e.target.classList.add('in'); o.unobserve(e.target); });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
+  t.forEach(function(el){ ob.observe(el); });
+})();
+
+/* ---------- count-up: once, when visible ---------- */
+(function(){
+  var els = document.querySelectorAll('[data-count]');
+  if(!els.length) return;
+  function fmt(v, dec){ return v.toLocaleString('en-US', {minimumFractionDigits:dec, maximumFractionDigits:dec}); }
+  function run(el){
+    var end = parseFloat(el.getAttribute('data-count')), dec = parseInt(el.getAttribute('data-dec')||'0',10), suf = el.getAttribute('data-suffix')||'';
+    var small = el.querySelector('small'); var tail = small ? ' ' : '';
+    var node = el.firstChild; if(!node || node.nodeType!==3){ node = document.createTextNode(''); el.insertBefore(node, el.firstChild); }
+    var dur = 1400 + Math.min(1200, Math.log10(end+1)*260), t0 = null;
+    function step(now){
+      if(t0===null) t0 = now;
+      var p = Math.min(1, (now-t0)/dur); p = 1 - Math.pow(1-p, 4);
+      node.nodeValue = fmt(end*p, dec) + suf + tail;
+      if(p<1) requestAnimationFrame(step); else node.nodeValue = fmt(end, dec) + suf + tail;
+    }
+    requestAnimationFrame(step);
+  }
+  if(reduce || !io) return; /* markup already holds the final value */
+  var ob = new IntersectionObserver(function(en, o){
+    en.forEach(function(e){ if(!e.isIntersecting) return; run(e.target); o.unobserve(e.target); });
+  }, {threshold:.6});
+  els.forEach(function(el){ ob.observe(el); });
+})();
+
+/* ---------- sticky showcase: the feature nearest the centre picks the image ---------- */
+(function(){
+  var shows = document.querySelectorAll('.show');
+  if(!shows.length) return;
+  shows.forEach(function(show){
+    var feats = Array.prototype.slice.call(show.querySelectorAll('.feat'));
+    var stage = show.querySelector('.show__stage'); if(!stage) return;
+    var imgs = {}; Array.prototype.forEach.call(stage.children, function(c){ imgs[c.getAttribute('data-key')] = c; });
+    var current = null;
+    function setKey(k){
+      if(k===current || !imgs[k]) return; current = k;
+      Object.keys(imgs).forEach(function(key){ imgs[key].classList.toggle('on', key===k); });
+    }
+    setKey(feats[0] && feats[0].getAttribute('data-img'));
+    var ticking = false;
+    function update(){
+      ticking = false;
+      var mid = innerHeight * .5, best = null, bd = Infinity;
+      feats.forEach(function(f){
+        var r = f.getBoundingClientRect(), c = r.top + r.height/2, d = Math.abs(c - mid);
+        if(d < bd){ bd = d; best = f; }
+      });
+      if(best) setKey(best.getAttribute('data-img'));
+    }
+    addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+    addEventListener('resize', update); update();
+  });
+})();
+
+/* ---------- clips play only while visible ---------- */
+(function(){
+  var vids = document.querySelectorAll('video[data-autoplay]');
+  if(!vids.length) return;
+  if(reduce){ return; } /* poster stays; no motion */
+  if(!io){ vids.forEach(function(v){ v.play().catch(function(){}); }); return; }
+  var ob = new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      var v = e.target;
+      if(e.isIntersecting){ if(v.preload==='none'){ v.preload='auto'; v.load(); } v.play().catch(function(){}); }
+      else { v.pause(); }
+    });
+  }, {threshold:.35});
+  vids.forEach(function(v){ ob.observe(v); });
+})();
+
+/* ---------- parallax: transform only, ±6%, rAF-throttled ---------- */
+(function(){
+  if(reduce) return;
+  var els = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  if(!els.length) return;
+  var ticking = false;
+  function update(){
+    ticking = false;
+    els.forEach(function(el){
+      var img = el.querySelector('img'); if(!img) return;
+      var r = el.getBoundingClientRect(); if(r.bottom < 0 || r.top > innerHeight) return;
+      var f = parseFloat(el.getAttribute('data-parallax')) || .06;
+      var p = (r.top + r.height/2 - innerHeight/2) / innerHeight; /* -0.5 .. 0.5 */
+      img.style.transform = 'translate3d(0,' + (p * -f * 100 * -1) + '%,0)';
+    });
+  }
+  addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+  addEventListener('resize', update); update();
+})();
+
+/* ---------- poster tilt ---------- */
+(function(){
+  if(reduce || !matchMedia('(hover:hover)').matches) return;
+  document.querySelectorAll('[data-tilt]').forEach(function(p){
+    var box = p.querySelector('.poster__img');
+    p.addEventListener('pointermove', function(e){
+      var r = box.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+      box.style.setProperty('--ry', (x*10)+'deg'); box.style.setProperty('--rx', (-y*8)+'deg');
+    });
+    p.addEventListener('pointerleave', function(){ box.style.setProperty('--ry','0deg'); box.style.setProperty('--rx','0deg'); });
+  });
+})();
+
+/* ---------- scroll-spy for the chapter nav ---------- */
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav__links a'));
+  var secs = links.map(function(l){ return document.querySelector(l.getAttribute('href')); });
+  if(!io){ return; }
+  var active = null;
+  function mark(id){
+    if(id===active) return; active = id;
+    links.forEach(function(l){ l.classList.toggle('on', l.getAttribute('href')==='#'+id); });
+  }
+  var ob = new IntersectionObserver(function(en){
+    en.forEach(function(e){ if(e.isIntersecting) mark(e.target.id); });
+  }, {rootMargin:'-40% 0px -55% 0px', threshold:0});
+  secs.forEach(function(s){ if(s) ob.observe(s); });
+})();
+})();
+</script>
+</body>
+</html>

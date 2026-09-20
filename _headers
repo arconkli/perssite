@@ -16,3 +16,10 @@
 /everyonesocial.html
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
   Referrer-Policy: strict-origin-when-cross-origin
+
+# The portfolio page is deliberately unlisted: reachable by link, never by search.
+/portfolio
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
+
+/portfolio.html
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
