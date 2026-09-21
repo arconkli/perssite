@@ -177,7 +177,8 @@ and `primitives.jsx`). Sprites: `assets/portfolio/clusters/cards/*.webp`, 444 KB
 (3.5 MB) are deleted. Three moments, chosen by Andrew: (1) a cursor labelled "andrew" swaps the greyscale
 and light approved logos in three drags; (2) an `add_cards` request typed beside the frame, in the real
 tool schema shape (`mcp/src/tools.js:491`), lands three image cards with the app's own card-pop; (3) the same
-board in a CSS phone bezel with the swap applied. Captions and terminal sit outside the frame. Chrome reads
+board in a CSS device shell (rim highlight, top pill, glare, slight breathing tilt) whose screen browses a
+three-pose path: approved logos, the DON'TS grid, the DO'S with the explanation notes, and back, 22 s loop. Captions and terminal sit outside the frame. Chrome reads
 "shared board · rebuilt from its real cards". Sprites load only when the chapter is within 75% of a
 viewport; under reduced motion each state is a static pose with the transcript fully rendered. The AI,
 growth-stack and docs-CI features moved into the ledgers as rows. Generator: `scratchpad/gen-stage.mjs`
