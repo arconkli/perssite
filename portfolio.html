@@ -424,10 +424,9 @@ p{margin:0;color:var(--ink-2)}
 .record .when{display:block;margin-top:.3rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
 .record p{max-width:46rem}
 
-/* sample video inside a record entry: a phone-shaped poster; YouTube loads only on click */
-.record .ent{display:flex;flex-wrap:wrap;gap:1.2rem 2.5rem;align-items:flex-start}
-.record .ent p{flex:1 1 20rem}
-.samp{flex:0 0 auto;width:min(100%,15rem)}
+/* sample video: an exhibit figure beside the growth ledger; YouTube loads only on click */
+.samp{width:min(100%,15rem);margin:clamp(1.6rem,3vw,2.4rem) 0 0}
+.samp__lbl{margin:0 0 .8rem}
 .samp__box{position:relative;aspect-ratio:9/16;background:#0B0B0C;border-radius:2rem;overflow:hidden;box-shadow:0 40px 100px -30px rgb(0 0 0 / .5),inset 0 0 0 1px rgb(255 255 255 / .06);border:5px solid #1A1A1D;isolation:isolate}
 .samp__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.4s var(--ease)}
 .samp__box:hover .samp__poster,.samp__box:focus-within .samp__poster{transform:scale(1.03)}
@@ -438,11 +437,24 @@ p{margin:0;color:var(--ink-2)}
 .samp__btn:hover .samp__play svg,.samp__btn:focus-visible .samp__play svg{fill:#0B0B0C}
 .samp__btn:focus-visible{outline:1px solid #EDEAE5;outline-offset:-6px}
 .samp iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
-.samp--live .samp__poster,.samp--live .samp__btn{display:none}
-.samp .cap{display:grid;gap:.35rem;margin-top:.8rem}
+.samp--live .samp__btn{display:none} /* the poster stays under the iframe until YouTube paints */
+.samp .cap{display:grid;gap:.35rem;margin:.8rem 0 0}
+.samp .cap p{font-size:var(--s--1);line-height:1.5;text-wrap:pretty}
 .samp .cap a{justify-self:start;color:var(--faint);text-decoration:none;border-bottom:1px solid var(--rule);transition:color .3s var(--ease),border-color .3s var(--ease)}
 .samp .cap a:hover,.samp .cap a:focus-visible{color:var(--ink-2);border-color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){.samp__poster,.samp__play,.samp__play svg{transition:none}.samp__box:hover .samp__poster,.samp__box:focus-within .samp__poster{transform:none}}
+/* 46 to 72rem: the figure sits below the list, caption beside the phone on its base line */
+@media (min-width:46rem) and (max-width:71.99rem){
+  .samp{width:auto;display:grid;grid-template-columns:15rem minmax(0,24rem);column-gap:2.5rem;align-items:end}
+  .samp__lbl{grid-column:1 / -1}
+  .samp .cap{margin-top:0}
+}
+/* 72rem and up: an exhibit column beside the ledger (below 72rem the wide track is too narrow for it) */
+@media (min-width:72rem){
+  .recwrap{display:grid;grid-template-columns:minmax(0,1fr) 15rem;column-gap:clamp(2rem,4vw,3rem);align-items:start;border-top:1px solid var(--rule-2)}
+  .recwrap .record{border-top:0}
+  .samp{margin:0;padding-top:1.2rem;position:sticky;top:calc(var(--nav-h) + 1.25rem)}
+}
 
 /* ============================================================
    STILL — a frame from the work
@@ -956,7 +968,8 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
   <h2 id="growth-h" class="fade" style="--d:.06s">Before the products, the campaigns.</h2>
   <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Both products exist because the funnel was already familiar: recruit creators, verify them, nudge them into posting, measure the post. That was the job first.</p>
 
-  <ul class="record u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+  <div class="recwrap u-wide fade" style="margin-top:clamp(2rem,4vw,3rem)">
+  <ul class="record">
     <li>
       <div><div class="who">WorldStar HipHop</div><span class="when">marketing director &middot; jun 2021 &ndash; aug 2022 &middot; age 17</span></div>
       <p>Directed influencer and social campaigns for artist releases with a three-to-four-person team. One fully documented TikTok creator campaign: <b>48 creator videos, 956,650 views, $7,750 spend, $0.0081 per view</b>, best creator at $0.0016. Seeded releases through a <b>14.6-million-follower</b> Instagram meme-page pool with per-post view, engagement, and ROI tracking. Took an artist from <b>20K to 250K Spotify monthly listeners in six months</b>.</p>
@@ -971,24 +984,29 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     </li>
     <li>
       <div><div class="who">Georgia Entertainment</div><span class="when">event photographer &amp; journalist &middot; oct 2024 &ndash; sep 2025</span></div>
-      <div class="ent">
-        <p>Documented Atlanta&rsquo;s entertainment scene on assignment. The sample here was cut to pitch a potential client: the kind of video I make.</p>
-        <div class="samp" data-yt="RxR0G8qX9dY" data-title="Georgia Entertainment sample video">
-          <div class="samp__box">
-            <img class="samp__poster" src="assets/portfolio/sample-georgia.webp" width="480" height="854" alt="" loading="lazy" decoding="async">
-            <button class="samp__btn" type="button" aria-label="Play: Georgia Entertainment sample video, 1 minute 58 seconds">
-              <span class="samp__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-            </button>
-          </div>
-          <div class="cap"><span class="mlbl">georgia entertainment sample &middot; aug 2024</span><span class="mlbl">1:58 &middot; vertical &middot; sound on</span><a class="mlbl" href="https://youtu.be/RxR0G8qX9dY" target="_blank" rel="noopener">watch on youtube &nearr;</a></div>
-        </div>
-      </div>
+      <p>Documented Atlanta&rsquo;s entertainment scene on assignment.</p>
     </li>
     <li>
       <div><div class="who">Swoon Esports</div><span class="when">founder &middot; sep 2019 &ndash; nov 2020 &middot; age 15</span></div>
       <p>Built a <b>5K+ community</b>, ran online tournaments for hundreds of participants, and managed branding and operations for semi-professional teams in Rocket League, Rainbow Six Siege, and CS:GO.</p>
     </li>
   </ul>
+  <figure class="samp" id="samp-georgia" data-yt="RxR0G8qX9dY" data-title="Georgia Entertainment sample video">
+    <p class="mlbl samp__lbl">georgia entertainment</p>
+    <div class="samp__box">
+      <img class="samp__poster" src="assets/portfolio/sample-georgia.webp" width="720" height="1280" alt="" loading="lazy" decoding="async">
+      <button class="samp__btn" type="button" aria-label="Play: Georgia Entertainment sample video, 1 minute 58 seconds">
+        <span class="samp__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+      </button>
+    </div>
+    <figcaption class="cap">
+      <span class="mlbl">sample &middot; aug 2024 &middot; 1:58</span>
+      <span class="mlbl">vertical &middot; sound on</span>
+      <p>Cut to pitch a potential client: the kind of video I make.</p>
+      <a class="mlbl" href="https://youtu.be/RxR0G8qX9dY" target="_blank" rel="noopener">watch on youtube &nearr;</a>
+    </figcaption>
+  </figure>
+</div>
 </section>
 
 <!-- 05 · ON CAMERA ───────────────────────────────────────── -->

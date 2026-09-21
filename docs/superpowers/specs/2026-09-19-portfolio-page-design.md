@@ -96,11 +96,17 @@ An unlisted page at `andrewconklin.com/portfolio` (reachable by link, kept out o
 
 Andrew asked for his "Georgia Entertainment Sample Vid" (youtu.be/RxR0G8qX9dY, unlisted, 1:58, uploaded
 2024-08-22, vertical 1080x1920) to go on the page: "a sample video I made for a potential client, kinda shows
-the videos I can make." It sits inside the Georgia Entertainment entry of chapter 04, as a phone-shaped
-poster (`.samp`, 9:16, 15rem wide, beside the entry text; below it on phones) with a single play control.
-Nothing from YouTube loads until the button is pressed; the click builds the iframe the same way the
-EveryoneSocial page does (youtube.com/embed with `origin`, `referrerpolicy=strict-origin-when-cross-origin`),
-and `_headers` now sends the matching Referrer-Policy for /portfolio so the player's origin check passes.
-The poster is a real frame from the last second of the video (caption-free), stored as
-`assets/portfolio/sample-georgia.webp`. Caption copy states only what is known: the video's own title,
-its upload month, its length, and that it is vertical.
+the videos I can make." First placed inside the Georgia Entertainment ledger row as a 15rem phone-shaped
+poster; he liked the poster but said the row's spacing felt "off and weird" (the row became ~35rem tall with a
+two-line paragraph and a void). Fix, chosen by a three-proposal judge panel over "shrink to a thumbnail +
+dialog player": the figure moved out of the row into `div.recwrap` around the ledger. At 72rem and up it is a
+15rem sticky exhibit column beside the whole list (top = nav height + 1.25rem), its mono label
+"sample · georgia entertainment" on the same line as the first entry name; 46 to 72rem it sits below the list
+with the caption beside the phone on its base line; under 46rem it stacks. The Georgia row is a one-line
+paragraph again. Nothing from YouTube loads until the play button is pressed; the press builds the iframe the
+same way the EveryoneSocial page does (youtube.com/embed with `origin`,
+`referrerpolicy=strict-origin-when-cross-origin`), and `_headers` sends the matching Referrer-Policy for
+/portfolio so the player's origin check passes. The poster is a real frame from the last second of the video
+(caption-free), `assets/portfolio/sample-georgia.webp`, 720x1280. Caption copy states only what is known:
+aug 2024, 1:58, vertical, sound on, "Cut to pitch a potential client: the kind of video I make.", and the
+YouTube link.
