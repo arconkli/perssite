@@ -127,6 +127,7 @@ as the chapter's sign-off. The paper-trail ledger is removed.
 
 Lifeline is a supporting role, not a lead (Andrew: "i was just supporting in that"); director Brentson Buckner;
 made for the Buried Alive Film Fest. It moved into the supporting group of the credits table; the lead count is
-six of eleven in the heading, hero stat and ledger. A small mono line under the table lists uncredited
-background work he named: Marvel's Thunderbolts, DC's Man of Tomorrow, Tulsa King, Will Trent, Southern
-Bastards, Gorilla Grodd, "among others" (his "etc."). Noise Complaint's festival is still unnamed.
+six of eleven in the heading, hero stat and ledger. Under the table, a block labelled "uncredited · on set"
+lists the big sets he named in the display face at heading size (he first asked for it small, then wanted it
+to "show and be a point"): Marvel's Thunderbolts, DC's Man of Tomorrow, Tulsa King, Will Trent, Southern
+Bastards, Gorilla Grodd, "among others" (his "etc."). Noise Complaint: Atlanta Horror Film Festival.
