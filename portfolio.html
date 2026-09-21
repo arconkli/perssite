@@ -225,7 +225,6 @@ p{margin:0;color:var(--ink-2)}
 @media (min-width:64rem){.show{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
 .show__stick{position:relative}
 @media (min-width:64rem){.show__stick{position:sticky;top:calc(var(--nav-h) + 4vh);height:calc(100svh - var(--nav-h) - 8vh);display:grid;place-items:center}}
-.show__stage{position:relative;width:100%;height:100%;display:grid;place-items:center}
 
 .feat{padding-block:clamp(1.6rem,4vw,3rem);border-top:1px solid var(--rule)}
 @media (min-width:64rem){.feat{min-height:62vh;display:flex;flex-direction:column;justify-content:center}}
@@ -251,34 +250,45 @@ p{margin:0;color:var(--ink-2)}
   background:rgb(20 20 23 / .9);border-bottom:1px solid rgb(255 255 255 / .06);font-size:.95em;letter-spacing:.06em;color:#8C8984;z-index:5;white-space:nowrap;overflow:hidden}
 .sc-chrome b{color:#EDEAE5;font-weight:500}
 .sc-chrome .dot{width:.45rem;height:.45rem;border-radius:50%;background:#3A3A3F;box-shadow:.8rem 0 0 #3A3A3F,1.6rem 0 0 #3A3A3F;margin-right:1.6rem}
-.sc-live{margin-left:auto;display:flex;align-items:center;gap:.4rem;color:#A9A69F}
-.sc-live i{width:.45rem;height:.45rem;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 0 rgb(74 222 128 / .6);animation:pulse 2.2s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgb(74 222 128 / .55)}70%{box-shadow:0 0 0 .55rem rgb(74 222 128 / 0)}100%{box-shadow:0 0 0 0 rgb(74 222 128 / 0)}}
-.av{display:inline-grid;place-items:center;width:1.35rem;height:1.35rem;border-radius:50%;font-size:.55rem;font-weight:700;color:#0B0B0C;border:2px solid #141416;margin-left:-.35rem}
-.av:first-child{margin-left:0}
 
-/* ---- Clusters: the real board, on film ---- */
-.film{position:absolute;inset:2.1rem 0 0 0;display:grid;background:#0E0E11;transition:opacity .9s var(--ease),filter .9s var(--ease)}
-.film .take{grid-area:1/1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s var(--ease)}
-.film .take.on{opacity:1}
-.scene[data-state="3"] .film{opacity:.28;filter:blur(3px) saturate(.7)}
-.term{position:absolute;left:1rem;bottom:1rem;width:min(74%,30rem);max-height:56%;overflow:hidden;padding:1em 1.2em;border-radius:10px;background:rgb(11 11 12 / .86);border:1px solid rgb(255 255 255 / .1);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.95em;line-height:1.55;color:#A9A69F;white-space:pre;z-index:6;transform:translateY(12px)}
-.term b{color:#EDEAE5;font-weight:500}.term .ok{color:#4ADE80}.term .warn{color:#D2495E}.term .am{color:#E39A2D}
-.hud{position:absolute;left:1rem;bottom:1rem;z-index:6;padding:.5em .8em;border-radius:6px;background:rgb(11 11 12 / .72);border:1px solid rgb(255 255 255 / .1);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:.95em;letter-spacing:.08em;text-transform:lowercase;color:#EDEAE5;max-width:60%;transition:opacity .5s var(--ease)}
-.hud b{color:#E39A2D;font-weight:500}
-.scene[data-state="2"] .hud,.scene[data-state="6"] .hud{bottom:auto;top:2.9rem}
-.scene[data-state="3"] .hud{bottom:auto;top:2.9rem}
-.signals{position:absolute;right:1rem;top:2.9rem;width:min(46%,17rem);max-height:66%;overflow:hidden;display:grid;gap:.4em;z-index:6;align-content:start}
-.signals div{padding:.5em .8em;border-radius:6px;background:rgb(11 11 12 / .86);border:1px solid rgb(255 255 255 / .1);font-size:.95em;color:#A9A69F;display:flex;justify-content:space-between;gap:.8em;
-  opacity:0;transform:translateX(12px);transition:opacity .6s var(--ease) var(--td),transform .7s var(--ease) var(--td)}
-.signals b{color:#EDEAE5;font-weight:500}.signals em{font-style:normal;color:#E39A2D}
-.scene[data-state="5"] .signals div{opacity:1;transform:none}
-.phone-ov{position:absolute;inset:0;display:grid;place-items:center;z-index:3;pointer-events:none}
-.phone-ov .bezel{width:min(30%,11.5rem);aspect-ratio:9/19.3;border-radius:2.2rem;border:.45rem solid #0B0B0C;overflow:hidden;background:#0B0B0C;box-shadow:0 0 0 1px rgb(255 255 255 / .14),0 40px 80px -20px rgb(0 0 0 / .8);transform:scale(.92);transition:transform 1.1s var(--ease)}
-.phone-ov .bezel .take{width:100%;height:100%;object-fit:cover;display:block;opacity:1}
-.scene[data-state="3"] .phone-ov .bezel{transform:none}
-.scene[data-state="3"] .term{opacity:0}
+/* ---- Clusters: the real board, rebuilt from its cards and driven by scroll ---- */
+@media (min-width:64rem){.show--wide{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}}
+.show__stick{container-type:inline-size}
+.stage{position:relative;width:100%;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;font-family:var(--mono);color:#EDEAE5;margin:0}
+.stage .sc-chrome{position:relative;height:2.1rem;border-radius:16px 16px 0 0;border:1px solid rgb(255 255 255 / .08);border-bottom:0;font-size:.62rem;background:#141417;grid-column:1 / -1}
+.stage .sc-rec{margin-left:auto;color:#A9A69F}
+.stage__frame{position:relative;grid-column:1;grid-row:2;height:calc(100cqw * 10 / 16);overflow:hidden;background:#0a0a0c;border-radius:0 0 16px 16px;border:1px solid rgb(255 255 255 / .08);border-top:0;box-shadow:0 40px 100px -30px rgb(0 0 0 / .6);isolation:isolate;
+  background-image:linear-gradient(to right,rgb(245 245 247 / .024) 1px,transparent 1px),linear-gradient(rgb(245 245 247 / .024) 1px,transparent 1px);background-size:40px 40px}
+.board,.phone-cam{position:absolute;left:0;top:0;width:2600px;height:2300px;transform-origin:0 0;transform:translate(var(--x,0px),var(--y,0px)) scale(var(--z,.3))}
+.board{transition:transform 1.6s var(--ease),opacity .9s var(--ease),filter .9s var(--ease)}
+.board .bcard{position:absolute;display:block;border-radius:8px;box-shadow:0 1px 0 rgb(0 0 0 / .4),0 2px 6px rgb(0 0 0 / .25);transition:box-shadow .32s cubic-bezier(.2,.8,.2,1),opacity .4s var(--ease)}
+.board .bcard.is-dragging{z-index:5;box-shadow:0 1px 0 rgb(0 0 0 / .5),0 8px 24px rgb(0 0 0 / .32),0 2px 6px rgb(0 0 0 / .2)}
+.board .bcard.is-pending{opacity:0}
+.board .bcard.is-new{animation:card-pop 200ms cubic-bezier(.2,.8,.2,1)}
+@keyframes card-pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.board__lines{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.board__lines text{fill:#d0d0d4}
+.cursor{position:absolute;left:0;top:0;opacity:0;pointer-events:none;z-index:9;transition:opacity .4s var(--ease)}
+.cursor__in{position:relative;transform:scale(var(--iz,1));transform-origin:0 0}
+.cursor__in svg{display:block}
+.cursor-flag{position:absolute;top:18px;left:12px;padding:3px 8px;font:600 11px/1.2 system-ui,-apple-system,sans-serif;color:#0a0a0c;border-radius:4px;white-space:nowrap;box-shadow:0 2px 8px rgb(0 0 0 / .4);background:#f97316;letter-spacing:0;text-transform:none}
+.stage[data-state="3"] .stage__frame > .board{opacity:.28;filter:blur(3px) saturate(.7)}
+.stage__phone{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(12px) scale(.96);transition:opacity 1.1s var(--ease),transform 1.4s var(--ease);pointer-events:none;z-index:4}
+.stage__phone.on{opacity:1;transform:none}
+.bezel{position:relative;height:88%;aspect-ratio:390/844;border-radius:2.4rem;border:.5rem solid #0B0B0C;background:#0a0a0c;overflow:hidden;box-shadow:0 0 0 1px rgb(255 255 255 / .14),0 40px 80px -20px rgb(0 0 0 / .8);
+  background-image:linear-gradient(to right,rgb(245 245 247 / .03) 1px,transparent 1px),linear-gradient(rgb(245 245 247 / .03) 1px,transparent 1px);background-size:24px 24px}
+.stage__term{grid-column:1;grid-row:3;max-height:0;opacity:0;overflow:hidden;margin:0;padding:0 1.1em;border-radius:10px;background:rgb(11 11 12 / .92);border:1px solid rgb(255 255 255 / .1);font-size:clamp(.62rem,1.5cqw,.8rem);line-height:1.55;color:#A9A69F;white-space:pre-wrap;transition:max-height .9s var(--ease),opacity .6s var(--ease),padding .9s var(--ease),margin .9s var(--ease)}
+.stage__term pre{margin:0;font:inherit;white-space:pre-wrap;word-break:break-word}
+.stage[data-state="2"] .stage__term{max-height:14rem;opacity:1;padding:.9em 1.1em;margin-top:.8rem}
+@container (min-width:42rem){
+  .stage[data-state="2"]{grid-template-columns:minmax(0,1fr) 15.5rem;column-gap:1rem}
+  .stage[data-state="2"] .stage__term{grid-column:2;grid-row:2;max-height:none;margin:0;padding:.9em 1.1em;align-self:stretch;overflow:auto}
+  .stage[data-state="2"] .sc-chrome,.stage[data-state="2"] .stage__cap{grid-column:1 / -1}
+}
+@container (max-width:40rem){.stage__frame{height:calc(100cqw * 12 / 16)}.stage .sc-chrome > span:not(.sc-rec):not(.dot){display:none}}
+.stage__cap{grid-column:1 / -1;grid-row:4;display:flex;justify-content:space-between;gap:.4rem 1rem;flex-wrap:wrap;margin:.8rem 0 0;font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
+.stage__cap span{transition:opacity .5s var(--ease)}
+@media (prefers-reduced-motion:reduce){.stage .cursor{display:none}.board,.stage__phone,.stage__term,.stage__cap span{transition:none}.board .bcard.is-new{animation:none}}
 
 /* ---- Bounty_OS: pay per view ---- */
 .scene--ppv{background:#0B0B0C}
@@ -373,10 +383,8 @@ p{margin:0;color:var(--ink-2)}
 @media (max-width:63.98rem){
   .show__stick{display:block;order:-1;position:sticky;top:var(--nav-h);z-index:20;padding:.6rem 0 .9rem;background:var(--bg)}
   .scene{aspect-ratio:16/11;border-radius:12px}
-  .term{width:78%;bottom:.6rem;left:.6rem}
   .panel{left:51%;right:3%;top:11%}
-  .signals{width:56%;top:2.6rem}.hud{max-width:70%}
-  .sc-chrome{font-size:.58rem;gap:.5rem;padding:0 .6rem}.sc-chrome > span:not(.sc-live):not(.dot){display:none}.sc-chrome .dot{margin-right:.9rem}
+  .sc-chrome{font-size:.58rem;gap:.5rem;padding:0 .6rem}.sc-chrome > span:not(.sc-rec):not(.dot){display:none}.sc-chrome .dot{margin-right:.9rem}
   .feat{min-height:auto}
 }
 
@@ -800,70 +808,92 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
   <h2 id="clusters-h" class="fade" style="--d:.06s">A real-time canvas for film teams. Driveable by an agent.</h2>
   <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Moodboards, shot lists, lookbooks, scripts, and schedules on one infinite canvas, edited live by everyone on the production. Built by a film studio for its own work, then opened up: <b>a public API, its own OAuth server, and an MCP server</b> so an AI assistant can build a board for you.</p>
 
-  <div class="clip u-wide fade" style="--d:.18s">
-    <div class="frame">
-      <video muted playsinline loop preload="none" poster="assets/portfolio/clusters/establish.webp" aria-hidden="true" data-autoplay>
-        <source src="assets/portfolio/clusters/establish.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="cap"><span class="mlbl">the clusters brand guide, a shared board &middot; recorded live, no sound</span><span class="mlbl">every card, arrow and note is the real thing</span></div>
-  </div>
-
-  <div class="show u-wide">
+  <div class="show show--wide u-wide">
     <div class="show__feats">
-      <article class="feat" data-state="1">
+      <article class="feat" data-state="1" data-cap="three cards moved by a cursor in another window" data-src="reconstruction &middot; the board&rsquo;s real cards &middot; the app&rsquo;s own cursor and card styles">
         <p class="mlbl sig-amber">engineering &middot; 1</p>
-        <h3>Real time, done properly.</h3>
+        <h3>An edit made somewhere else, arriving here.</h3>
         <p><b>Yjs CRDTs over PartyKit</b>, one Durable Object per board at the edge. Every connection is authenticated with a Supabase JWT and checked against row-level security before it joins; viewers are read-only at the protocol level. Every update is appended to a per-board op log, compacted hourly into R2, and an in-room anomaly detector watches for mass deletes.</p>
       </article>
-      <article class="feat" data-state="2">
+      <article class="feat" data-state="2" data-cap="one add_cards call &middot; three cards land" data-src="request shape from the tool schema &middot; the landing is the app&rsquo;s own card-pop">
         <p class="mlbl sig-amber">engineering &middot; 2</p>
-        <h3>Built for agents, not just people.</h3>
+        <h3>Cards added by an agent.</h3>
         <p><b>50 REST endpoints</b>, 18 OAuth 2.1 endpoints, 9 webhook events, and an MCP server with <b>33 tools and 3 prompts</b>, published to the official MCP Registry as <span class="mono">com.soleilpictures/clusters</span> and to npm as <span class="mono">soleil-clusters-mcp</span>. The hosted endpoint signs you in over OAuth, so there is no token to paste.</p>
       </article>
-      <article class="feat" data-state="3">
+      <article class="feat" data-state="3" data-cap="the same board on a phone-size screen" data-src="css bezel, no vendor hardware &middot; the moved cards have arrived">
         <p class="mlbl sig-amber">engineering &middot; 3</p>
-        <h3>Native, without a second codebase.</h3>
+        <h3>The same board, on a phone.</h3>
         <p>Capacitor shells for <b>iOS and Android</b> wrap the same Vite build. And Scout: text photos, clips, voice notes, PDFs, or links to a number and they land, arranged, on a canvas; voice notes are transcribed and photos keep their capture time. It runs on Fly.io because iMessage needs gRPC, which a Worker cannot speak.</p>
-      </article>
-      <article class="feat" data-state="4">
-        <p class="mlbl sig-amber">engineering &middot; 4</p>
-        <h3>AI where it earns its keep.</h3>
-        <p>OpenAI embeddings into <b>pgvector</b> with an HNSW index power semantic search and auto-tagging. Cloudflare Workers AI writes grounded SEO copy and image alt text on the free tier. A weekly probe asks an assistant the questions a buyer would ask and records whether Clusters gets cited.</p>
-      </article>
-      <article class="feat" data-state="5">
-        <p class="mlbl sig-amber">engineering &middot; 5</p>
-        <h3>A growth stack most startups buy.</h3>
-        <p>A deterministic A/B harness stamped on every event. A lifecycle-email bandit with <b>per-user send-time optimisation</b>. A referral loop with k-factor tracking. Attribution across <b>11 click-IDs on 8 ad networks</b>, Meta Pixel with server-side Conversions API, a daily Search Console sync, a six-hourly production prober, and IndexNow.</p>
-      </article>
-      <article class="feat" data-state="6">
-        <p class="mlbl sig-amber">engineering &middot; 6</p>
-        <h3>Docs that cannot drift.</h3>
-        <p>A CI test extracts the public surface straight from source, endpoints, MCP tools, card kinds, settings tabs, hashes it, and <b>fails the build</b> if the docs were not updated. Every number in the docs is injected from the code that enforces it. The crawler-facing HTML and the React page render from the same parse.</p>
       </article>
     </div>
     <div class="show__stick" aria-hidden="true">
-      <div class="scene scene--film" id="scene-clusters" data-state="1">
-        <div class="sc-chrome"><span class="dot"></span><b>clusters logo</b><span>brand guide &middot; shared board &middot; view only</span><span class="sc-live"><i></i>live &middot; <span class="av" style="background:#E39A2D">AC</span><span class="av" style="background:#7CC4FF">CP</span><span class="av" style="background:#A9A69F">+3</span></span></div>
-        <div class="film">
-          <video class="take" data-take="1 6" muted playsinline loop preload="none" poster="assets/portfolio/clusters/establish.webp"><source src="assets/portfolio/clusters/establish.mp4" type="video/mp4"></video>
-          <video class="take" data-take="2" muted playsinline loop preload="none" poster="assets/portfolio/clusters/push.webp"><source src="assets/portfolio/clusters/push.mp4" type="video/mp4"></video>
-          <video class="take" data-take="4" muted playsinline loop preload="none" poster="assets/portfolio/clusters/lateral.webp"><source src="assets/portfolio/clusters/lateral.mp4" type="video/mp4"></video>
-          <video class="take" data-take="5" muted playsinline loop preload="none" poster="assets/portfolio/clusters/pullback.webp"><source src="assets/portfolio/clusters/pullback.mp4" type="video/mp4"></video>
+      <figure class="stage" id="stage-clusters" data-state="1" data-moves='[["image-mp52tatz-522039",1820,530],["img-1778625290045-881250",1172,529],["note-1778738608951",518,385]]'>
+        <div class="sc-chrome"><span class="dot"></span><b>clusters logo</b><span>shared board &middot; rebuilt from its real cards</span><span class="sc-rec">sep 2026</span></div>
+        <div class="stage__frame">
+          <div class="board">
+            <svg class="board__lines" width="2600" height="2300" viewBox="0 0 2600 2300" aria-hidden="true" style="font:600 11px/1 system-ui,-apple-system,sans-serif"><g data-stroke-idx="0"><path d="M1930.1,579.3 L1929.9,581.0 L1929.4,583.8 L1929.4,585.7 L1929.4,583.7 L1929.4,582.2 L1931.0,584.1 L1931.7,585.6 L1934.0,587.1 L1936.5,587.1 L1938.0,584.7 L1938.8,583.2 L1941.1,582.8 L1943.4,583.6 L1946.2,586.9 L1948.9,591.0 L1950.7,593.8 L1951.8,595.1 L1953.2,593.7 L1953.8,592.1 L1954.8,590.4 L1957.0,589.7 L1959.6,589.7 L1962.1,587.8 L1963.3,585.4 L1964.8,583.6 L1966.2,582.6 L1967.7,582.2 L1970.3,581.7 L1972.3,580.6 L1973.4,578.9 L1975.1,577.9 L1979.2,579.7 L1980.1,578.3 L1980.9,575.3 L1982.3,572.9" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1930.1,579.3 L1929.9,581.0 L1929.4,583.8 L1929.4,585.7 L1929.4,583.7 L1929.4,582.2 L1931.0,584.1 L1931.7,585.6 L1934.0,587.1 L1936.5,587.1 L1938.0,584.7 L1938.8,583.2 L1941.1,582.8 L1943.4,583.6 L1946.2,586.9 L1948.9,591.0 L1950.7,593.8 L1951.8,595.1 L1953.2,593.7 L1953.8,592.1 L1954.8,590.4 L1957.0,589.7 L1959.6,589.7 L1962.1,587.8 L1963.3,585.4 L1964.8,583.6 L1966.2,582.6 L1967.7,582.2 L1970.3,581.7 L1972.3,580.6 L1973.4,578.9 L1975.1,577.9 L1979.2,579.7 L1980.1,578.3 L1980.9,575.3 L1982.3,572.9" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="1"><path d="M1991.6,572.7 L1993.2,570.9 L1994.5,566.7 L1996.0,561.6 L1997.5,557.9 L1998.9,556.0 L2000.8,556.8 L2001.6,559.8 L2002.5,562.6 L2003.7,564.4 L2005.6,565.7 L2008.0,566.3 L2010.3,566.3 L2012.7,566.3 L2015.1,566.3 L2017.5,566.3 L2020.0,566.3 L2023.0,566.7 L2026.4,567.5 L2029.9,568.5 L2032.8,569.3 L2034.9,569.5 L2037.4,569.5 L2040.3,569.5 L2043.8,569.5 L2047.7,569.4 L2050.2,568.9 L2052.1,568.2 L2053.8,567.6 L2055.6,567.3 L2057.9,567.3 L2060.4,567.3 L2062.9,567.3 L2065.8,567.3 L2068.7,568.2 L2070.5,569.3 L2071.9,569.9 L2074.8,570.1 L2076.6,570.1 L2079.5,569.7 L2082.9,568.9 L2085.2,568.4 L2086.7,568.8" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1991.6,572.7 L1993.2,570.9 L1994.5,566.7 L1996.0,561.6 L1997.5,557.9 L1998.9,556.0 L2000.8,556.8 L2001.6,559.8 L2002.5,562.6 L2003.7,564.4 L2005.6,565.7 L2008.0,566.3 L2010.3,566.3 L2012.7,566.3 L2015.1,566.3 L2017.5,566.3 L2020.0,566.3 L2023.0,566.7 L2026.4,567.5 L2029.9,568.5 L2032.8,569.3 L2034.9,569.5 L2037.4,569.5 L2040.3,569.5 L2043.8,569.5 L2047.7,569.4 L2050.2,568.9 L2052.1,568.2 L2053.8,567.6 L2055.6,567.3 L2057.9,567.3 L2060.4,567.3 L2062.9,567.3 L2065.8,567.3 L2068.7,568.2 L2070.5,569.3 L2071.9,569.9 L2074.8,570.1 L2076.6,570.1 L2079.5,569.7 L2082.9,568.9 L2085.2,568.4 L2086.7,568.8" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="2"><path d="M1923.0,610.5 L1924.9,611.7 L1926.8,611.7 L1928.9,611.7 L1932.0,611.3 L1935.1,609.9 L1937.3,608.4 L1939.8,607.9 L1941.4,607.9 L1943.2,607.9 L1946.0,607.9 L1947.7,607.9 L1951.1,607.9 L1954.0,607.9 L1956.6,607.9 L1958.9,607.6 L1960.8,606.9 L1962.2,606.2" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1923.0,610.5 L1924.9,611.7 L1926.8,611.7 L1928.9,611.7 L1932.0,611.3 L1935.1,609.9 L1937.3,608.4 L1939.8,607.9 L1941.4,607.9 L1943.2,607.9 L1946.0,607.9 L1947.7,607.9 L1951.1,607.9 L1954.0,607.9 L1956.6,607.9 L1958.9,607.6 L1960.8,606.9 L1962.2,606.2" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="3"><path d="M1987.5,604.2 L1989.5,603.6 L1992.1,603.6 L1995.9,603.6 L1998.8,603.6 L2001.3,603.6 L2003.7,603.6 L2005.5,603.6 L2007.4,603.6 L2009.7,603.6 L2012.3,603.6 L2014.1,603.6 L2018.0,604.0 L2022.1,604.4 L2027.5,604.4 L2033.8,604.4 L2040.5,604.4 L2046.3,604.4 L2050.6,604.4 L2054.3,604.4 L2057.3,604.4 L2059.7,604.4 L2061.6,604.4 L2063.5,604.4 L2066.1,604.4 L2070.1,604.7 L2076.5,606.0 L2084.0,608.1 L2091.4,609.8 L2096.9,610.8 L2099.9,611.2 L2102.3,611.2 L2104.2,611.2 L2106.3,611.0 L2109.5,610.0 L2114.0,609.0 L2119.3,608.8" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1987.5,604.2 L1989.5,603.6 L1992.1,603.6 L1995.9,603.6 L1998.8,603.6 L2001.3,603.6 L2003.7,603.6 L2005.5,603.6 L2007.4,603.6 L2009.7,603.6 L2012.3,603.6 L2014.1,603.6 L2018.0,604.0 L2022.1,604.4 L2027.5,604.4 L2033.8,604.4 L2040.5,604.4 L2046.3,604.4 L2050.6,604.4 L2054.3,604.4 L2057.3,604.4 L2059.7,604.4 L2061.6,604.4 L2063.5,604.4 L2066.1,604.4 L2070.1,604.7 L2076.5,606.0 L2084.0,608.1 L2091.4,609.8 L2096.9,610.8 L2099.9,611.2 L2102.3,611.2 L2104.2,611.2 L2106.3,611.0 L2109.5,610.0 L2114.0,609.0 L2119.3,608.8" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="4"><path d="M1911.3,632.9 L1911.3,635.1 L1911.3,639.1 L1911.0,642.8 L1909.5,645.8 L1907.3,648.7 L1904.8,651.1 L1901.8,653.0 L1897.9,655.3 L1893.3,657.6 L1888.0,659.5 L1881.8,661.6 L1874.3,663.6 L1865.9,664.5 L1858.0,664.5 L1850.4,664.5 L1843.8,664.5 L1839.3,664.5 L1836.4,664.5 L1834.4,664.5" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1911.3,632.9 L1911.3,635.1 L1911.3,639.1 L1911.0,642.8 L1909.5,645.8 L1907.3,648.7 L1904.8,651.1 L1901.8,653.0 L1897.9,655.3 L1893.3,657.6 L1888.0,659.5 L1881.8,661.6 L1874.3,663.6 L1865.9,664.5 L1858.0,664.5 L1850.4,664.5 L1843.8,664.5 L1839.3,664.5 L1836.4,664.5 L1834.4,664.5" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="5"><path d="M1851.3,646.3 L1850.1,649.1 L1849.0,650.8 L1847.5,652.4 L1845.8,654.0 L1844.2,656.0 L1842.7,657.5 L1841.3,659.0 L1839.9,660.4 L1838.8,661.8 L1838.0,663.3 L1836.9,665.4 L1836.5,667.6 L1836.5,669.7 L1836.5,671.8 L1836.8,673.3 L1837.5,674.7 L1839.1,676.3 L1840.9,676.6 L1845.4,678.3 L1853.3,681.4" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1851.3,646.3 L1850.1,649.1 L1849.0,650.8 L1847.5,652.4 L1845.8,654.0 L1844.2,656.0 L1842.7,657.5 L1841.3,659.0 L1839.9,660.4 L1838.8,661.8 L1838.0,663.3 L1836.9,665.4 L1836.5,667.6 L1836.5,669.7 L1836.5,671.8 L1836.8,673.3 L1837.5,674.7 L1839.1,676.3 L1840.9,676.6 L1845.4,678.3 L1853.3,681.4" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="6"><path d="M1976.3,650.7 L1976.3,648.6 L1976.3,646.4 L1978.2,647.7 L1979.5,649.6 L1981.0,650.1 L1983.6,653.0 L1985.6,655.8 L1987.0,657.7 L1987.4,653.4 L1986.2,643.3 L1984.4,632.0 L1983.2,622.7 L1983.1,618.0 L1985.8,618.1 L1988.4,621.8 L1990.6,626.7 L1992.5,632.0 L1993.6,636.6 L1993.7,639.3 L1993.7,641.9 L1993.7,643.6 L1993.7,645.5 L1994.1,648.1 L1994.5,650.8 L1994.5,652.9 L1995.5,650.3 L1997.3,648.7 L2000.6,648.2 L2004.6,647.9 L2008.0,647.1 L2010.5,646.6 L2012.5,646.1 L2014.4,645.7 L2017.3,645.7 L2018.7,643.2 L2020.3,641.7 L2023.2,641.7 L2024.6,641.2 L2025.7,640.2 L2027.8,638.9 L2030.9,638.9 L2032.8,638.9 L2035.6,638.9 L2037.7,638.9 L2041.1,640.1 L2043.0,641.3 L2044.2,642.7 L2044.5,645.3 L2040.1,646.3 L2033.2,646.4 L2025.7,645.4 L2019.5,644.4 L2016.0,644.4 L2015.6,647.9 L2017.9,650.6 L2020.0,652.1 L2020.9,650.4 L2021.3,647.9 L2021.9,646.1 L2022.5,644.7 L2022.9,643.1 L2022.9,639.9 L2023.3,638.1 L2024.2,636.3 L2025.8,636.9 L2037.8,653.8 L2043.8,663.3 L2046.5,668.1 L2046.4,665.9 L2042.9,657.1 L2038.3,645.4 L2035.2,636.0 L2033.8,631.6 L2034.8,632.8 L2036.8,633.3 L2039.0,633.7 L2041.0,634.6 L2043.8,635.7 L2046.5,636.6 L2048.9,636.9 L2051.6,637.5 L2054.9,638.3" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M1976.3,650.7 L1976.3,648.6 L1976.3,646.4 L1978.2,647.7 L1979.5,649.6 L1981.0,650.1 L1983.6,653.0 L1985.6,655.8 L1987.0,657.7 L1987.4,653.4 L1986.2,643.3 L1984.4,632.0 L1983.2,622.7 L1983.1,618.0 L1985.8,618.1 L1988.4,621.8 L1990.6,626.7 L1992.5,632.0 L1993.6,636.6 L1993.7,639.3 L1993.7,641.9 L1993.7,643.6 L1993.7,645.5 L1994.1,648.1 L1994.5,650.8 L1994.5,652.9 L1995.5,650.3 L1997.3,648.7 L2000.6,648.2 L2004.6,647.9 L2008.0,647.1 L2010.5,646.6 L2012.5,646.1 L2014.4,645.7 L2017.3,645.7 L2018.7,643.2 L2020.3,641.7 L2023.2,641.7 L2024.6,641.2 L2025.7,640.2 L2027.8,638.9 L2030.9,638.9 L2032.8,638.9 L2035.6,638.9 L2037.7,638.9 L2041.1,640.1 L2043.0,641.3 L2044.2,642.7 L2044.5,645.3 L2040.1,646.3 L2033.2,646.4 L2025.7,645.4 L2019.5,644.4 L2016.0,644.4 L2015.6,647.9 L2017.9,650.6 L2020.0,652.1 L2020.9,650.4 L2021.3,647.9 L2021.9,646.1 L2022.5,644.7 L2022.9,643.1 L2022.9,639.9 L2023.3,638.1 L2024.2,636.3 L2025.8,636.9 L2037.8,653.8 L2043.8,663.3 L2046.5,668.1 L2046.4,665.9 L2042.9,657.1 L2038.3,645.4 L2035.2,636.0 L2033.8,631.6 L2034.8,632.8 L2036.8,633.3 L2039.0,633.7 L2041.0,634.6 L2043.8,635.7 L2046.5,636.6 L2048.9,636.9 L2051.6,637.5 L2054.9,638.3" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="7"><path d="M471.7,673.6 L471.7,671.4 L471.2,669.8 L469.9,667.9 L468.3,665.7 L467.1,663.8 L466.2,662.6 L465.1,661.5 L463.3,659.7 L460.4,656.7 L457.5,652.8 L454.9,649.5 L453.2,647.6 L453.3,649.7 L455.6,653.5 L459.9,658.8 L465.1,664.7 L469.3,669.0 L472.3,672.0 L475.2,674.6 L478.0,677.0 L480.5,679.1 L482.5,681.1 L483.9,682.6 L485.4,683.4" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M471.7,673.6 L471.7,671.4 L471.2,669.8 L469.9,667.9 L468.3,665.7 L467.1,663.8 L466.2,662.6 L465.1,661.5 L463.3,659.7 L460.4,656.7 L457.5,652.8 L454.9,649.5 L453.2,647.6 L453.3,649.7 L455.6,653.5 L459.9,658.8 L465.1,664.7 L469.3,669.0 L472.3,672.0 L475.2,674.6 L478.0,677.0 L480.5,679.1 L482.5,681.1 L483.9,682.6 L485.4,683.4" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="8"><path d="M496.9,703.1 L496.9,701.3 L495.8,699.3 L494.4,698.5 L492.1,698.1 L490.1,698.1 L489.6,699.6 L492.1,699.9 L495.0,699.5" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M496.9,703.1 L496.9,701.3 L495.8,699.3 L494.4,698.5 L492.1,698.1 L490.1,698.1 L489.6,699.6 L492.1,699.9 L495.0,699.5" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="9"><path d="M496.9,636.8 L496.9,639.6 L497.6,641.6 L498.7,643.5 L499.4,645.0 L500.2,646.4 L500.8,647.9 L501.4,649.3 L502.1,650.8 L502.4,652.7 L502.4,654.3 L502.8,656.3 L504.1,659.2 L505.2,662.0 L506.0,663.9 L506.6,665.4 L507.0,667.2" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M496.9,636.8 L496.9,639.6 L497.6,641.6 L498.7,643.5 L499.4,645.0 L500.2,646.4 L500.8,647.9 L501.4,649.3 L502.1,650.8 L502.4,652.7 L502.4,654.3 L502.8,656.3 L504.1,659.2 L505.2,662.0 L506.0,663.9 L506.6,665.4 L507.0,667.2" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="10"><path d="M519.8,681.0 L519.8,683.0 L519.8,685.2 L519.0,686.6 L517.7,687.4 L518.4,685.6 L519.7,684.9 L521.2,684.2 L523.9,683.6 L524.4,685.6 L524.4,688.0 L524.4,689.6 L524.4,691.5" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M519.8,681.0 L519.8,683.0 L519.8,685.2 L519.0,686.6 L517.7,687.4 L518.4,685.6 L519.7,684.9 L521.2,684.2 L523.9,683.6 L524.4,685.6 L524.4,688.0 L524.4,689.6 L524.4,691.5" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="11"><path d="M537.3,626.0 L537.3,630.9 L537.3,634.6 L537.3,636.5 L537.3,638.1 L537.3,640.7 L537.3,644.6 L537.3,648.6 L537.7,652.7 L538.1,656.3 L538.5,658.9 L538.9,660.7 L538.9,662.6 L539.6,665.2 L540.0,667.1 L540.4,669.0 L540.7,670.5 L542.3,671.4 L543.8,671.4" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M537.3,626.0 L537.3,630.9 L537.3,634.6 L537.3,636.5 L537.3,638.1 L537.3,640.7 L537.3,644.6 L537.3,648.6 L537.7,652.7 L538.1,656.3 L538.5,658.9 L538.9,660.7 L538.9,662.6 L539.6,665.2 L540.0,667.1 L540.4,669.0 L540.7,670.5 L542.3,671.4 L543.8,671.4" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="12"><path d="M545.8,694.7 L546.6,692.9 L548.1,692.5 L547.5,694.1 L547.5,695.8 L548.3,697.2 L550.1,697.2 L551.2,696.2 L551.2,694.0 L551.2,692.3 L548.8,691.1 L545.9,690.7 L543.0,690.7 L540.8,690.7" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M545.8,694.7 L546.6,692.9 L548.1,692.5 L547.5,694.1 L547.5,695.8 L548.3,697.2 L550.1,697.2 L551.2,696.2 L551.2,694.0 L551.2,692.3 L548.8,691.1 L545.9,690.7 L543.0,690.7 L540.8,690.7" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="13"><path d="M2000.6,1352.7 L2000.6,1355.3 L2001.3,1361.1 L2003.5,1369.2 L2007.8,1378.7 L2014.3,1391.4 L2022.9,1406.5 L2035.5,1423.2 L2057.3,1444.5 L2091.5,1472.5 L2136.0,1505.4 L2182.5,1536.5 L2221.8,1560.2 L2248.5,1575.9 L2265.5,1586.0 L2275.6,1591.9 L2279.3,1595.6" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M2000.6,1352.7 L2000.6,1355.3 L2001.3,1361.1 L2003.5,1369.2 L2007.8,1378.7 L2014.3,1391.4 L2022.9,1406.5 L2035.5,1423.2 L2057.3,1444.5 L2091.5,1472.5 L2136.0,1505.4 L2182.5,1536.5 L2221.8,1560.2 L2248.5,1575.9 L2265.5,1586.0 L2275.6,1591.9 L2279.3,1595.6" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="14"><path d="M2298.2,1588.2 L2298.2,1592.5 L2298.7,1597.1 L2299.7,1601.1 L2300.4,1603.9 L2301.1,1605.6 L2303.2,1606.2 L2304.6,1605.0 L2306.2,1603.2 L2308.1,1602.0 L2309.9,1601.2 L2311.3,1600.5 L2313.6,1600.3 L2315.5,1600.3 L2317.9,1600.3 L2319.8,1600.7 L2321.4,1602.2 L2321.8,1603.9 L2320.4,1605.2 L2317.7,1606.2 L2320.3,1604.4 L2325.5,1602.5 L2329.8,1600.6 L2332.9,1599.4 L2334.9,1598.9 L2336.7,1598.2 L2339.5,1598.2 L2341.9,1598.4 L2344.5,1599.1 L2346.8,1600.4 L2348.7,1601.1 L2350.9,1601.1 L2352.8,1601.1 L2354.7,1601.1 L2357.5,1601.1 L2359.8,1601.1 L2360.9,1603.4 L2361.1,1604.9 L2362.8,1605.4 L2367.8,1605.4 L2374.3,1605.4 L2381.4,1605.4 L2387.3,1605.4 L2390.6,1605.4 L2393.1,1605.7 L2394.0,1607.2 L2396.3,1607.8" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M2298.2,1588.2 L2298.2,1592.5 L2298.7,1597.1 L2299.7,1601.1 L2300.4,1603.9 L2301.1,1605.6 L2303.2,1606.2 L2304.6,1605.0 L2306.2,1603.2 L2308.1,1602.0 L2309.9,1601.2 L2311.3,1600.5 L2313.6,1600.3 L2315.5,1600.3 L2317.9,1600.3 L2319.8,1600.7 L2321.4,1602.2 L2321.8,1603.9 L2320.4,1605.2 L2317.7,1606.2 L2320.3,1604.4 L2325.5,1602.5 L2329.8,1600.6 L2332.9,1599.4 L2334.9,1598.9 L2336.7,1598.2 L2339.5,1598.2 L2341.9,1598.4 L2344.5,1599.1 L2346.8,1600.4 L2348.7,1601.1 L2350.9,1601.1 L2352.8,1601.1 L2354.7,1601.1 L2357.5,1601.1 L2359.8,1601.1 L2360.9,1603.4 L2361.1,1604.9 L2362.8,1605.4 L2367.8,1605.4 L2374.3,1605.4 L2381.4,1605.4 L2387.3,1605.4 L2390.6,1605.4 L2393.1,1605.7 L2394.0,1607.2 L2396.3,1607.8" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="15"><path d="M2413.4,1607.8 L2416.0,1607.8 L2418.5,1607.8 L2420.3,1607.9 L2421.9,1609.3 L2424.4,1611.7 L2426.8,1613.6 L2428.7,1614.6 L2431.6,1614.8 L2434.3,1614.8 L2436.2,1612.9 L2437.4,1611.8 L2439.6,1610.5 L2442.4,1609.5 L2445.4,1609.1 L2447.8,1609.1 L2450.2,1609.1 L2453.0,1609.1 L2455.6,1609.1 L2457.9,1609.1 L2460.4,1609.1 L2463.0,1609.1 L2465.7,1609.1 L2468.1,1609.1 L2470.0,1609.1 L2471.6,1609.1 L2473.5,1609.1 L2475.9,1609.1 L2479.0,1609.1 L2482.0,1609.1 L2484.2,1609.1 L2485.9,1609.1 L2487.5,1609.1 L2487.8,1610.6" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M2413.4,1607.8 L2416.0,1607.8 L2418.5,1607.8 L2420.3,1607.9 L2421.9,1609.3 L2424.4,1611.7 L2426.8,1613.6 L2428.7,1614.6 L2431.6,1614.8 L2434.3,1614.8 L2436.2,1612.9 L2437.4,1611.8 L2439.6,1610.5 L2442.4,1609.5 L2445.4,1609.1 L2447.8,1609.1 L2450.2,1609.1 L2453.0,1609.1 L2455.6,1609.1 L2457.9,1609.1 L2460.4,1609.1 L2463.0,1609.1 L2465.7,1609.1 L2468.1,1609.1 L2470.0,1609.1 L2471.6,1609.1 L2473.5,1609.1 L2475.9,1609.1 L2479.0,1609.1 L2482.0,1609.1 L2484.2,1609.1 L2485.9,1609.1 L2487.5,1609.1 L2487.8,1610.6" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="16"><path d="M2277.1,1645.4 L2275.8,1644.2 L2275.8,1642.6 L2277.7,1640.9 L2279.2,1640.1 L2280.7,1639.7 L2282.9,1639.4 L2286.0,1640.7 L2287.9,1642.6 L2289.2,1644.2 L2290.3,1642.2 L2290.3,1638.5 L2290.5,1635.2 L2291.3,1633.5 L2293.6,1633.1 L2296.0,1633.1 L2298.5,1633.5 L2300.4,1634.7 L2302.2,1636.2 L2303.3,1637.6 L2304.6,1638.6 L2306.2,1637.2 L2309.8,1636.6 L2312.5,1636.6 L2314.9,1636.6 L2316.8,1636.8 L2318.2,1637.8 L2319.6,1638.9 L2321.3,1639.9 L2324.0,1638.2 L2325.9,1637.1 L2328.2,1636.6 L2330.1,1636.5 L2332.1,1636.5 L2334.0,1636.5 L2337.0,1637.8 L2339.0,1638.8 L2340.7,1639.9 L2342.1,1640.6 L2345.4,1640.7 L2348.3,1640.7 L2351.3,1640.7 L2353.6,1640.7 L2355.4,1640.7 L2356.9,1641.4 L2357.5,1643.8 L2358.2,1645.7 L2359.0,1647.0 L2360.9,1647.5 L2363.6,1647.6 L2366.0,1647.6 L2370.1,1647.6 L2373.6,1647.6 L2375.9,1647.6 L2377.7,1647.6 L2379.2,1647.6 L2380.9,1647.6 L2384.4,1647.6 L2388.4,1646.3 L2391.8,1644.2 L2394.7,1642.7 L2396.5,1642.0" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M2277.1,1645.4 L2275.8,1644.2 L2275.8,1642.6 L2277.7,1640.9 L2279.2,1640.1 L2280.7,1639.7 L2282.9,1639.4 L2286.0,1640.7 L2287.9,1642.6 L2289.2,1644.2 L2290.3,1642.2 L2290.3,1638.5 L2290.5,1635.2 L2291.3,1633.5 L2293.6,1633.1 L2296.0,1633.1 L2298.5,1633.5 L2300.4,1634.7 L2302.2,1636.2 L2303.3,1637.6 L2304.6,1638.6 L2306.2,1637.2 L2309.8,1636.6 L2312.5,1636.6 L2314.9,1636.6 L2316.8,1636.8 L2318.2,1637.8 L2319.6,1638.9 L2321.3,1639.9 L2324.0,1638.2 L2325.9,1637.1 L2328.2,1636.6 L2330.1,1636.5 L2332.1,1636.5 L2334.0,1636.5 L2337.0,1637.8 L2339.0,1638.8 L2340.7,1639.9 L2342.1,1640.6 L2345.4,1640.7 L2348.3,1640.7 L2351.3,1640.7 L2353.6,1640.7 L2355.4,1640.7 L2356.9,1641.4 L2357.5,1643.8 L2358.2,1645.7 L2359.0,1647.0 L2360.9,1647.5 L2363.6,1647.6 L2366.0,1647.6 L2370.1,1647.6 L2373.6,1647.6 L2375.9,1647.6 L2377.7,1647.6 L2379.2,1647.6 L2380.9,1647.6 L2384.4,1647.6 L2388.4,1646.3 L2391.8,1644.2 L2394.7,1642.7 L2396.5,1642.0" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="17"><path d="M2437.5,1641.5 L2440.1,1640.9 L2442.0,1641.7 L2444.1,1644.3 L2446.2,1647.5 L2448.1,1649.8 L2449.2,1651.3 L2450.5,1652.1 L2452.6,1652.3 L2454.5,1651.9 L2456.3,1651.6 L2459.6,1651.6 L2462.9,1652.3 L2465.9,1653.9 L2467.8,1655.4 L2469.1,1656.4 L2470.3,1655.1 L2470.3,1653.2 L2471.0,1651.7 L2474.5,1652.2 L2478.4,1654.7 L2481.6,1658.3 L2483.8,1660.6 L2485.2,1661.6 L2485.8,1660.2 L2486.0,1658.0 L2486.3,1655.7 L2488.7,1653.3 L2490.7,1651.7 L2493.0,1650.6 L2494.9,1649.8 L2496.4,1649.5 L2499.2,1649.2 L2501.1,1649.2 L2503.0,1649.2 L2505.0,1648.0 L2507.0,1646.4 L2508.4,1645.4 L2509.9,1644.7 L2512.7,1644.7 L2515.0,1644.7 L2517.8,1644.7 L2520.7,1644.7 L2523.1,1644.7 L2524.6,1644.3 L2526.1,1643.5 L2527.5,1642.9 L2530.7,1642.7 L2532.9,1642.7 L2535.4,1642.7 L2537.9,1642.7 L2539.9,1642.7 L2542.6,1642.7 L2544.6,1641.7 L2546.0,1640.6 L2548.5,1638.6 L2550.5,1637.0 L2552.0,1636.2 L2553.4,1635.6 L2555.1,1635.3 L2557.2,1635.3 L2559.9,1635.3 L2562.8,1634.6 L2566.1,1633.0 L2569.5,1631.7 L2572.9,1630.3 L2575.7,1628.7 L2577.6,1627.7 L2579.3,1627.1 L2581.5,1626.7 L2584.5,1626.7 L2588.5,1627.5 L2592.1,1629.1" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M2437.5,1641.5 L2440.1,1640.9 L2442.0,1641.7 L2444.1,1644.3 L2446.2,1647.5 L2448.1,1649.8 L2449.2,1651.3 L2450.5,1652.1 L2452.6,1652.3 L2454.5,1651.9 L2456.3,1651.6 L2459.6,1651.6 L2462.9,1652.3 L2465.9,1653.9 L2467.8,1655.4 L2469.1,1656.4 L2470.3,1655.1 L2470.3,1653.2 L2471.0,1651.7 L2474.5,1652.2 L2478.4,1654.7 L2481.6,1658.3 L2483.8,1660.6 L2485.2,1661.6 L2485.8,1660.2 L2486.0,1658.0 L2486.3,1655.7 L2488.7,1653.3 L2490.7,1651.7 L2493.0,1650.6 L2494.9,1649.8 L2496.4,1649.5 L2499.2,1649.2 L2501.1,1649.2 L2503.0,1649.2 L2505.0,1648.0 L2507.0,1646.4 L2508.4,1645.4 L2509.9,1644.7 L2512.7,1644.7 L2515.0,1644.7 L2517.8,1644.7 L2520.7,1644.7 L2523.1,1644.7 L2524.6,1644.3 L2526.1,1643.5 L2527.5,1642.9 L2530.7,1642.7 L2532.9,1642.7 L2535.4,1642.7 L2537.9,1642.7 L2539.9,1642.7 L2542.6,1642.7 L2544.6,1641.7 L2546.0,1640.6 L2548.5,1638.6 L2550.5,1637.0 L2552.0,1636.2 L2553.4,1635.6 L2555.1,1635.3 L2557.2,1635.3 L2559.9,1635.3 L2562.8,1634.6 L2566.1,1633.0 L2569.5,1631.7 L2572.9,1630.3 L2575.7,1628.7 L2577.6,1627.7 L2579.3,1627.1 L2581.5,1626.7 L2584.5,1626.7 L2588.5,1627.5 L2592.1,1629.1" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-stroke-idx="18"><path d="M2615.3,1607.5 L2615.7,1604.9 L2616.4,1603.5 L2617.9,1601.8 L2620.2,1601.6 L2623.0,1601.6 L2627.7,1601.6 L2632.3,1601.6 L2635.2,1602.0 L2637.0,1602.4 L2638.8,1603.2 L2638.8,1604.9 L2637.5,1606.3 L2634.4,1608.6 L2631.3,1612.3 L2628.7,1616.2 L2626.8,1619.3 L2625.9,1621.4 L2625.4,1622.9 L2624.3,1625.0 L2623.9,1626.5 L2623.1,1627.9 L2621.8,1629.8 L2621.7,1631.5 L2621.7,1633.7" fill="none" stroke="transparent" stroke-width="15" pointer-events="none" style="cursor: default;"></path><path d="M2615.3,1607.5 L2615.7,1604.9 L2616.4,1603.5 L2617.9,1601.8 L2620.2,1601.6 L2623.0,1601.6 L2627.7,1601.6 L2632.3,1601.6 L2635.2,1602.0 L2637.0,1602.4 L2638.8,1603.2 L2638.8,1604.9 L2637.5,1606.3 L2634.4,1608.6 L2631.3,1612.3 L2628.7,1616.2 L2626.8,1619.3 L2625.9,1621.4 L2625.4,1622.9 L2624.3,1625.0 L2623.9,1626.5 L2623.1,1627.9 L2621.8,1629.8 L2621.7,1631.5 L2621.7,1633.7" fill="none" stroke="#f5f5f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-stroke-line="true" pointer-events="none"></path></g><g data-arrow-idx="0" class="arrow-g"><path d="M1609,1577.4 L1697,1593" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1609,1577.4 L1697,1593" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="6.2 4.4" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="1697,1593 1687.5,1595.0 1688.8,1587.9" fill="#888890" pointer-events="none"></polygon><text class="arrow-label-text" pointer-events="none" text-anchor="middle" dominant-baseline="middle" dy="-7" transform="translate(1653 1585.2) rotate(10.0) scale(2.3)">Significance</text></g><g data-arrow-idx="1" class="arrow-g"><path d="M1609,1867.6 L1697,1806.5" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1609,1867.6 L1697,1806.5" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="6.2 4.4" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="1697,1806.5 1691.7,1814.6 1687.6,1808.7" fill="#888890" pointer-events="none"></polygon><text class="arrow-label-text" pointer-events="none" text-anchor="middle" dominant-baseline="middle" dy="-7" transform="translate(1653 1837.0) rotate(-34.8) scale(2.3)">Visuals</text></g><g data-arrow-idx="2" class="arrow-g"><path d="M1645,838 C1617.42,939.9 1715.9,960.7 1743.5,1035" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1645,838 C1617.42,939.9 1715.9,960.7 1743.5,1035" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="0" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="1743.5,1035 1737.0,1027.8 1743.7,1025.3" fill="#888890" pointer-events="none"></polygon></g><g data-arrow-idx="3" class="arrow-g"><path d="M1150,843 C1399.5978281223042,867.4 1327.5,872.7 1377,1158.5" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1150,843 C1399.5978281223042,867.4 1327.5,872.7 1377,1158.5" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="0" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="1377,1158.5 1371.9,1150.2 1379.0,1149.0" fill="#888890" pointer-events="none"></polygon></g><g data-arrow-idx="4" class="arrow-g"><path d="M1303,851 L2358,851 Q2368,851 2368,861 L2368,1028 Q2368,1038 2358,1038 L2158,1038" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1303,851 L2358,851 Q2368,851 2368,861 L2368,1028 Q2368,1038 2358,1038 L2158,1038" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="0" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="2158,1038 2167,1034.4 2167,1041.6" fill="#888890" pointer-events="none"></polygon></g><g data-arrow-idx="5" class="arrow-g"><path d="M1782,508 L1782,365 Q1782,355 1792,355 L1887.46,355 Q1897.46,355 1897.5,365 L1897.46,1000 Q1897.46,1010 1897.5,1018 L1897.46,1026" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1782,508 L1782,365 Q1782,355 1792,355 L1887.46,355 Q1897.46,355 1897.5,365 L1897.46,1000 Q1897.46,1010 1897.5,1018 L1897.46,1026" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="0" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="1897.5,1026 1893.9,1017 1901.1,1017" fill="#888890" pointer-events="none"></polygon></g><g data-arrow-idx="6" class="arrow-g"><path d="M1795,424 C1895.9994232816077,594.4 2120.3,802.8 2069.5,1026" fill="none" stroke="transparent" stroke-width="14" pointer-events="none" style="cursor: default;"></path><path data-arrow-line="true" d="M1795,424 C1895.9994232816077,594.4 2120.3,802.8 2069.5,1026" fill="none" stroke="#888890" stroke-width="1.2" stroke-dasharray="0" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"></path><polygon points="2069.5,1026 2068.0,1016.4 2075.0,1018.0" fill="#888890" pointer-events="none"></polygon></g></svg>
+            <img class="bcard" data-id="img-1778727556084-709683" data-src="assets/portfolio/clusters/cards/img-1778727556084-709683.webp" width="482" height="470" style="left:322px;top:1023px;width:241px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4ygtix-497636" data-src="assets/portfolio/clusters/cards/note-mp4ygtix-497636.webp" width="482" height="150" style="left:1046px;top:1561px;width:241px;height:75px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778727735791-42539" data-src="assets/portfolio/clusters/cards/img-1778727735791-42539.webp" width="486" height="470" style="left:1044px;top:1023px;width:243px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4wx46x-865388" data-src="assets/portfolio/clusters/cards/note-mp4wx46x-865388.webp" width="482" height="136" style="left:563px;top:1258px;width:241px;height:68px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778730894562-76849" data-src="assets/portfolio/clusters/cards/img-1778730894562-76849.webp" width="480" height="470" style="left:1044px;top:1326px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778730524710-627769" data-src="assets/portfolio/clusters/cards/img-1778730524710-627769.webp" width="482" height="470" style="left:804px;top:1326px;width:241px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778734264137-569405" data-src="assets/portfolio/clusters/cards/img-1778734264137-569405.webp" width="480" height="470" style="left:566px;top:1326px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778727564600-28112" data-src="assets/portfolio/clusters/cards/img-1778727564600-28112.webp" width="482" height="470" style="left:563px;top:1023px;width:241px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4x15vt-803035" data-src="assets/portfolio/clusters/cards/note-mp4x15vt-803035.webp" width="482" height="150" style="left:1045px;top:1258px;width:241px;height:75px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4x05cj-665996" data-src="assets/portfolio/clusters/cards/note-mp4x05cj-665996.webp" width="482" height="196" style="left:804px;top:1258px;width:241px;height:98px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4y81jv-815975" data-src="assets/portfolio/clusters/cards/note-mp4y81jv-815975.webp" width="482" height="196" style="left:805px;top:1561px;width:241px;height:98px" alt="" decoding="async">
+        <img class="bcard" data-id="note-1778728187643" data-src="assets/portfolio/clusters/cards/note-1778728187643.webp" width="482" height="196" style="left:322px;top:1258px;width:241px;height:98px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp51b517-993273" data-src="assets/portfolio/clusters/cards/note-mp51b517-993273.webp" width="482" height="196" style="left:1623px;top:1276px;width:241px;height:98px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp51n4b2-906135" data-src="assets/portfolio/clusters/cards/note-mp51n4b2-906135.webp" width="482" height="196" style="left:1864px;top:1270px;width:241px;height:98px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp50ygpj-934583" data-src="assets/portfolio/clusters/cards/note-mp50ygpj-934583.webp" width="482" height="150" style="left:2103px;top:1267px;width:241px;height:75px" alt="" decoding="async">
+        <img class="bcard" data-id="note-1778736195391" data-src="assets/portfolio/clusters/cards/note-1778736195391.webp" width="434" height="150" style="left:1762px;top:939px;width:217px;height:75px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4xgx95-999399" data-src="assets/portfolio/clusters/cards/note-mp4xgx95-999399.webp" width="482" height="136" style="left:564px;top:1568px;width:241px;height:68px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778735657149-90949" data-src="assets/portfolio/clusters/cards/img-1778735657149-90949.webp" width="482" height="470" style="left:1623px;top:1041px;width:241px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp51f6ac-397220" data-src="assets/portfolio/clusters/cards/note-mp51f6ac-397220.webp" width="482" height="196" style="left:1382px;top:1276px;width:241px;height:98px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778736174403-978515" data-src="assets/portfolio/clusters/cards/img-1778736174403-978515.webp" width="480" height="470" style="left:1383px;top:1041px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-1778738608951" data-src="assets/portfolio/clusters/cards/note-1778738608951.webp" width="564" height="234" style="left:856px;top:385px;width:282px;height:117px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp394dd4-400841" data-src="assets/portfolio/clusters/cards/note-mp394dd4-400841.webp" width="552" height="470" style="left:1703px;top:1689px;width:276px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-1778625629880" data-src="assets/portfolio/clusters/cards/note-1778625629880.webp" width="1256" height="206" style="left:1383px;top:1401px;width:628px;height:103px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp38qqh1-440280" data-src="assets/portfolio/clusters/cards/note-mp38qqh1-440280.webp" width="352" height="806" style="left:1427px;top:1521px;width:176px;height:403px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp50uiu6-565679" data-src="assets/portfolio/clusters/cards/note-mp50uiu6-565679.webp" width="506" height="206" style="left:1034px;top:1863px;width:253px;height:103px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778737651178-687832" data-src="assets/portfolio/clusters/cards/img-1778737651178-687832.webp" width="486" height="470" style="left:1044px;top:1628px;width:243px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778733145843-973192" data-src="assets/portfolio/clusters/cards/img-1778733145843-973192.webp" width="480" height="470" style="left:562px;top:1628px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778733198335-549383" data-src="assets/portfolio/clusters/cards/img-1778733198335-549383.webp" width="484" height="470" style="left:803px;top:1628px;width:242px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4zuumm-814575" data-src="assets/portfolio/clusters/cards/note-mp4zuumm-814575.webp" width="464" height="206" style="left:802px;top:1863px;width:232px;height:103px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4zxrun-151906" data-src="assets/portfolio/clusters/cards/note-mp4zxrun-151906.webp" width="482" height="206" style="left:565px;top:1863px;width:241px;height:103px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp50gpf6-844950" data-src="assets/portfolio/clusters/cards/note-mp50gpf6-844950.webp" width="486" height="206" style="left:322px;top:1863px;width:243px;height:103px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778734811470-149336" data-src="assets/portfolio/clusters/cards/img-1778734811470-149336.webp" width="480" height="470" style="left:322px;top:1628px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="image-mp52tatz-522039" data-src="assets/portfolio/clusters/cards/image-mp52tatz-522039.webp" width="608" height="604" style="left:1172px;top:529px;width:304px;height:302px" alt="" decoding="async">
+        <img class="bcard" data-id="note-1778804842878" data-src="assets/portfolio/clusters/cards/note-1778804842878.webp" width="656" height="300" style="left:518px;top:682px;width:328px;height:150px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp51qz48-187360" data-src="assets/portfolio/clusters/cards/note-mp51qz48-187360.webp" width="408" height="144" style="left:700px;top:921px;width:204px;height:72px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778728003235-315302" data-src="assets/portfolio/clusters/cards/img-1778728003235-315302.webp" width="480" height="470" style="left:804px;top:1023px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778727865691-643632" data-src="assets/portfolio/clusters/cards/img-1778727865691-643632.webp" width="480" height="470" style="left:324px;top:1326px;width:240px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778733914986-758351" data-src="assets/portfolio/clusters/cards/img-1778733914986-758351.webp" width="478" height="470" style="left:2103px;top:1032px;width:239px;height:235px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778737786779-516099" data-src="assets/portfolio/clusters/cards/img-1778737786779-516099.webp" width="478" height="476" style="left:1864px;top:1032px;width:239px;height:238px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp4xg1eu-91163" data-src="assets/portfolio/clusters/cards/note-mp4xg1eu-91163.webp" width="482" height="150" style="left:323px;top:1561px;width:241px;height:75px" alt="" decoding="async">
+        <img class="bcard" data-id="note-mp38qcyn-579837" data-src="assets/portfolio/clusters/cards/note-mp38qcyn-579837.webp" width="564" height="300" style="left:1703px;top:1518px;width:282px;height:150px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778625290045-881250" data-src="assets/portfolio/clusters/cards/img-1778625290045-881250.webp" width="608" height="604" style="left:1493px;top:530px;width:304px;height:302px" alt="" decoding="async">
+        <img class="bcard" data-id="pal-1778624811893" data-src="assets/portfolio/clusters/cards/pal-1778624811893.webp" width="656" height="252" style="left:1157px;top:376px;width:328px;height:126px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778738481638-351902" data-src="assets/portfolio/clusters/cards/img-1778738481638-351902.webp" width="564" height="94" style="left:1504px;top:381px;width:282px;height:47px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778738438186-324977" data-src="assets/portfolio/clusters/cards/img-1778738438186-324977.webp" width="564" height="94" style="left:1500px;top:450px;width:282px;height:47px" alt="" decoding="async">
+        <img class="bcard" data-id="img-1778625294763-800924" data-src="assets/portfolio/clusters/cards/img-1778625294763-800924.webp" width="608" height="604" style="left:846px;top:530px;width:304px;height:302px" alt="" decoding="async">
+            <img data-ghost class="bcard is-pending" data-id="img-1778625294763-800924" data-src="assets/portfolio/clusters/cards/img-1778625294763-800924.webp" width="440" height="436" style="left:2050px;top:1420px;width:220px;height:218px" alt="" decoding="async">
+        <img data-ghost class="bcard is-pending" data-id="image-mp52tatz-522039" data-src="assets/portfolio/clusters/cards/image-mp52tatz-522039.webp" width="440" height="436" style="left:2050px;top:1660px;width:220px;height:218px" alt="" decoding="async">
+        <img data-ghost class="bcard is-pending" data-id="img-1778625290045-881250" data-src="assets/portfolio/clusters/cards/img-1778625290045-881250.webp" width="440" height="436" style="left:2050px;top:1900px;width:220px;height:218px" alt="" decoding="async">
+            <div class="cursor"><div class="cursor__in"><svg width="16" height="20" viewBox="0 0 16 20" fill="none"><path d="M2 2 L2 15 L5.5 12 L8 17.5 L10 16.5 L7.5 11 L13 11 Z" fill="#f97316" stroke="#0a0a0c" stroke-width="1" stroke-linejoin="round"/></svg><span class="cursor-flag">andrew</span></div></div>
+          </div>
+          <div class="stage__phone" data-for="3"><div class="bezel"><div class="phone-cam"></div></div></div>
         </div>
-        <div class="phone-ov lay hide" data-for="3"><div class="bezel"><video class="take" data-take="3" muted playsinline loop preload="none" poster="assets/portfolio/clusters/phone.webp"><source src="assets/portfolio/clusters/phone.mp4" type="video/mp4"></video></div></div>
-        <div class="signals" data-for="5">
-          <div style="--td:.1s"><span><b>gclid</b> &middot; google ads</span><em>first touch</em></div>
-          <div style="--td:.3s"><span><b>ttclid</b> &middot; tiktok</span><em>last touch</em></div>
-          <div style="--td:.5s"><span><b>fbp + capi</b> &middot; meta, server-side</span><em>deduped</em></div>
-          <div style="--td:.7s"><span><b>send-time</b> &middot; user most active</span><em>19:00 local</em></div>
-          <div style="--td:.9s"><span><b>experiment</b> &middot; onboarding_v3</span><em>arm b</em></div>
-          <div style="--td:1.1s"><span><b>referral</b> &middot; k-factor</span><em>tracked</em></div>
-          <div style="--td:1.3s"><span><b>gsc sync</b> &middot; daily</span><em>1,146 &rarr; 5,793</em></div>
-        </div>
-        <div class="term hide" data-for="2 6"><span data-term></span></div>
-        <div class="hud"><span data-hud></span></div>
-      </div>
+        <aside class="stage__term" data-for="2"><pre data-term></pre><template id="mcp-request">› add_cards
+  board_id: "ebf42869-d19f-4b86-8659-763b082095c8"
+  cards: [
+    { kind: "image", image_key: "&lt;from upload_image&gt;", alt: "Clusters logo, dark mode",  x: 2050, y: 1420, w: 220, h: 218 },
+    { kind: "image", image_key: "&lt;from upload_image&gt;", alt: "Clusters logo, greyscale",  x: 2050, y: 1660, w: 220, h: 218 },
+    { kind: "image", image_key: "&lt;from upload_image&gt;", alt: "Clusters logo, light mode", x: 2050, y: 1900, w: 220, h: 218 }
+  ]</template></aside>
+        <figcaption class="stage__cap"><span data-cap></span><span data-src></span></figcaption>
+      </figure>
     </div>
   </div>
 
@@ -883,6 +913,10 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
         <dt>end-to-end specs (Playwright)</dt><dd data-count="195">195</dd>
         <dt>docs pages &middot; changelog editions</dt><dd>64 &middot; 8</dd>
         <dt>landing pages &middot; listicles &middot; templates</dt><dd>14 &middot; 4 &middot; 16</dd>
+        <dt class="below-h">semantic search &middot; auto-tagging</dt><dd class="below">openai embeddings &rarr; pgvector, hnsw index</dd>
+        <dt class="below-h">seo copy &middot; image alt text</dt><dd class="below">cloudflare workers ai, free tier</dd>
+        <dt class="below-h">docs surface check</dt><dd class="below">ci extracts endpoints, mcp tools, card kinds and settings tabs from source, hashes them, fails the build if the docs did not move</dd>
+        <dt>assistant citation probe</dt><dd>weekly</dd>
       </dl>
     </div>
     <div>
@@ -897,6 +931,11 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
         <dt>price</dt><dd>$25 / mo</dd>
         <dt>free tier</dt><dd>50 cards</dd>
         <dt>in production since</dt><dd>spring 2026</dd>
+        <dt>attribution</dt><dd>11 click-ids &middot; 8 ad networks</dd>
+        <dt class="below-h">meta pixel</dt><dd class="below">server-side conversions api</dd>
+        <dt class="below-h">lifecycle email</dt><dd class="below">bandit &middot; per-user send time</dd>
+        <dt class="below-h">a/b harness &middot; referral loop</dt><dd class="below">stamped on every event &middot; k-factor tracked</dd>
+        <dt class="below-h">search console sync &middot; prober &middot; indexnow</dt><dd class="below">daily &middot; six-hourly &middot; on publish</dd>
         <dt class="tags-h">stack</dt><dd class="tags"><span>react</span><span>vite</span><span>cloudflare workers + r2</span><span>partykit</span><span>yjs</span><span>supabase</span><span>pgvector</span><span>workers ai</span><span>stripe</span><span>capacitor</span></dd>
       </dl>
     </div>
@@ -1318,47 +1357,17 @@ var io = ('IntersectionObserver' in window);
 
 /* ---------- scenes: the feature nearest the centre sets the product's state ---------- */
 (function(){
-  var TERM = {
-    '2': [
-      ['› ','mcp call <b>add_cards</b>  board=clusters-logo'],
-      ['  ','image  …/logo-light-mode.png'],
-      ['  ','image  …/logo-greyscale.png'],
-      ['  ','note   "DO: match the wordmark to the line"'],
-      ['← ','<span class="ok">3 cards added</span> · 84 ms · scope write · <span class="am">audit #40,112</span>']
-    ],
-    '6': [
-      ['› ','npm test'],
-      ['  ','docsite.test.mjs'],
-      ['  ','  endpoints +1  <b>POST /boards/:id/export</b>'],
-      ['  ','  <span class="warn">✗ docs not updated · build failed</span>'],
-      ['› ','edit docs/api/export.md · docs:accept'],
-      ['  ','<span class="ok">✓ 1,381 passing</span> · surface re-snapshotted']
-    ]
-  };
-  var HUD = {
-    '1': 'shared board · <b>view only</b> · every edit syncs live',
-    '2': 'the same board, reachable by an agent · <b>33 tools over mcp</b>',
-    '3': 'the same build on <b>ios and android</b>',
-    '4': 'the DO and DON\'T grids · <b>auto-tagged, searchable by meaning</b>',
-    '5': 'the notes · <b>attribution and lifecycle, instrumented</b>',
-    '6': 'docs that <b>cannot drift</b> from the surface they describe'
-  };
   function typeInto(el, lines, done){
-    el.innerHTML=''; if(reduce){ el.innerHTML=lines.map(function(l){return l[0]+l[1];}).join('\n'); return; }
+    el.innerHTML=''; if(reduce){ el.innerHTML=lines.map(function(l){return l[0]+l[1];}).join('\n'); if(done) done(); return; }
     var li=0, ci=0, cur=null, plain=[];
     function next(){
       if(li>=lines.length){ if(done) done(); return; }
-      if(!cur){ cur=document.createElement('div'); el.appendChild(cur); plain=lines[li][1].replace(/<[^>]+>/g,''); ci=0; }
+      if(!cur){ cur=document.createElement('div'); el.appendChild(cur); plain=lines[li][1].replace(/<[^>]+>/g,'').replace(/&lt;/g,'<').replace(/&amp;/g,'&'); ci=0; }
       ci+= (plain.length>60?3:2);
-      if(ci>=plain.length){ cur.innerHTML=lines[li][0]+lines[li][1]; cur=null; li++; el._t=setTimeout(next, 260); }
+      if(ci>=plain.length){ cur.innerHTML=lines[li][0]+lines[li][1]; cur=null; li++; el._t=setTimeout(next, 220); }
       else { cur.textContent=lines[li][0]+plain.slice(0,ci); el._t=setTimeout(next, 18); }
     }
     clearTimeout(el._t); next();
-  }
-  function typeText(el, text){
-    if(reduce){ el.textContent=text; return; }
-    var i=0; el.textContent=''; clearTimeout(el._t);
-    (function step(){ i++; el.textContent=text.slice(0,i); if(i<text.length) el._t=setTimeout(step, 55); })();
   }
   function countTo(el, end, dur){
     var t0=null; if(reduce){ el.textContent=end.toLocaleString('en-US'); return; }
@@ -1366,19 +1375,23 @@ var io = ('IntersectionObserver' in window);
       el.textContent=Math.round(end*p).toLocaleString('en-US'); if(p<1) requestAnimationFrame(step); }
     requestAnimationFrame(step);
   }
+  function nearest(feats){
+    var mid=innerHeight*.5, best=null, bd=Infinity;
+    feats.forEach(function(f){ var r=f.getBoundingClientRect(), c=r.top+r.height/2, d=Math.abs(c-mid); if(d<bd){ bd=d; best=f; } });
+    return best;
+  }
+  function bindScroll(update){
+    var ticking=false;
+    addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(function(){ ticking=false; update(); }); } }, {passive:true});
+    addEventListener('resize', update); update();
+  }
+
+  /* CSS-built scenes (Bounty_OS): layers toggle, one live counter */
   function apply(scene, st){
     scene.setAttribute('data-state', st);
     scene.querySelectorAll('[data-for]').forEach(function(l){
       var on = l.getAttribute('data-for').split(' ').indexOf(st)>=0;
       l.classList.toggle('hide', !on); l.classList.toggle('on', on);
-    });
-    var term = scene.querySelector('[data-term]'); if(term && TERM[st]) typeInto(term, TERM[st]);
-    var hud = scene.querySelector('[data-hud]'); if(hud && HUD[st]) hud.innerHTML = HUD[st];
-    scene.querySelectorAll('.take').forEach(function(t){
-      var on = t.getAttribute('data-take').split(' ').indexOf(st)>=0;
-      t.classList.toggle('on', on);
-      if(on){ if(t.preload==='none'){ t.preload='auto'; t.load(); } if(!reduce) t.play().catch(function(){}); }
-      else { t.pause(); }
     });
     var v = scene.querySelector('[data-scene-count]');
     if(v){
@@ -1393,19 +1406,103 @@ var io = ('IntersectionObserver' in window);
   document.querySelectorAll('.show').forEach(function(show){
     var feats = Array.prototype.slice.call(show.querySelectorAll('.feat'));
     var scene = show.querySelector('.scene'); if(!scene || !feats.length) return;
-    var current = null;
-    function set(st){ if(st===current) return; current=st; apply(scene, st); }
-    scene.classList.add('in');
-    var ticking=false;
-    function update(){
-      ticking=false;
-      var mid=innerHeight*.5, best=null, bd=Infinity;
-      feats.forEach(function(f){ var r=f.getBoundingClientRect(), c=r.top+r.height/2, d=Math.abs(c-mid); if(d<bd){ bd=d; best=f; } });
-      if(best) set(best.getAttribute('data-state'));
-    }
-    addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } }, {passive:true});
-    addEventListener('resize', update); update();
+    var current = null; scene.classList.add('in');
+    bindScroll(function(){ var b=nearest(feats); if(!b) return; var st=b.getAttribute('data-state'); if(st!==current){ current=st; apply(scene, st); } });
   });
+
+  /* The Clusters stage: the logo board rebuilt from its real cards, three moments driven by scroll */
+  var stage=document.getElementById('stage-clusters'); if(!stage) return;
+  var show=stage.closest('.show'), feats=Array.prototype.slice.call(show.querySelectorAll('.feat'));
+  var frame=stage.querySelector('.stage__frame'), board=stage.querySelector('.board'), cursor=stage.querySelector('.cursor');
+  var bezel=stage.querySelector('.bezel'), pcam=stage.querySelector('.phone-cam');
+  var capEl=stage.querySelector('[data-cap]'), srcEl=stage.querySelector('[data-src]'), term=stage.querySelector('[data-term]'), tpl=document.getElementById('mcp-request');
+  var MOVES=JSON.parse(stage.getAttribute('data-moves'));
+  var CAM={'1':{cx:1440,cy:620,h:900},'2':{cx:1860,cy:1700,h:900},'3':{cx:1440,cy:620,h:900}};
+  var PCAM={cx:1150,cy:600,h:1150};
+  var EASE='cubic-bezier(.2,.8,.2,1)';
+  var current=null, near=false, loaded=false, anims=[], timers=[], off={};
+  function byId(id){ return board.querySelector('.bcard[data-id="'+id+'"]'); }
+  function load(){ if(loaded) return; loaded=true; stage.querySelectorAll('img[data-src]').forEach(function(i){ i.src=i.getAttribute('data-src'); i.removeAttribute('data-src'); }); }
+  function cam(el, host, c){
+    var fw=host.clientWidth, fh=host.clientHeight; if(!fw||!fh) return;
+    var z=fh/c.h; el.style.setProperty('--z',z); el.style.setProperty('--x',(fw/2-c.cx*z)+'px'); el.style.setProperty('--y',(fh/2-c.cy*z)+'px'); el.style.setProperty('--iz',1/z);
+  }
+  function after(ms,fn){ timers.push(setTimeout(fn,ms)); }
+  function run(el,kf,opt){ var a=el.animate(kf,opt); anims.push(a); return a; }
+  function cancelAll(){ anims.forEach(function(a){ try{ a.cancel(); }catch(e){} }); anims=[]; }
+  function stop(){
+    cancelAll(); timers.forEach(clearTimeout); timers=[]; if(term) clearTimeout(term._t); off={};
+    board.querySelectorAll('.bcard').forEach(function(c){ c.classList.remove('is-dragging','is-new'); });
+    board.querySelectorAll('[data-ghost]').forEach(function(g){ g.classList.add('is-pending'); });
+    cursor.style.opacity='0';
+  }
+  function tr(o){ return 'translate('+o.x+'px,'+o.y+'px)'; }
+  function centre(c){ var o=off[c.getAttribute('data-id')]||{x:0,y:0}; return { x: parseFloat(c.style.left)+parseFloat(c.style.width)*.5+o.x, y: parseFloat(c.style.top)+parseFloat(c.style.height)*.55+o.y }; }
+  function moveCursor(from,to,ms,easing){ return run(cursor,[{transform:tr(from)},{transform:tr(to)}],{duration:ms,easing:easing||'ease-in-out',fill:'forwards'}); }
+  function moment1(){
+    var t=0, pos={x:CAM['1'].cx-560, y:CAM['1'].cy+520};
+    cursor.style.transform=tr(pos); cursor.style.opacity='1';
+    MOVES.forEach(function(m){
+      var c=byId(m[0]); if(!c) return;
+      after(t,function(){ var from=centre(c); moveCursor(pos,from,900); pos=from; });
+      after(t+900,function(){
+        var id=c.getAttribute('data-id'), prev=off[id]||{x:0,y:0}, next={x:m[1]-parseFloat(c.style.left), y:m[2]-parseFloat(c.style.top)};
+        var from=centre(c), to={x:from.x+(next.x-prev.x), y:from.y+(next.y-prev.y)};
+        c.classList.add('is-dragging');
+        run(c,[{transform:tr(prev)},{transform:tr(next)}],{duration:1800,easing:EASE,fill:'forwards'});
+        moveCursor(from,to,1800,EASE); off[id]=next; pos=to;
+      });
+      after(t+2700,function(){ c.classList.remove('is-dragging'); });
+      t+=3400;
+    });
+    after(t+1000,function(){ moveCursor(pos,{x:pos.x+240,y:pos.y+560},700,'ease-in'); });
+    after(t+1600,function(){ cursor.style.opacity='0'; });
+    after(t+2300,function(){ MOVES.forEach(function(m){ var c=byId(m[0]); if(c) run(c,[{opacity:1},{opacity:0}],{duration:400,fill:'forwards'}); }); });
+    after(t+2750,function(){ cancelAll(); off={}; MOVES.forEach(function(m){ var c=byId(m[0]); if(c) run(c,[{opacity:0},{opacity:1}],{duration:500,fill:'forwards'}); }); });
+    after(t+3700,function(){ cancelAll(); moment1(); });
+  }
+  function ghosts(){ return Array.prototype.slice.call(board.querySelectorAll('[data-ghost]')); }
+  function moment2(){
+    var lines=tpl.content.textContent.trim().split('\n').map(function(l){ return ['', l.replace(/&/g,'&amp;').replace(/</g,'&lt;')]; });
+    typeInto(term, lines, function(){
+      var gs=ghosts();
+      gs.forEach(function(g,i){ after(260+i*140,function(){ g.classList.remove('is-pending'); g.classList.add('is-new'); }); });
+      after(260,function(){ cam(board,frame,{cx:CAM['2'].cx+40,cy:CAM['2'].cy+24,h:CAM['2'].h}); });
+      after(6800,function(){ gs.forEach(function(g){ run(g,[{opacity:1},{opacity:0}],{duration:400,fill:'forwards'}); }); });
+      after(7300,function(){ cancelAll(); gs.forEach(function(g){ g.classList.add('is-pending'); g.classList.remove('is-new'); }); cam(board,frame,CAM['2']); });
+      after(8300,moment2);
+    });
+  }
+  function buildPhone(){
+    if(pcam.childElementCount) return;
+    var clone=board.cloneNode(true); clone.className='board board--phone'; clone.removeAttribute('style'); clone.style.cssText='--x:0px;--y:0px;--z:1';
+    clone.querySelectorAll('.cursor,[data-ghost]').forEach(function(n){ n.remove(); });
+    clone.querySelectorAll('img[data-src]').forEach(function(i){ i.src=i.getAttribute('data-src'); i.removeAttribute('data-src'); });
+    var fin={}; MOVES.forEach(function(m){ fin[m[0]]=m; });
+    Object.keys(fin).forEach(function(id){ var c=clone.querySelector('.bcard[data-id="'+id+'"]'); if(c){ c.style.left=fin[id][1]+'px'; c.style.top=fin[id][2]+'px'; } });
+    pcam.appendChild(clone);
+  }
+  function moment3(){
+    var clone=pcam.firstElementChild; if(!clone) return;
+    run(clone,[{transform:'translate(-240px,0)'},{transform:'translate(240px,0)'}],{duration:14000,direction:'alternate',iterations:Infinity,easing:'ease-in-out'});
+  }
+  function start(st){ if(st==='1') moment1(); else if(st==='2') moment2(); else if(st==='3') moment3(); }
+  function setState(st){
+    if(st===current) return; current=st; stop();
+    stage.setAttribute('data-state',st);
+    stage.querySelectorAll('[data-for]').forEach(function(l){ l.classList.toggle('on', l.getAttribute('data-for').split(' ').indexOf(st)>=0); });
+    var f=feats.filter(function(x){ return x.getAttribute('data-state')===st; })[0];
+    if(f){ capEl.innerHTML=f.getAttribute('data-cap')||''; srcEl.innerHTML=f.getAttribute('data-src')||''; }
+    cam(board,frame,CAM[st]);
+    if(st==='2'){ if(reduce){ term.textContent=tpl.content.textContent.trim(); ghosts().forEach(function(g){ g.classList.remove('is-pending'); }); } else if(term) term.innerHTML=''; }
+    if(st==='3'){ buildPhone(); cam(pcam,bezel,PCAM); }
+    if(near && !reduce) start(st);
+  }
+  if(io){
+    new IntersectionObserver(function(en){ en.forEach(function(e){ near=e.isIntersecting; if(near){ load(); if(current){ stop(); if(!reduce) start(current); } } else stop(); }); },{rootMargin:'75% 0px'}).observe(stage);
+  } else { near=true; load(); }
+  if('ResizeObserver' in window){ new ResizeObserver(function(){ if(current){ cam(board,frame,CAM[current]); if(current==='3') cam(pcam,bezel,PCAM); } }).observe(frame); }
+  bindScroll(function(){ var b=nearest(feats); if(b) setState(b.getAttribute('data-state')); });
 })();
 
 /* ---------- clips play only while visible ---------- */
