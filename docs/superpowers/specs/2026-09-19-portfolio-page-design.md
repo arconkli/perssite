@@ -156,3 +156,10 @@ X-Robots-Tag noindex for `/assets/portfolio/docs/*`. The on-camera still is now
 `~/Documents/Andrew Conklin/Acting/Photos/BTS/No Love Lost 995 (1)-3.jpg` (caption "no love lost · lead ·
 capped films"); the Noise Complaint frame is deleted. Alternative film frame if wanted:
 `Acting/Photos/Screengrabs/NLL Electricute 1.png`.
+
+## Addendum, 2026-09-21: music chapter removed
+
+Andrew: the music "is under a different 'keekoh' brand", so chapter 06 (Keekoh · Soleil Records, "It All
+Falls", the FL Studio ledger) is gone, along with the nav and index entries, the "musician" hero word, the meta
+description clause, the ticker word and the structured-data job title. Other builds and Contact are now 06 and
+07. The freelance entry's "music-production content" line stays: that is growth history, not the brand.
