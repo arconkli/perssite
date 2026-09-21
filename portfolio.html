@@ -424,6 +424,26 @@ p{margin:0;color:var(--ink-2)}
 .record .when{display:block;margin-top:.3rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
 .record p{max-width:46rem}
 
+/* sample video inside a record entry: a phone-shaped poster; YouTube loads only on click */
+.record .ent{display:flex;flex-wrap:wrap;gap:1.2rem 2.5rem;align-items:flex-start}
+.record .ent p{flex:1 1 20rem}
+.samp{flex:0 0 auto;width:min(100%,15rem)}
+.samp__box{position:relative;aspect-ratio:9/16;background:#0B0B0C;border-radius:2rem;overflow:hidden;box-shadow:0 40px 100px -30px rgb(0 0 0 / .5),inset 0 0 0 1px rgb(255 255 255 / .06);border:5px solid #1A1A1D;isolation:isolate}
+.samp__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.4s var(--ease)}
+.samp__box:hover .samp__poster,.samp__box:focus-within .samp__poster{transform:scale(1.03)}
+.samp__btn{position:absolute;inset:0;z-index:2;width:100%;height:100%;display:grid;place-items:center;background:none;border:0;cursor:pointer;padding:0;border-radius:1.6rem}
+.samp__play{width:3.6rem;height:3.6rem;border-radius:50%;display:grid;place-items:center;background:rgb(11 11 12 / .28);border:1px solid rgb(237 234 229 / .55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 30px -10px rgb(0 0 0 / .6);transition:transform .6s var(--ease),background .45s var(--ease),border-color .45s var(--ease)}
+.samp__play svg{width:1rem;height:1rem;fill:#EDEAE5;margin-left:.15rem;transition:fill .45s var(--ease)}
+.samp__btn:hover .samp__play,.samp__btn:focus-visible .samp__play{background:#EDEAE5;border-color:#EDEAE5;transform:scale(1.08)}
+.samp__btn:hover .samp__play svg,.samp__btn:focus-visible .samp__play svg{fill:#0B0B0C}
+.samp__btn:focus-visible{outline:1px solid #EDEAE5;outline-offset:-6px}
+.samp iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
+.samp--live .samp__poster,.samp--live .samp__btn{display:none}
+.samp .cap{display:grid;gap:.35rem;margin-top:.8rem}
+.samp .cap a{justify-self:start;color:var(--faint);text-decoration:none;border-bottom:1px solid var(--rule);transition:color .3s var(--ease),border-color .3s var(--ease)}
+.samp .cap a:hover,.samp .cap a:focus-visible{color:var(--ink-2);border-color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){.samp__poster,.samp__play,.samp__play svg{transition:none}.samp__box:hover .samp__poster,.samp__box:focus-within .samp__poster{transform:none}}
+
 /* ============================================================
    STILL — a frame from the work
    ============================================================ */
@@ -951,7 +971,18 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     </li>
     <li>
       <div><div class="who">Georgia Entertainment</div><span class="when">event photographer &amp; journalist &middot; oct 2024 &ndash; sep 2025</span></div>
-      <p>Documented Atlanta&rsquo;s entertainment scene on assignment.</p>
+      <div class="ent">
+        <p>Documented Atlanta&rsquo;s entertainment scene on assignment. The sample here was cut to pitch a potential client: the kind of video I make.</p>
+        <div class="samp" data-yt="RxR0G8qX9dY" data-title="Georgia Entertainment sample video">
+          <div class="samp__box">
+            <img class="samp__poster" src="assets/portfolio/sample-georgia.webp" width="480" height="854" alt="" loading="lazy" decoding="async">
+            <button class="samp__btn" type="button" aria-label="Play: Georgia Entertainment sample video, 1 minute 58 seconds">
+              <span class="samp__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            </button>
+          </div>
+          <div class="cap"><span class="mlbl">georgia entertainment sample &middot; aug 2024</span><span class="mlbl">1:58 &middot; vertical &middot; sound on</span><a class="mlbl" href="https://youtu.be/RxR0G8qX9dY" target="_blank" rel="noopener">watch on youtube &nearr;</a></div>
+        </div>
+      </div>
     </li>
     <li>
       <div><div class="who">Swoon Esports</div><span class="when">founder &middot; sep 2019 &ndash; nov 2020 &middot; age 15</span></div>
@@ -1367,6 +1398,38 @@ var io = ('IntersectionObserver' in window);
     });
   }, {threshold:.35});
   vids.forEach(function(v){ ob.observe(v); });
+})();
+
+/* ---------- sample video: poster first, YouTube only on click ---------- */
+(function(){
+  var samps = document.querySelectorAll('.samp[data-yt]');
+  if(!samps.length) return;
+  var warmed = false;
+  function warm(){
+    if(warmed) return; warmed = true;
+    ['https://www.youtube.com','https://i.ytimg.com'].forEach(function(h){
+      var l = document.createElement('link');
+      l.rel = 'preconnect'; l.href = h; l.crossOrigin = ''; document.head.appendChild(l);
+    });
+  }
+  samps.forEach(function(el){
+    var id  = el.getAttribute('data-yt'),
+        box = el.querySelector('.samp__box'),
+        btn = el.querySelector('.samp__btn');
+    if(!id || !box || !btn) return;
+    el.addEventListener('pointerover', warm, {once:true});
+    btn.addEventListener('focus', warm, {once:true});
+    btn.addEventListener('click', function(){
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube.com/embed/' + id
+            + '?autoplay=1&playsinline=1&rel=0'
+            + '&origin=' + encodeURIComponent(location.origin);
+      f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; web-share';
+      f.allowFullscreen = true; f.title = el.getAttribute('data-title') || 'Video';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      box.appendChild(f); el.classList.add('samp--live'); f.focus();
+    }, {once:true});
+  });
 })();
 
 /* ---------- parallax: transform only, ±6%, rAF-throttled ---------- */

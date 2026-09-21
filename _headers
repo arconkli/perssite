@@ -18,8 +18,12 @@
   Referrer-Policy: strict-origin-when-cross-origin
 
 # The portfolio page is deliberately unlisted: reachable by link, never by search.
+# It embeds a YouTube video on click; the same Referrer-Policy as above keeps
+# the player's origin check working without ever sending the page path.
 /portfolio
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /portfolio.html
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
+  Referrer-Policy: strict-origin-when-cross-origin

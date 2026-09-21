@@ -91,3 +91,16 @@ An unlisted page at `andrewconklin.com/portfolio` (reachable by link, kept out o
 - HTML validity (no unclosed tags, unique ids), every internal anchor resolves, every external link returns 2xx/3xx.
 - Playwright screenshots at 390, 820, 1440 px, light and dark bands, plus `prefers-reduced-motion` to confirm content is fully visible with motion off.
 - A fact-check pass: extract every number from the page and match it to the source table above.
+
+## Addendum, 2026-09-21: sample video in the growth record
+
+Andrew asked for his "Georgia Entertainment Sample Vid" (youtu.be/RxR0G8qX9dY, unlisted, 1:58, uploaded
+2024-08-22, vertical 1080x1920) to go on the page: "a sample video I made for a potential client, kinda shows
+the videos I can make." It sits inside the Georgia Entertainment entry of chapter 04, as a phone-shaped
+poster (`.samp`, 9:16, 15rem wide, beside the entry text; below it on phones) with a single play control.
+Nothing from YouTube loads until the button is pressed; the click builds the iframe the same way the
+EveryoneSocial page does (youtube.com/embed with `origin`, `referrerpolicy=strict-origin-when-cross-origin`),
+and `_headers` now sends the matching Referrer-Policy for /portfolio so the player's origin check passes.
+The poster is a real frame from the last second of the video (caption-free), stored as
+`assets/portfolio/sample-georgia.webp`. Caption copy states only what is known: the video's own title,
+its upload month, its length, and that it is vertical.
