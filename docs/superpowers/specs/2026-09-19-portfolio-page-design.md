@@ -163,3 +163,22 @@ Andrew: the music "is under a different 'keekoh' brand", so chapter 06 (Keekoh Â
 Falls", the FL Studio ledger) is gone, along with the nav and index entries, the "musician" hero word, the meta
 description clause, the ticker word and the structured-data job title. Other builds and Contact are now 06 and
 07. The freelance entry's "music-production content" line stays: that is growth history, not the brand.
+
+## Addendum, 2026-09-21: Clusters stage rebuilt as a DOM reconstruction
+
+Andrew on the footage stage: "TERRIBLE, really really really terrible. all of them." Filming the public
+share link live was ruled out in planning (the viewer is a frozen snapshot: `PublicBoardView.jsx:21` "No
+realtime, no editing"); he declined a sign-in handoff and asked to "rebuild a portion of the app... like what
+we did with Bounty OS". The stage is now a DOM reconstruction of the Clusters Logo board: 46 real cards
+harvested from the public share view at 1:1 zoom and 2x pixels (`scratchpad/harvest-board.mjs`; positions
+read from the app's own inline styles; the arrows and freehand-stroke SVG layers serialised; the app's grid,
+colours, shadows, radius, easing, cursor SVG and `card-pop` keyframes copied from `boards/src/styles.css`
+and `primitives.jsx`). Sprites: `assets/portfolio/clusters/cards/*.webp`, 444 KB for all 46; the old clips
+(3.5 MB) are deleted. Three moments, chosen by Andrew: (1) a cursor labelled "andrew" swaps the greyscale
+and light approved logos in three drags; (2) an `add_cards` request typed beside the frame, in the real
+tool schema shape (`mcp/src/tools.js:491`), lands three image cards with the app's own card-pop; (3) the same
+board in a CSS phone bezel with the swap applied. Captions and terminal sit outside the frame. Chrome reads
+"shared board Â· rebuilt from its real cards". Sprites load only when the chapter is within 75% of a
+viewport; under reduced motion each state is a static pose with the transcript fully rendered. The AI,
+growth-stack and docs-CI features moved into the ledgers as rows. Generator: `scratchpad/gen-stage.mjs`
+(re-run after a new harvest); QA: `qa-clusters.mjs`, `qa-clusters2.mjs`, `fidelity.mjs`.
