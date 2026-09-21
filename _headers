@@ -27,3 +27,7 @@
 /portfolio.html
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate
   Referrer-Policy: strict-origin-when-cross-origin
+
+# Documents linked from the unlisted portfolio page: readable by link, never by search.
+/assets/portfolio/docs/*
+  X-Robots-Tag: noindex, nofollow, noarchive

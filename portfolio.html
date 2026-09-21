@@ -489,6 +489,17 @@ p{margin:0;color:var(--ink-2)}
    LINKS ROW, PRESS, CLOSE
    ============================================================ */
 .links{display:flex;gap:.6rem 1.6rem;flex-wrap:wrap;margin-top:clamp(1.4rem,3vw,2rem)}
+.papers{margin-top:clamp(2rem,4vw,3rem)}
+.papers__grid{display:grid;gap:clamp(1.2rem,2.5vw,2rem);grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));margin-top:1rem}
+.paper{display:block;text-decoration:none;color:inherit;min-width:0}
+.paper__page{display:grid;place-items:center;aspect-ratio:4/3;background:#F5F4F0;border-radius:10px;overflow:hidden;padding:1rem;box-shadow:0 30px 60px -30px rgb(0 0 0 / .7);border:1px solid rgb(255 255 255 / .08);transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
+.paper__page img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;box-shadow:0 8px 24px -12px rgb(0 0 0 / .35)}
+.paper:hover .paper__page,.paper:focus-visible .paper__page{transform:translateY(-6px);box-shadow:0 50px 80px -30px rgb(0 0 0 / .8)}
+.paper__t{display:block;margin-top:1rem;font-family:var(--display);font-stretch:70%;font-weight:600;font-size:var(--s-2);letter-spacing:-.02em;color:var(--ink);line-height:1}
+.paper__s{display:block;margin-top:.35rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
+.paper__go{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--ink-2);border-bottom:1px solid var(--rule-2);transition:color .3s var(--ease),border-color .3s var(--ease)}
+.paper:hover .paper__go,.paper:focus-visible .paper__go{color:var(--ink);border-color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.paper__page,.paper__go{transition:none}.paper:hover .paper__page{transform:none}}
 .studio{display:flex;align-items:center;flex-wrap:wrap;gap:clamp(1.5rem,4vw,3.5rem);margin-top:clamp(2rem,4vw,3rem);padding-top:clamp(1.5rem,3vw,2rem);border-top:1px solid var(--rule-2)}
 .studio img{width:min(100%,14rem);height:auto;display:block}
 .studio .links{margin-top:0}
@@ -946,6 +957,32 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     </article>
   </div>
 
+  <div class="papers u-wide fade">
+    <p class="mlbl">on paper &middot; read the work</p>
+    <div class="papers__grid">
+      <a class="paper" href="assets/portfolio/docs/deep-dive-short-script.pdf" target="_blank" rel="noopener">
+        <span class="paper__page"><img src="assets/portfolio/docs/deep-dive-short-script.webp" width="900" height="1166" alt="" loading="lazy"></span>
+        <span class="paper__t">Deep Dive</span>
+        <span class="paper__s">short film script &middot; final draft, 10 jul 2025 &middot; 4 pages</span>
+        <span class="paper__s">written by Christopher Perez and Andrew Conklin</span>
+        <span class="paper__go">read the script &nearr;</span>
+      </a>
+      <a class="paper" href="assets/portfolio/docs/deep-dive-shot-list.pdf" target="_blank" rel="noopener">
+        <span class="paper__page"><img src="assets/portfolio/docs/deep-dive-shot-list.webp" width="900" height="696" alt="" loading="lazy"></span>
+        <span class="paper__t">Deep Dive</span>
+        <span class="paper__s">shot list &middot; 4 pages</span>
+        <span class="paper__s">boards, lens, angle, movement and gear per shot</span>
+        <span class="paper__go">open the shot list &nearr;</span>
+      </a>
+      <a class="paper" href="assets/portfolio/docs/lost-time-onyx-storyboard.pdf" target="_blank" rel="noopener">
+        <span class="paper__page"><img src="assets/portfolio/docs/lost-time-onyx-storyboard.webp" width="900" height="696" alt="" loading="lazy"></span>
+        <span class="paper__t">Lost Time</span>
+        <span class="paper__s">onyx scene storyboard &middot; 8 pages</span>
+        <span class="paper__s">dialogue and action beside every frame</span>
+        <span class="paper__go">open the storyboard &nearr;</span>
+      </a>
+    </div>
+  </div>
   <div class="studio fade">
     <img src="assets/portfolio/soleil-logo.webp" width="1200" height="788" alt="Soleil Pictures" loading="lazy">
     <div class="links">
@@ -1018,8 +1055,8 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
   <p class="lead fade" style="margin-top:1.2rem;--d:.12s">Acting is where the products came from: the studio needed tools, and the person on set built them. Working actor since 2023, training in Chubbuck, Meisner, and at Michelle Danner&rsquo;s studio.</p>
 
   <div class="still u-wide fade" style="--d:.18s;margin-top:clamp(2rem,4vw,3rem)" data-parallax="0.06">
-    <img src="assets/portfolio/still-noise-complaint.webp" width="1800" height="1013" alt="A frame from Noise Complaint: Andrew in a blue security uniform, lit low and blue, wide-eyed" loading="lazy">
-    <span class="cap">noise complaint &middot; lead &middot; ion films studios</span>
+    <img src="assets/portfolio/still-no-love-lost.webp" width="1800" height="1200" alt="Andrew on the set of No Love Lost, shirtless and covered in stage blood, grinning, sunlit trees behind him" loading="lazy">
+    <span class="cap">no love lost &middot; lead &middot; capped films</span>
   </div>
 
   <div class="u-wide fade" style="margin-top:clamp(2rem,4vw,3rem);overflow-x:auto">
