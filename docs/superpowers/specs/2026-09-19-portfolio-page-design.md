@@ -110,3 +110,15 @@ same way the EveryoneSocial page does (youtube.com/embed with `origin`,
 (caption-free), `assets/portfolio/sample-georgia.webp`, 720x1280. Caption copy states only what is known:
 aug 2024, 1:58, vertical, sound on, "Cut to pitch a potential client: the kind of video I make.", and the
 YouTube link.
+
+## Addendum, 2026-09-21: Soleil Pictures chapter
+
+Andrew: "get the actual posters from our soleil pictures website... make the logo actually fit properly and be
+the correct size AND remove the paper trail." The posters are now the three files soleilpictures.com/projects
+serves (`assets/YAHWEH_mock.PNG` 1518x2048, `assets/Deep_Dive_poster_correct.jpg` 3300x5100,
+`assets/losttime-poster.png` 1536x2048), re-encoded to 1200px-wide webp and shown at their own aspect ratios
+(fixed card height, auto width; on phones the height also respects the viewport width so nothing letterboxes).
+The earlier YAHWEH image was a different design. The logo had been rendering at 256x592 because an inline
+`width` left the HTML `height` attribute in force; it is re-encoded from
+`~/Documents/soleilpictures/soleil_pictures_logo.png` (alpha kept) and sits at 14rem beside the chapter links
+as the chapter's sign-off. The paper-trail ledger is removed.
