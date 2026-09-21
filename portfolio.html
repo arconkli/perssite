@@ -438,6 +438,7 @@ p{margin:0;color:var(--ink-2)}
 @media (min-width:52rem){.cards{grid-template-columns:1fr 1fr}}
 .card{background:var(--card);padding:clamp(1.3rem,2.5vw,1.8rem);display:flex;flex-direction:column;gap:.6rem;transition:background .5s var(--ease)}
 .card:hover{background:var(--bg)}
+@media (min-width:52rem){.cards > .card:last-child:nth-child(odd){grid-column:1 / -1}}
 .card .mlbl{color:var(--faint)}
 .card h3{font-stretch:78%;font-size:var(--s-2);letter-spacing:-.02em}
 .card p{font-size:var(--s--1);line-height:1.55}
@@ -915,9 +916,8 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       </dl>
     </div>
     <div>
-      <p class="mlbl">future studio &middot; a model you can argue with</p>
-      <p style="max-width:40ch;font-size:var(--s--1);line-height:1.6">A gated page at <a href="https://soleilpictures.com/future-studio" rel="noopener">soleilpictures.com/future-studio</a> models a film studio and a theme park sharing one island as one business: an interactive map, a pro forma, and a situation room built from a <b>90-entry idea ledger</b>, with <b>147 test assertions</b> guarding the economics. It records where the plan fails as carefully as where it works.</p>
-      <img src="assets/portfolio/soleil-logo.webp" width="900" height="592" alt="Soleil Pictures" loading="lazy" style="width:min(100%,16rem);margin-top:1.6rem;opacity:.9">
+      <p class="mlbl">the studio</p>
+      <img src="assets/portfolio/soleil-logo.webp" width="900" height="592" alt="Soleil Pictures" loading="lazy" style="width:min(100%,16rem);margin-top:1rem;opacity:.9">
     </div>
   </div>
   <div class="links fade">
@@ -943,7 +943,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     </li>
     <li>
       <div><div class="who">Freelance</div><span class="when">social growth &amp; management &middot; 2018 &ndash; 2023</span></div>
-      <p>Grew an Instagram page from <b>0 to 35K followers</b> organically. Produced music-production content that earned <b>1M+ organic TikTok views</b>. Managed pages totalling 550K+ followers.</p>
+      <p>Ever see the <b>&ldquo;They did surgery on a grape&rdquo;</b> meme? That was me. Grew an Instagram page from <b>0 to 35K followers</b> organically. Produced music-production content that earned <b>1M+ organic TikTok views</b>. Managed pages totalling 550K+ followers.</p>
     </li>
     <li>
       <div><div class="who">Rise Studios &middot; Just Peachy Locations</div><span class="when">social media marketing consultant &middot; aug 2024 &ndash; jul 2025</span></div>
@@ -1069,12 +1069,6 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       <h3>Rocklords</h3>
       <p>A PvP rock-collection game: mining, refinement with a wager feel, fusion trade-ups, theft, auto-miners for offline progression, procedurally generated mythical rocks players get to name. 18,107 lines of Luau across 39 server modules, 126 tests, a 20-section design spec, and a Rojo, Wally, StyLua, Selene toolchain.</p>
       <p class="meta">written in two days, apr 2026 &middot; unpublished</p>
-    </article>
-    <article class="card">
-      <p class="mlbl">model &middot; next.js on the edge</p>
-      <h3>Future Studio</h3>
-      <p>A studio-plus-theme-park island as one business, rendered as a map, a pro forma, and a situation room from a 90-entry idea ledger. Gated at the edge, with 147 test assertions on the economics. <a href="https://soleilpictures.com/future-studio" rel="noopener">soleilpictures.com/future-studio</a></p>
-      <p class="meta">aug 2026 &middot; live</p>
     </article>
     <article class="card">
       <p class="mlbl">automation &middot; python + claude</p>

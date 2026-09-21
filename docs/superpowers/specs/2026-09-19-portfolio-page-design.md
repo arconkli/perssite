@@ -48,11 +48,11 @@ An unlisted page at `andrewconklin.com/portfolio` (reachable by link, kept out o
 2. **Index**: numbered chapter list.
 3. **01 Bounty_OS** (dark, green signal): what it is; the block model with the worked example; sticky showcase (home → docs explorer → mobile dashboard); "the machine" feature list; ledger "traction, production DB 28 Jun 2026"; ledger "the build"; links.
 4. **02 Soleil Clusters** (light, amber signal): what it is; sticky showcase (wide canvas → collaboration → phone) plus the 8-second establishing clip; engineering feature list (Yjs CRDT over PartyKit Durable Objects, 50-endpoint API, own OAuth 2.1 server, 33-tool MCP server on the official registry, native shells, Scout, pgvector, Workers AI SEO loop, attribution, docs-parity CI, backups); ledgers "the build" and "in production"; press line (FilmPlatforms, 27 Jul 2026); links.
-5. **03 Soleil Pictures** (dark, cinematic): studio line; poster rail (YAHWEH, Deep Dive, Lost Time) with loglines and stage; the development paper trail (business plan, marketing plan, storyboards, short script co-written 2025); Future Studio one-liner; links.
+5. **03 Soleil Pictures** (dark, cinematic): studio line; poster rail (YAHWEH, Deep Dive, Lost Time) with loglines and stage; the development paper trail (business plan, marketing plan, storyboards, short script co-written 2025); links.
 6. **04 Growth record** (light): WorldStar HipHop, freelance, consulting, Georgia Entertainment, Swoon Esports — as a dated ledger.
 7. **05 On camera** (dark): 10-credit table, training, still from Noise Complaint, IMDb link.
 8. **06 Music** (light): Keekoh, It All Falls on Soleil Records, output cadence (typographic; the master video is a lyric video, so no loop).
-9. **07 Other builds** (light): card grid — Project Genesis, Rocklords, Future Studio, cast-and-crew database, Create OS, investor-research pipeline, this site's film app, this page.
+9. **07 Other builds** (light): card grid — Project Genesis, Rocklords, cast-and-crew database, Create OS, investor-research pipeline, this site's film app, this page.
 10. **08 Contact + colophon** (dark): email headline; links; "how this page was verified" line and date.
 11. **Ticker**.
 
@@ -63,7 +63,7 @@ An unlisted page at `andrewconklin.com/portfolio` (reachable by link, kept out o
 - **Clusters build**: repo counts on 2026-09-20 (1,764 commits, 1,690 since 2026-05-01, 651 in the last 90 days; 171,247 non-generated lines + 32,713 CSS; 358 migrations; 245 RLS policies; 21 edge functions; 50 REST endpoints + 18 OAuth endpoints from `docsiteSurface.json`; 33 MCP tools + 3 prompts; 1,381 unit tests per `npm test` run on 2026-09-19; 195 Playwright specs; 64 docs pages; 8 changelog editions). MCP Registry and npm entries confirmed live.
 - **Clusters production**: pitch page figures verified 2026-09-01 (180,159 live edit ops; 5,054 lifecycle emails delivered; search impressions 1,146 → 5,793 over six weeks); users 113 / MAU 86 from the 2026-06-28 fact base, labelled with that date.
 - **Growth record**: 2026 résumé + `Spooki x Duke Recap.csv` totals row (48 videos, 956,650 views, $7,750, CPV $0.0081, best $0.0016) + LinkedIn export dates. The "$0.013 cost-per-lead" line is dropped (the sheet computes cost per like).
-- **Credits**: acting résumé dated 2026-02-23 (10 credits). Not independently confirmed on IMDb (blocked); presented as credits, not awards.
+- **Credits**: acting résumé dated 2026-02-23 (10 credits) plus Lifeline (lead) and the festival selections for Lifeline and Noise Complaint, both from Andrew directly (2026-09-20). Not independently confirmed on IMDb (blocked); presented as credits, not awards.
 - **Music**: Soleil Records distribution report (artist Keekoh, It All Falls, activity from Nov 2024); track-folder counts on disk.
 - **Other builds**: repo counts on 2026-09-20 (Genesis 14 crates / 24,912 lines / 275 tests / 90 systems, 78 CDDA-fork commits; Rocklords 18,107 lines / 126 tests / 39 server modules; Future Studio 90 ledger entries / 147 assertions; investor pipeline 53 tests; film app 4,067 lines / 57 commits).
 
