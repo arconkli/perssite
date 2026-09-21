@@ -131,3 +131,13 @@ six of eleven in the heading, hero stat and ledger. Under the table, a block lab
 lists the big sets he named in the display face at heading size (he first asked for it small, then wanted it
 to "show and be a point"): Marvel's Thunderbolts, DC's Man of Tomorrow, Tulsa King, Will Trent, Southern
 Bastards, Gorilla Grodd, "among others" (his "etc."). Noise Complaint: Atlanta Horror Film Festival.
+
+## Addendum, 2026-09-21: ledger lists
+
+Andrew: multi-item ledger values ("assets made: master video · tiktok spot · spotify canvas · caption export",
+the two stacks, special skills, festival selections, artist · label) "look weird... look bad" when they wrap
+right-aligned with dangling separators. They are now `dt.tags-h` + `dd.tags`: the label on its own full-width
+line, the items beneath it as hairline mono chips that wrap cleanly. Long single names in the training ledger
+are `dt.below-h` + `dd.below` (label, then the value on its own line, left-aligned). The value column is now
+`auto` instead of a fixed 17ch/12ch, and values never wrap at any width, so numeric pairs like "55 · 203 · 132"
+and "1,146 → 5,793" stay on one line on phones.

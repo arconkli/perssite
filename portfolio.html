@@ -186,7 +186,7 @@ p{margin:0;color:var(--ink-2)}
    THE LEDGER — every value lands on one shared axis
    ============================================================ */
 .ledger{
-  display:grid;grid-template-columns:minmax(0,1fr) 17ch;column-gap:clamp(.75rem,1.6vw,1.25rem);margin:0;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:clamp(.75rem,1.6vw,1.25rem);margin:0;
   border-top:1px solid var(--rule-2);max-width:min(100%,46rem);
   font-family:var(--mono);font-size:var(--s--1);font-variant-numeric:tabular-nums lining-nums slashed-zero;
 }
@@ -195,7 +195,13 @@ p{margin:0;color:var(--ink-2)}
 .ledger > dd{margin:0;text-align:right;font-weight:500;white-space:nowrap;color:var(--ink)}
 .ledger > dd small{font-weight:400;color:var(--faint);font-size:.85em}
 .ledger > dd.wrap{white-space:normal;text-align:right;max-width:100%}
-@media (max-width:46rem){.ledger{grid-template-columns:minmax(0,1fr) 12ch;font-size:var(--s--2)}.ledger > dd{white-space:normal}}
+/* lists and long names: label on its own line, value beneath it, left-aligned */
+.ledger > dt.tags-h,.ledger > dt.below-h{grid-column:1 / -1;border-bottom:0;padding-bottom:.3rem}
+.ledger > dd.tags,.ledger > dd.below{grid-column:1 / -1;text-align:left;white-space:normal;padding-top:0}
+.ledger > dd.below{font-weight:500}
+.ledger > dd.tags{display:flex;flex-wrap:wrap;gap:.4rem .45rem;padding-bottom:.75rem}
+.ledger > dd.tags span{display:inline-block;max-width:100%;padding:.2rem .6rem;border:1px solid var(--rule-2);border-radius:999px;font-weight:400;font-size:.88em;line-height:1.45;color:var(--ink-2);letter-spacing:.02em}
+@media (max-width:46rem){.ledger{font-size:var(--s--2)}}
 .ledgers{display:grid;gap:clamp(2rem,4vw,3rem);grid-template-columns:1fr}
 .ledgers > *{min-width:0}
 @media (min-width:64rem){.ledgers{grid-template-columns:1fr 1fr}}
@@ -761,7 +767,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
         <dt>docs pages</dt><dd data-count="41">41</dd>
         <dt>commits, one author</dt><dd data-count="599">599</dd>
         <dt>live since</dt><dd>jan 2026</dd>
-        <dt>stack</dt><dd class="wrap"><small>react 18 &middot; ts &middot; vite &middot; tailwind &middot; supabase &middot; stripe connect &middot; brightdata &middot; resend &middot; discord</small></dd>
+        <dt class="tags-h">stack</dt><dd class="tags"><span>react 18</span><span>ts</span><span>vite</span><span>tailwind</span><span>supabase</span><span>stripe connect</span><span>brightdata</span><span>resend</span><span>discord</span></dd>
       </dl>
     </div>
   </div>
@@ -882,7 +888,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
         <dt>price</dt><dd>$25 / mo</dd>
         <dt>free tier</dt><dd>50 cards</dd>
         <dt>in production since</dt><dd>spring 2026</dd>
-        <dt>stack</dt><dd class="wrap"><small>react &middot; vite &middot; cloudflare workers + r2 &middot; partykit &middot; yjs &middot; supabase &middot; pgvector &middot; workers ai &middot; stripe &middot; capacitor</small></dd>
+        <dt class="tags-h">stack</dt><dd class="tags"><span>react</span><span>vite</span><span>cloudflare workers + r2</span><span>partykit</span><span>yjs</span><span>supabase</span><span>pgvector</span><span>workers ai</span><span>stripe</span><span>capacitor</span></dd>
       </dl>
     </div>
   </div>
@@ -1043,19 +1049,19 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     <div>
       <p class="mlbl">training</p>
       <dl class="ledger">
-        <dt>Advanced Acting Techniques &middot; Intro to Chubbuck</dt><dd class="wrap">Jerri Tubbs, GSU</dd>
-        <dt>Meisner Technique</dt><dd class="wrap">Emerald Coast Theater</dd>
-        <dt>Acting Techniques</dt><dd class="wrap">Michelle Danner Acting Studio</dd>
+        <dt class="below-h">Advanced Acting Techniques &middot; Intro to Chubbuck</dt><dd class="below">Jerri Tubbs, GSU</dd>
+        <dt class="below-h">Meisner Technique</dt><dd class="below">Emerald Coast Theater</dd>
+        <dt class="below-h">Acting Techniques</dt><dd class="below">Michelle Danner Acting Studio</dd>
       </dl>
     </div>
     <div>
       <p class="mlbl">on the page</p>
       <dl class="ledger">
         <dt>credits &middot; leads</dt><dd>11 &middot; 6</dd>
-        <dt>festival selections</dt><dd class="wrap">Noise Complaint, Atlanta Horror Film Festival &middot; Lifeline, Buried Alive Film Fest</dd>
+        <dt class="tags-h">festival selections</dt><dd class="tags"><span>Noise Complaint, Atlanta Horror Film Festival</span><span>Lifeline, Buried Alive Film Fest</span></dd>
         <dt>reels</dt><dd>2</dd>
         <dt>height</dt><dd>6&prime;</dd>
-        <dt>special skills</dt><dd class="wrap"><small>stunts &middot; free diving &middot; rock climbing &middot; horseback &middot; improv &middot; cold reading</small></dd>
+        <dt class="tags-h">special skills</dt><dd class="tags"><span>stunts</span><span>free diving</span><span>rock climbing</span><span>horseback</span><span>improv</span><span>cold reading</span></dd>
       </dl>
     </div>
   </div>
@@ -1084,9 +1090,9 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       <p class="mlbl">the release</p>
       <dl class="ledger">
         <dt>single</dt><dd>It All Falls</dd>
-        <dt>artist &middot; label</dt><dd class="wrap">Keekoh &middot; Soleil Records</dd>
+        <dt class="tags-h">artist &middot; label</dt><dd class="tags"><span>Keekoh</span><span>Soleil Records</span></dd>
         <dt>out</dt><dd>late 2024</dd>
-        <dt>assets made</dt><dd class="wrap"><small>master video &middot; tiktok spot &middot; spotify canvas &middot; caption export</small></dd>
+        <dt class="tags-h">assets made</dt><dd class="tags"><span>master video</span><span>tiktok spot</span><span>spotify canvas</span><span>caption export</span></dd>
       </dl>
     </div>
   </div>
