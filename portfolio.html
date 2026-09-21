@@ -397,11 +397,11 @@ p{margin:0;color:var(--ink-2)}
    ============================================================ */
 .rail{display:flex;gap:clamp(1rem,2.5vw,1.8rem);overflow-x:auto;scroll-snap-type:x mandatory;padding:1rem var(--gutter) 2rem;margin:0 calc(-1 * var(--gutter));scrollbar-width:none}
 .rail::-webkit-scrollbar{display:none}
-.poster{flex:0 0 min(78vw,22rem);scroll-snap-align:start;perspective:1200px}
-.poster__img{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#1A1A1D;box-shadow:0 40px 80px -30px rgb(0 0 0 / .7);transform-style:preserve-3d;transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
-.poster__img img{width:100%;height:100%;object-fit:cover}
+.poster{flex:0 0 auto;max-width:78vw;scroll-snap-align:start;perspective:1200px}
+.poster__img{position:relative;height:clamp(20rem,min(58vh,104vw),33rem);width:fit-content;max-width:100%;border-radius:10px;overflow:hidden;background:#1A1A1D;box-shadow:0 40px 80px -30px rgb(0 0 0 / .7);transform-style:preserve-3d;transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
+.poster__img img{display:block;width:auto;height:100%;max-width:100%;object-fit:contain}
 .poster:hover .poster__img{transform:rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg)) translateY(-6px);box-shadow:0 60px 100px -30px rgb(0 0 0 / .8)}
-.poster__meta{margin-top:1rem}
+.poster__meta{width:0;min-width:100%;margin-top:1rem}
 .poster__meta .t{font-family:var(--display);font-stretch:70%;font-weight:600;font-size:var(--s-2);letter-spacing:-.02em;color:var(--ink);line-height:1}
 .poster__meta .s{margin:.35rem 0 .6rem;font-family:var(--mono);font-size:var(--s--2);letter-spacing:.1em;text-transform:lowercase;color:var(--faint)}
 .poster__meta p{font-size:var(--s--1);line-height:1.5;max-width:34ch}
@@ -481,6 +481,9 @@ p{margin:0;color:var(--ink-2)}
    LINKS ROW, PRESS, CLOSE
    ============================================================ */
 .links{display:flex;gap:.6rem 1.6rem;flex-wrap:wrap;margin-top:clamp(1.4rem,3vw,2rem)}
+.studio{display:flex;align-items:center;flex-wrap:wrap;gap:clamp(1.5rem,4vw,3.5rem);margin-top:clamp(2rem,4vw,3rem);padding-top:clamp(1.5rem,3vw,2rem);border-top:1px solid var(--rule-2)}
+.studio img{width:min(100%,14rem);height:auto;display:block}
+.studio .links{margin-top:0}
 .links a{font-family:var(--mono);font-size:var(--s--2);letter-spacing:.12em;text-transform:lowercase;color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:color .35s,border-color .35s}
 .links a:hover,.links a:focus-visible{color:var(--ink);border-color:var(--rule-3)}
 .press{margin-top:clamp(2rem,4vw,3rem);padding-top:1.2rem;border-top:1px solid var(--rule-2);max-width:46rem}
@@ -910,7 +913,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
 
   <div class="rail u-wide fade" style="--d:.18s;margin-top:clamp(2rem,4vw,3rem)" role="list" aria-label="Slate">
     <article class="poster" role="listitem" data-tilt>
-      <div class="poster__img"><img src="assets/portfolio/poster-yahweh.webp" width="900" height="1200" alt="YAHWEH poster" loading="lazy"></div>
+      <div class="poster__img"><img src="assets/portfolio/poster-yahweh.webp" width="1200" height="1618" alt="YAHWEH poster" loading="lazy"></div>
       <div class="poster__meta">
         <div class="t">YAHWEH</div>
         <div class="s">feature &middot; in development &middot; action thriller</div>
@@ -918,7 +921,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       </div>
     </article>
     <article class="poster" role="listitem" data-tilt>
-      <div class="poster__img"><img src="assets/portfolio/poster-deepdive.webp" width="900" height="1391" alt="Deep Dive poster" loading="lazy"></div>
+      <div class="poster__img"><img src="assets/portfolio/poster-deepdive.webp" width="1200" height="1854" alt="Deep Dive poster" loading="lazy"></div>
       <div class="poster__meta">
         <div class="t">Deep Dive</div>
         <div class="s">feature &middot; pre-production &middot; psychological action thriller</div>
@@ -926,7 +929,7 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
       </div>
     </article>
     <article class="poster" role="listitem" data-tilt>
-      <div class="poster__img"><img src="assets/portfolio/poster-losttime.webp" width="900" height="1200" alt="Lost Time poster" loading="lazy"></div>
+      <div class="poster__img"><img src="assets/portfolio/poster-losttime.webp" width="1200" height="1600" alt="Lost Time poster" loading="lazy"></div>
       <div class="poster__meta">
         <div class="t">Lost Time</div>
         <div class="s">tv series &middot; pre-production &middot; historical dramedy, sci-fi action</div>
@@ -935,26 +938,12 @@ html:not(.js) .line > span,html:not(.js) .fade{transform:none;opacity:1}
     </article>
   </div>
 
-  <div class="ledgers u-wide fade" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
-    <div>
-      <p class="mlbl">the paper trail</p>
-      <dl class="ledger">
-        <dt>business plan &middot; marketing plan, Deep Dive</dt><dd>mar 2024</dd>
-        <dt>shot-direction frames, Deep Dive office scene</dt><dd data-count="24">24</dd>
-        <dt>Deep Dive proof-of-concept short, co-written with Christopher Perez</dt><dd>jul 2025</dd>
-        <dt>show bible, Lost Time</dt><dd>written</dd>
-        <dt>posters, designed in-house</dt><dd>2026</dd>
-        <dt>Georgia LLC organized</dt><dd>aug 2024</dd>
-      </dl>
+  <div class="studio fade">
+    <img src="assets/portfolio/soleil-logo.webp" width="1200" height="788" alt="Soleil Pictures" loading="lazy">
+    <div class="links">
+      <a href="https://soleilpictures.com/projects" rel="noopener">the slate &nearr;</a>
+      <a href="https://soleilpictures.com/about-us" rel="noopener">about the studio</a>
     </div>
-    <div>
-      <p class="mlbl">the studio</p>
-      <img src="assets/portfolio/soleil-logo.webp" width="900" height="592" alt="Soleil Pictures" loading="lazy" style="width:min(100%,16rem);margin-top:1rem;opacity:.9">
-    </div>
-  </div>
-  <div class="links fade">
-    <a href="https://soleilpictures.com/projects" rel="noopener">the slate &nearr;</a>
-    <a href="https://soleilpictures.com/about-us" rel="noopener">about the studio</a>
   </div>
 </section>
 
