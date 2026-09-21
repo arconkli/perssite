@@ -122,3 +122,11 @@ The earlier YAHWEH image was a different design. The logo had been rendering at 
 `width` left the HTML `height` attribute in force; it is re-encoded from
 `~/Documents/soleilpictures/soleil_pictures_logo.png` (alpha kept) and sits at 14rem beside the chapter links
 as the chapter's sign-off. The paper-trail ledger is removed.
+
+## Addendum, 2026-09-21: on-camera corrections
+
+Lifeline is a supporting role, not a lead (Andrew: "i was just supporting in that"); director Brentson Buckner;
+made for the Buried Alive Film Fest. It moved into the supporting group of the credits table; the lead count is
+six of eleven in the heading, hero stat and ledger. A small mono line under the table lists uncredited
+background work he named: Marvel's Thunderbolts, DC's Man of Tomorrow, Tulsa King, Will Trent, Southern
+Bastards, Gorilla Grodd, "among others" (his "etc."). Noise Complaint's festival is still unnamed.
