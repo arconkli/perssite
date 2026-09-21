@@ -141,3 +141,18 @@ line, the items beneath it as hairline mono chips that wrap cleanly. Long single
 are `dt.below-h` + `dd.below` (label, then the value on its own line, left-aligned). The value column is now
 `auto` instead of a fixed 17ch/12ch, and values never wrap at any width, so numeric pairs like "55 · 203 · 132"
 and "1,146 → 5,793" stay on one line on phones.
+
+## Addendum, 2026-09-21: documents and the on-camera still
+
+Andrew asked for the Deep Dive short script, the Deep Dive shot list and the Lost Time Onyx-scene storyboard
+to be readable on the page, and for a better acting picture ("the one of me covered in blood... the cop one
+doesn't play well here"). The three PDFs live in `assets/portfolio/docs/` as "paper" cards under the slate in
+chapter 03 (first-page thumbnail on a light card, title, mono meta, "read/open ↗" link opening the PDF in a
+new tab). Sources: `~/Documents/soleilpictures/Deep Dive/Deep Dive Short Final Jul 10 25 Printable.pdf`,
+`~/Downloads/Deep Dive Shot List (2).pdf`, `~/Downloads/Lost Time- Onyx scene [storyboard].pdf`. They were
+14–18 MB, so they were run through a custom Quartz filter (JPEG 0.78, 200 dpi, max 2400px; text untouched)
+via a 6-line Swift PDFKit tool in the scratchpad, to 1.4 / 1.1 / 3.6 MB. `_headers` sends
+X-Robots-Tag noindex for `/assets/portfolio/docs/*`. The on-camera still is now
+`~/Documents/Andrew Conklin/Acting/Photos/BTS/No Love Lost 995 (1)-3.jpg` (caption "no love lost · lead ·
+capped films"); the Noise Complaint frame is deleted. Alternative film frame if wanted:
+`Acting/Photos/Screengrabs/NLL Electricute 1.png`.
